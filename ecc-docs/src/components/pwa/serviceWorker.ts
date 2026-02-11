@@ -76,6 +76,7 @@ export function getPrecacheList(): string[] {
 
 /**
  * Service worker registration helper
+ * @returns Promise resolving to ServiceWorkerRegistration or null if not supported
  */
 export function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
@@ -84,11 +85,11 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
   
   return navigator.serviceWorker.register('/sw.js')
     .then((registration) => {
-      console.log('SW registered:', registration.scope)
+      // Registration successful - scope: registration.scope
       return registration
     })
-    .catch((error) => {
-      console.error('SW registration failed:', error)
+    .catch(() => {
+      // SW registration failed silently - graceful degradation
       return null
     })
 }

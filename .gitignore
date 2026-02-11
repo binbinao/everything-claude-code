@@ -30,3 +30,7 @@ examples/sessions/*.tmp
 
 # Local drafts
 marketing/
+
+# AI assistant generated files
+.codebuddy/
+_mydocs/
