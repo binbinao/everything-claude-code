@@ -1,0 +1,125 @@
+---
+sidebar_position: 1
+title: Hello ECC
+description: Your first ECC command - an interactive tutorial
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🎯 Hello ECC - Your First Command
+
+Welcome to your first interactive ECC tutorial! In this lesson, you'll learn how to use your first ECC command.
+
+## 🎮 Try the Command Simulator
+
+Let's start by experimenting with ECC commands. Type a command below or click on the available commands:
+
+<CommandSimulator 
+  availableCommands={['/plan', '/tdd', '/e2e', '/code-review']}
+  commandOutputs={{
+    '/plan': '🎯 Planning mode activated!\n\nI will create a detailed implementation plan for your feature.\n\nWhat would you like to build today?',
+    '/tdd': '🧪 TDD Guide activated!\n\nLet me guide you through the red-green-refactor cycle:\n\n1. 🔴 RED: Write a failing test\n2. 🟢 GREEN: Write code to pass\n3. 🔵 REFACTOR: Improve the code',
+    '/e2e': '🎭 E2E Runner activated!\n\nI will help you test your user journeys with Playwright.\n\nWhat flow would you like to test?',
+    '/code-review': '🔍 Code Review mode!\n\nI will analyze your code for:\n- Code quality\n- Security issues\n- Performance concerns\n- Best practices'
+  }}
+/>
+
+## 📚 Step-by-Step: Your First /plan Command
+
+Follow these steps to master the `/plan` command:
+
+<StepByStep 
+  title="Using the /plan Command"
+  steps={[
+    {
+      title: 'Open Claude Code',
+      description: 'Make sure you have Claude Code installed and open in your project directory.',
+      tip: 'You can verify by typing /help in the chat'
+    },
+    {
+      title: 'Type /plan',
+      description: 'In the Claude Code chat, type /plan followed by what you want to build.',
+      code: '/plan Create a user authentication system',
+      tip: 'Be specific about what you want!'
+    },
+    {
+      title: 'Review the Plan',
+      description: 'Claude will generate a detailed implementation plan with phases, risks, and time estimates.',
+      tip: 'You can ask for modifications before confirming'
+    },
+    {
+      title: 'Confirm and Execute',
+      description: 'Say "yes" or "proceed" to start implementing the plan.',
+      tip: 'Claude will work through each phase systematically'
+    }
+  ]}
+/>
+
+## 💻 Try It: Configuration Example
+
+Here's an example of ECC configuration. Try modifying it:
+
+<CodePlayground 
+  title="ECC CLAUDE.md Configuration"
+  language="markdown"
+  initialCode={`# ECC Configuration Example
+
+## Commands
+- /plan - Create implementation plans
+- /tdd - Test-driven development guide
+- /e2e - End-to-end testing
+
+## Agents
+- planner: Complex feature planning
+- tdd-guide: TDD coaching
+- e2e-runner: Playwright testing
+
+## Quick Start
+1. Type /plan to start planning
+2. Confirm the plan
+3. Watch magic happen!`}
+/>
+
+## ❓ Knowledge Check
+
+Let's test your understanding:
+
+<Quiz 
+  question="What command should you use to create a detailed implementation plan?"
+  options={[
+    '/plan',
+    '/build',
+    '/create',
+    '/make'
+  ]}
+  correctAnswer={0}
+  explanation="The /plan command activates the planner agent, which creates a comprehensive implementation plan with phases, risks, and time estimates."
+/>
+
+<Quiz 
+  question="What are the three phases of TDD (Test-Driven Development)?"
+  options={[
+    'Write, Test, Deploy',
+    'Red, Green, Refactor',
+    'Plan, Code, Review',
+    'Build, Test, Ship'
+  ]}
+  correctAnswer={1}
+  explanation="TDD follows the Red-Green-Refactor cycle: First write a failing test (RED), then write code to pass the test (GREEN), then improve the code (REFACTOR)."
+/>
+
+## 🎉 Congratulations!
+
+You've completed your first ECC tutorial! You learned:
+
+- ✅ How to use the command simulator
+- ✅ The step-by-step process for `/plan`
+- ✅ ECC configuration basics
+- ✅ TDD fundamentals
+
+## 📖 Next Steps
+
+Ready for more? Check out these tutorials:
+
+- [TDD Masterclass](/docs/tutorials/tdd-masterclass) - Deep dive into test-driven development
+- More tutorials coming soon!
