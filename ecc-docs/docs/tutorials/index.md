@@ -1,52 +1,52 @@
 ---
 sidebar_position: 1
-title: Interactive Tutorials
-description: Learn ECC through hands-on interactive tutorials
+title: 交互式教程
+description: 通过动手实践的交互式教程学习 ECC
 ---
 
-# 🎓 Interactive Tutorials
+# 🎓 交互式教程
 
-Welcome to the ECC Learning Center! These interactive tutorials will help you master Everything Claude Code through hands-on practice.
+欢迎来到 ECC 学习中心！这些交互式教程将帮助你通过动手实践掌握 Everything Claude Code。
 
-## 🚀 Getting Started
+## 🚀 快速开始
 
-| Tutorial | Duration | What You'll Learn |
-|----------|----------|-------------------|
-| [Hello ECC](./hello-ecc) | 10 min | Your first ECC commands, basic concepts |
-| [TDD Masterclass](./tdd-masterclass) | 20 min | Test-driven development with ECC |
+| 教程 | 时长 | 你将学到 |
+|------|------|---------|
+| [Hello ECC](./hello-ecc) | 10 分钟 | 你的第一个 ECC 命令，基础概念 |
+| [TDD 大师课](./tdd-masterclass) | 20 分钟 | 使用 ECC 进行测试驱动开发 |
 
-## 📚 Tutorial Features
+## 📚 教程特色
 
-Each tutorial includes:
+每个教程都包含：
 
-- 🎮 **Command Simulator** - Try commands without leaving the browser
-- 📖 **Step-by-Step Guides** - Follow along at your own pace
-- 💻 **Code Playground** - Edit and experiment with code
-- ❓ **Knowledge Quizzes** - Test your understanding
+- 🎮 **命令模拟器** - 无需离开浏览器即可尝试命令
+- 📖 **分步指南** - 按照自己的节奏学习
+- 💻 **代码练习场** - 编辑和实验代码
+- ❓ **知识测验** - 测试你的理解程度
 
-## 🎯 Learning Path
+## 🎯 学习路径
 
-### Beginner (Start Here!)
-1. **[Hello ECC](./hello-ecc)** - Get familiar with ECC basics
-2. **[TDD Masterclass](./tdd-masterclass)** - Learn test-driven development
+### 入门（从这里开始！）
+1. **[Hello ECC](./hello-ecc)** - 熟悉 ECC 基础知识
+2. **[TDD 大师课](./tdd-masterclass)** - 学习测试驱动开发
 
-### Intermediate
-- Multi-Agent Workflows *(Coming Soon)*
-- Custom Hooks Development *(Coming Soon)*
-- E2E Testing Strategies *(Coming Soon)*
+### 进阶
+- 多智能体工作流 *（即将推出）*
+- 自定义 Hooks 开发 *（即将推出）*
+- E2E 测试策略 *（即将推出）*
 
-### Advanced
-- Performance Optimization *(Coming Soon)*
-- Security Best Practices *(Coming Soon)*
-- Enterprise Patterns *(Coming Soon)*
+### 高级
+- 性能优化 *（即将推出）*
+- 安全最佳实践 *（即将推出）*
+- 企业级模式 *（即将推出）*
 
-## 💡 Tips for Learning
+## 💡 学习建议
 
-1. **Practice, don't just read** - Use the interactive components!
-2. **Take the quizzes** - They reinforce your learning
-3. **Experiment** - Try modifying the code examples
-4. **Ask questions** - Use the command simulator to explore
+1. **多动手实践，不要只是阅读** - 使用交互组件！
+2. **完成测验** - 它们能强化你的学习效果
+3. **大胆实验** - 尝试修改代码示例
+4. **积极探索** - 使用命令模拟器进行探索
 
-## 🎉 Ready to Start?
+## 🎉 准备好开始了吗？
 
-Click on [Hello ECC](./hello-ecc) to begin your journey!
+点击 [Hello ECC](./hello-ecc) 开始你的学习之旅！

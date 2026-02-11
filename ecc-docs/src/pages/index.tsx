@@ -2,25 +2,51 @@ import React from 'react'
 import Layout from '@theme/Layout'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
+import styles from './index.module.css'
 
 export default function Home(): JSX.Element {
   return (
     <Layout title="ECC Learning Site" description="Everything Claude Code learning hub">
       <header className="hero hero--primary">
         <div className="container">
-          <Heading as="h1" className="hero__title">
-            Everything Claude Code
-          </Heading>
-          <p className="hero__subtitle">
-            你的 ECC 学习站点已准备就绪：文档、教程、最佳实践，一站搞定。
-          </p>
-          <div className="button-group">
-            <Link className="button button--secondary button--lg" to="/docs/intro">
-              开始学习
-            </Link>
-            <Link className="button button--outline button--lg" to="/docs/quick-start">
-              快速开始
-            </Link>
+          <div className={styles.heroRow}>
+            {/* Left: Main Content */}
+            <div className={styles.heroContent}>
+              <Heading as="h1" className="hero__title">
+                Everything Claude Code
+              </Heading>
+              <p className="hero__subtitle">
+                你的 ECC 学习站点已准备就绪：文档、教程、最佳实践，一站搞定。
+              </p>
+              <div className="button-group">
+                <Link className="button button--secondary button--lg" to="/docs/intro">
+                  开始学习
+                </Link>
+                <Link className="button button--outline button--lg" to="/docs/quick-start">
+                  快速开始
+                </Link>
+              </div>
+            </div>
+            
+            {/* Right: Tip QR Codes */}
+            <div className={styles.tipSection}>
+              <div className={styles.tipHeader}>
+                <span className={styles.tipIcon}>☕</span>
+                <span className={styles.tipTitle}>觉得有帮助？</span>
+              </div>
+              <p className={styles.tipSubtitle}>请作者喝杯咖啡，支持创作~</p>
+              <div className={styles.qrCodes}>
+                <div className={styles.qrItem}>
+                  <img src="/img/zfb.jpg" alt="支付宝" className={styles.qrImage} />
+                  <span className={styles.qrLabel}>💙 支付宝</span>
+                </div>
+                <div className={styles.qrItem}>
+                  <img src="/img/wxpay.jpg" alt="微信支付" className={styles.qrImage} />
+                  <span className={styles.qrLabel}>💚 微信支付</span>
+                </div>
+              </div>
+              <p className={styles.tipNote}>小额打赏，心意满满 💝</p>
+            </div>
           </div>
         </div>
       </header>

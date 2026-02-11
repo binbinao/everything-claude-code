@@ -1,91 +1,91 @@
 ---
 sidebar_position: 1
 title: Hello ECC
-description: Your first ECC command - an interactive tutorial
+description: 你的第一个 ECC 命令 - 交互式教程
 ---
 
 import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
 
-# 🎯 Hello ECC - Your First Command
+# 🎯 Hello ECC - 你的第一个命令
 
-Welcome to your first interactive ECC tutorial! In this lesson, you'll learn how to use your first ECC command.
+欢迎来到你的第一个交互式 ECC 教程！在本课程中，你将学习如何使用你的第一个 ECC 命令。
 
-## 🎮 Try the Command Simulator
+## 🎮 试试命令模拟器
 
-Let's start by experimenting with ECC commands. Type a command below or click on the available commands:
+让我们从体验 ECC 命令开始。在下方输入命令或点击可用命令：
 
 <CommandSimulator 
   availableCommands={['/plan', '/tdd', '/e2e', '/code-review']}
   commandOutputs={{
-    '/plan': '🎯 Planning mode activated!\n\nI will create a detailed implementation plan for your feature.\n\nWhat would you like to build today?',
-    '/tdd': '🧪 TDD Guide activated!\n\nLet me guide you through the red-green-refactor cycle:\n\n1. 🔴 RED: Write a failing test\n2. 🟢 GREEN: Write code to pass\n3. 🔵 REFACTOR: Improve the code',
-    '/e2e': '🎭 E2E Runner activated!\n\nI will help you test your user journeys with Playwright.\n\nWhat flow would you like to test?',
-    '/code-review': '🔍 Code Review mode!\n\nI will analyze your code for:\n- Code quality\n- Security issues\n- Performance concerns\n- Best practices'
+    '/plan': '🎯 规划模式已激活！\n\n我将为你的功能创建详细的实施计划。\n\n你今天想构建什么？',
+    '/tdd': '🧪 TDD 指南已激活！\n\n让我带你完成红-绿-重构循环：\n\n1. 🔴 红色：编写一个失败的测试\n2. 🟢 绿色：编写代码使测试通过\n3. 🔵 重构：改进代码',
+    '/e2e': '🎭 E2E 运行器已激活！\n\n我将帮助你使用 Playwright 测试用户流程。\n\n你想测试什么流程？',
+    '/code-review': '🔍 代码审查模式！\n\n我将分析你的代码：\n- 代码质量\n- 安全问题\n- 性能问题\n- 最佳实践'
   }}
 />
 
-## 📚 Step-by-Step: Your First /plan Command
+## 📚 分步指南：你的第一个 /plan 命令
 
-Follow these steps to master the `/plan` command:
+按照以下步骤掌握 `/plan` 命令：
 
 <StepByStep 
-  title="Using the /plan Command"
+  title="使用 /plan 命令"
   steps={[
     {
-      title: 'Open Claude Code',
-      description: 'Make sure you have Claude Code installed and open in your project directory.',
-      tip: 'You can verify by typing /help in the chat'
+      title: '打开 Claude Code',
+      description: '确保你已安装 Claude Code 并在项目目录中打开。',
+      tip: '你可以在聊天中输入 /help 来验证'
     },
     {
-      title: 'Type /plan',
-      description: 'In the Claude Code chat, type /plan followed by what you want to build.',
-      code: '/plan Create a user authentication system',
-      tip: 'Be specific about what you want!'
+      title: '输入 /plan',
+      description: '在 Claude Code 聊天中，输入 /plan 后跟你想要构建的内容。',
+      code: '/plan 创建一个用户认证系统',
+      tip: '具体说明你想要什么！'
     },
     {
-      title: 'Review the Plan',
-      description: 'Claude will generate a detailed implementation plan with phases, risks, and time estimates.',
-      tip: 'You can ask for modifications before confirming'
+      title: '审查计划',
+      description: 'Claude 将生成一个包含阶段、风险和时间估算的详细实施计划。',
+      tip: '你可以在确认之前要求修改'
     },
     {
-      title: 'Confirm and Execute',
-      description: 'Say "yes" or "proceed" to start implementing the plan.',
-      tip: 'Claude will work through each phase systematically'
+      title: '确认并执行',
+      description: '说"是"或"继续"开始实施计划。',
+      tip: 'Claude 将系统地完成每个阶段'
     }
   ]}
 />
 
-## 💻 Try It: Configuration Example
+## 💻 动手试试：配置示例
 
-Here's an example of ECC configuration. Try modifying it:
+这是一个 ECC 配置示例。尝试修改它：
 
 <CodePlayground 
-  title="ECC CLAUDE.md Configuration"
+  title="ECC CLAUDE.md 配置"
   language="markdown"
-  initialCode={`# ECC Configuration Example
+  initialCode={`# ECC 配置示例
 
-## Commands
-- /plan - Create implementation plans
-- /tdd - Test-driven development guide
-- /e2e - End-to-end testing
+## 命令
+- /plan - 创建实施计划
+- /tdd - 测试驱动开发指南
+- /e2e - 端到端测试
 
-## Agents
-- planner: Complex feature planning
-- tdd-guide: TDD coaching
-- e2e-runner: Playwright testing
+## 智能体
+- planner：复杂功能规划
+- tdd-guide：TDD 指导
+- e2e-runner：Playwright 测试
 
-## Quick Start
-1. Type /plan to start planning
-2. Confirm the plan
-3. Watch magic happen!`}
+## 快速开始
+1. 输入 /plan 开始规划
+2. 确认计划
+3. 见证奇迹！`}
 />
 
-## ❓ Knowledge Check
+## ❓ 知识检测
 
-Let's test your understanding:
+让我们测试一下你的理解：
 
 <Quiz 
-  question="What command should you use to create a detailed implementation plan?"
+  question="你应该使用什么命令来创建详细的实施计划？"
   options={[
     '/plan',
     '/build',
@@ -93,33 +93,33 @@ Let's test your understanding:
     '/make'
   ]}
   correctAnswer={0}
-  explanation="The /plan command activates the planner agent, which creates a comprehensive implementation plan with phases, risks, and time estimates."
+  explanation="/plan 命令会激活规划智能体，它会创建一个包含阶段、风险和时间估算的综合实施计划。"
 />
 
 <Quiz 
-  question="What are the three phases of TDD (Test-Driven Development)?"
+  question="TDD（测试驱动开发）的三个阶段是什么？"
   options={[
-    'Write, Test, Deploy',
-    'Red, Green, Refactor',
-    'Plan, Code, Review',
-    'Build, Test, Ship'
+    '编写、测试、部署',
+    '红色、绿色、重构',
+    '规划、编码、审查',
+    '构建、测试、发布'
   ]}
   correctAnswer={1}
-  explanation="TDD follows the Red-Green-Refactor cycle: First write a failing test (RED), then write code to pass the test (GREEN), then improve the code (REFACTOR)."
+  explanation="TDD 遵循红-绿-重构循环：首先编写一个失败的测试（红色），然后编写代码使测试通过（绿色），最后改进代码（重构）。"
 />
 
-## 🎉 Congratulations!
+## 🎉 恭喜！
 
-You've completed your first ECC tutorial! You learned:
+你已完成第一个 ECC 教程！你学到了：
 
-- ✅ How to use the command simulator
-- ✅ The step-by-step process for `/plan`
-- ✅ ECC configuration basics
-- ✅ TDD fundamentals
+- ✅ 如何使用命令模拟器
+- ✅ `/plan` 的分步流程
+- ✅ ECC 配置基础
+- ✅ TDD 基础知识
 
-## 📖 Next Steps
+## 📖 下一步
 
-Ready for more? Check out these tutorials:
+准备好继续了吗？查看这些教程：
 
-- [TDD Masterclass](/docs/tutorials/tdd-masterclass) - Deep dive into test-driven development
-- More tutorials coming soon!
+- [TDD 大师课](/docs/tutorials/tdd-masterclass) - 深入了解测试驱动开发
+- 更多教程即将推出！

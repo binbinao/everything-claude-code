@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="-2 -2 36 36">
+  <!-- Left bracket < -->
+  <path d="M11 4 L3 16 L11 28" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right bracket > -->
+  <path d="M21 4 L29 16 L21 28" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- AI dot - outer -->
+  <circle cx="16" cy="16" r="4" fill="#3b82f6"/>
+  <!-- AI dot - inner -->
+  <circle cx="16" cy="16" r="2" fill="#ffffff"/>
+</svg>

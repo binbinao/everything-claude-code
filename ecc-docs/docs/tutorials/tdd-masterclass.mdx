@@ -1,44 +1,44 @@
 ---
 sidebar_position: 2
-title: TDD Masterclass
-description: Master Test-Driven Development with ECC
+title: TDD 大师课
+description: 使用 ECC 掌握测试驱动开发
 ---
 
 import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
 
-# 🧪 TDD Masterclass
+# 🧪 TDD 大师课
 
-Welcome to the TDD Masterclass! In this tutorial, you'll master the art of Test-Driven Development using ECC's tdd-guide agent.
+欢迎来到 TDD 大师课！在本教程中，你将使用 ECC 的 tdd-guide 智能体掌握测试驱动开发的艺术。
 
-## 🎯 What is TDD?
+## 🎯 什么是 TDD？
 
-**Test-Driven Development** is a software development approach where you:
+**测试驱动开发（Test-Driven Development）** 是一种软件开发方法，你需要：
 
-1. **🔴 RED** - Write a failing test first
-2. **🟢 GREEN** - Write the minimum code to pass the test
-3. **🔵 REFACTOR** - Improve the code while keeping tests green
+1. **🔴 红灯阶段** - 先编写一个失败的测试
+2. **🟢 绿灯阶段** - 编写最少的代码让测试通过
+3. **🔵 重构阶段** - 在不改变行为的前提下优化代码
 
-This cycle ensures your code is always tested and you're building exactly what's needed.
+这个循环确保你的代码始终经过测试，并且你只构建真正需要的功能。
 
-## 🎮 Try the TDD Command
+## 🎮 试试 TDD 命令
 
 <CommandSimulator 
   availableCommands={['/tdd', '/tdd --feature="auth"', '/tdd --fix="bug-123"']}
   commandOutputs={{
-    '/tdd': '🧪 TDD Guide activated!\n\nI\'m ready to guide you through test-driven development.\n\nUsage:\n  /tdd --feature="feature-name"\n  /tdd --fix="bug-id"\n\nWhat would you like to build or fix?',
-    '/tdd --feature="auth"': '🧪 TDD Guide: User Authentication Feature\n\n📋 Test Plan:\n1. Test user registration validation\n2. Test password hashing\n3. Test login flow\n4. Test session management\n\nLet\'s start with the first test...\n\n🔴 RED Phase: Writing failing test for user registration',
-    '/tdd --fix="bug-123"': '🧪 TDD Guide: Bug Fix Mode\n\n🐛 Analyzing bug-123...\n\nFirst, let\'s write a test that reproduces the bug.\nThis test should FAIL with the current code.\n\n🔴 RED Phase: Creating reproduction test...'
+    '/tdd': '🧪 TDD 指南已激活！\n\n我已准备好指导你进行测试驱动开发。\n\n用法：\n  /tdd --feature="功能名称"\n  /tdd --fix="bug编号"\n\n你想构建或修复什么？',
+    '/tdd --feature="auth"': '🧪 TDD 指南：用户认证功能\n\n📋 测试计划：\n1. 测试用户注册验证\n2. 测试密码哈希\n3. 测试登录流程\n4. 测试会话管理\n\n让我们从第一个测试开始...\n\n🔴 红灯阶段：为用户注册编写失败的测试',
+    '/tdd --fix="bug-123"': '🧪 TDD 指南：Bug 修复模式\n\n🐛 分析 bug-123...\n\n首先，让我们编写一个能重现这个 bug 的测试。\n这个测试在当前代码下应该会失败。\n\n🔴 红灯阶段：创建重现测试...'
   }}
 />
 
-## 📚 The Red-Green-Refactor Cycle
+## 📚 红-绿-重构循环
 
 <StepByStep 
-  title="TDD Cycle: Building a Calculator"
+  title="TDD 循环：构建一个计算器"
   steps={[
     {
-      title: '🔴 RED: Write a Failing Test',
-      description: 'Start by writing a test for functionality that doesn\'t exist yet. This test MUST fail.',
+      title: '🔴 红灯：编写失败的测试',
+      description: '首先为尚不存在的功能编写测试。这个测试必须失败。',
       code: `// calculator.test.ts
 import { add } from './calculator'
 
@@ -47,53 +47,53 @@ describe('Calculator', () => {
     expect(add(2, 3)).toBe(5)
   })
 })`,
-      tip: 'Run the test now - it should fail because add() doesn\'t exist yet!'
+      tip: '现在运行测试 - 它应该会失败，因为 add() 还不存在！'
     },
     {
-      title: '🟢 GREEN: Write Minimum Code',
-      description: 'Write the simplest code that makes the test pass. Don\'t over-engineer!',
+      title: '🟢 绿灯：编写最少的代码',
+      description: '编写能让测试通过的最简单代码。不要过度设计！',
       code: `// calculator.ts
 export function add(a: number, b: number): number {
   return a + b
 }`,
-      tip: 'Resist the urge to add extra features. Just make the test pass!'
+      tip: '抵制添加额外功能的冲动。只需让测试通过！'
     },
     {
-      title: '🔵 REFACTOR: Improve the Code',
-      description: 'Now that tests are green, improve code quality without changing behavior.',
-      code: `// calculator.ts (refactored)
+      title: '🔵 重构：改进代码',
+      description: '现在测试通过了，在不改变行为的前提下提升代码质量。',
+      code: `// calculator.ts（重构后）
 /**
- * Adds two numbers together
- * @param a - First number
- * @param b - Second number
- * @returns Sum of a and b
+ * 将两个数字相加
+ * @param a - 第一个数字
+ * @param b - 第二个数字
+ * @returns a 和 b 的和
  */
 export function add(a: number, b: number): number {
   return a + b
 }`,
-      tip: 'Add documentation, improve naming, extract functions - but keep tests green!'
+      tip: '添加文档、改进命名、提取函数 - 但要保持测试通过！'
     },
     {
-      title: '🔄 REPEAT: Next Feature',
-      description: 'Now add another test and repeat the cycle!',
-      code: `// Add to calculator.test.ts
+      title: '🔄 重复：下一个功能',
+      description: '现在添加另一个测试并重复循环！',
+      code: `// 添加到 calculator.test.ts
 it('should subtract two numbers', () => {
   expect(subtract(5, 3)).toBe(2)
 })`,
-      tip: 'Each cycle should be small and focused. 5-10 minutes per cycle is ideal.'
+      tip: '每个循环应该小而专注。每个循环理想时间是 5-10 分钟。'
     }
   ]}
 />
 
-## 💻 Interactive Code Lab
+## 💻 交互式代码实验室
 
-Try writing your own TDD cycle! Start with a failing test:
+尝试编写你自己的 TDD 循环！从一个失败的测试开始：
 
 <CodePlayground 
-  title="TDD Lab: String Utilities"
+  title="TDD 实验室：字符串工具"
   language="typescript"
-  initialCode={`// Step 1: Write a failing test
-// Test: capitalize('hello') should return 'Hello'
+  initialCode={`// 第一步：编写一个失败的测试
+// 测试：capitalize('hello') 应该返回 'Hello'
 
 import { capitalize } from './stringUtils'
 
@@ -103,76 +103,76 @@ describe('StringUtils', () => {
   })
 })
 
-// Step 2: Now write the function to make it pass!
+// 第二步：现在编写函数让测试通过！
 // export function capitalize(str: string): string {
-//   // Your code here
+//   // 你的代码写在这里
 // }
 `}
 />
 
-## 🎯 TDD Best Practices
+## 🎯 TDD 最佳实践
 
-### DO ✅
-- Write the **smallest possible test** first
-- Run tests **frequently** (after every change)
-- **Commit** after each green phase
-- Keep the **refactor phase short**
-- Name tests **descriptively**
+### 应该做 ✅
+- 先编写**最小可能的测试**
+- **频繁运行**测试（每次修改后）
+- 在每个绿灯阶段后**提交代码**
+- 保持**重构阶段简短**
+- 给测试起**描述性的名称**
 
-### DON'T ❌
-- Write implementation before tests
-- Write multiple tests at once
-- Skip the refactor phase
-- Test implementation details
-- Make tests too complex
+### 不应该做 ❌
+- 在编写测试之前编写实现代码
+- 一次编写多个测试
+- 跳过重构阶段
+- 测试实现细节
+- 让测试变得太复杂
 
-## ❓ Knowledge Check
+## ❓ 知识检测
 
 <Quiz 
-  question="In TDD, when should you write the implementation code?"
+  question="在 TDD 中，什么时候应该编写实现代码？"
   options={[
-    'Before writing any tests',
-    'After writing a failing test',
-    'At the start of the project',
-    'Only during code review'
+    '在编写任何测试之前',
+    '在编写失败的测试之后',
+    '在项目开始时',
+    '仅在代码审查期间'
   ]}
   correctAnswer={1}
-  explanation="In TDD, you always write a failing test FIRST (RED phase), then write the minimum code needed to make it pass (GREEN phase). This ensures you're only writing code that's actually needed."
+  explanation="在 TDD 中，你总是先编写一个失败的测试（红灯阶段），然后编写让它通过所需的最少代码（绿灯阶段）。这确保你只编写真正需要的代码。"
 />
 
 <Quiz 
-  question="What should you do in the REFACTOR phase?"
+  question="在重构阶段应该做什么？"
   options={[
-    'Add new features',
-    'Write more tests',
-    'Improve code quality without changing behavior',
-    'Delete failing tests'
+    '添加新功能',
+    '编写更多测试',
+    '在不改变行为的前提下提升代码质量',
+    '删除失败的测试'
   ]}
   correctAnswer={2}
-  explanation="The REFACTOR phase is for improving code quality (better names, documentation, extracting functions) while keeping all tests passing. Never change behavior during refactoring!"
+  explanation="重构阶段是为了在保持所有测试通过的同时提升代码质量（更好的命名、文档、提取函数）。重构时永远不要改变行为！"
 />
 
 <Quiz 
-  question="How long should a typical TDD cycle take?"
+  question="一个典型的 TDD 循环应该花多长时间？"
   options={[
-    '1-2 hours',
-    '30-60 minutes',
-    '5-10 minutes',
-    '1 full day'
+    '1-2 小时',
+    '30-60 分钟',
+    '5-10 分钟',
+    '一整天'
   ]}
   correctAnswer={2}
-  explanation="A typical TDD cycle should be 5-10 minutes. Small, frequent cycles give faster feedback and make it easier to identify where bugs are introduced. If a cycle takes longer, break it down!"
+  explanation="一个典型的 TDD 循环应该是 5-10 分钟。小而频繁的循环能提供更快的反馈，更容易识别 bug 是在哪里引入的。如果一个循环花费更长时间，就把它分解成更小的部分！"
 />
 
-## 🎉 Congratulations!
+## 🎉 恭喜你！
 
-You've completed the TDD Masterclass! You've learned:
+你已经完成了 TDD 大师课！你学到了：
 
-- ✅ The Red-Green-Refactor cycle
-- ✅ TDD best practices
-- ✅ How to use `/tdd` command in ECC
-- ✅ Writing effective tests
+- ✅ 红-绿-重构循环
+- ✅ TDD 最佳实践
+- ✅ 如何在 ECC 中使用 `/tdd` 命令
+- ✅ 编写有效的测试
 
-## 📖 Next Steps
+## 📖 下一步
 
-Check out more tutorials in the [Interactive Tutorials](/docs/tutorials/) section!
+查看[交互式教程](/docs/tutorials/)部分的更多教程！

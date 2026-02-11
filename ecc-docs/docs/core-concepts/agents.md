@@ -79,13 +79,13 @@ description: ECC 的 13 个专业智能体详解
 
 ```mermaid
 graph LR
-    A[/plan] --> B[planner]
-    B --> C[/tdd]
-    C --> D[tdd-guide]
-    D --> E[/code-review]
-    E --> F[code-reviewer]
-    F --> G[/e2e]
-    G --> H[e2e-runner]
+    A["/plan"] --> B["planner 🏗️"]
+    B --> C["/tdd"]
+    C --> D["tdd-guide 🧪"]
+    D --> E["/code-review"]
+    E --> F["code-reviewer 🔍"]
+    F --> G["/e2e"]
+    G --> H["e2e-runner 🎯"]
 ```
 
 ## 最佳实践

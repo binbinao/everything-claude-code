@@ -7,6 +7,12 @@ const config: Config = {
   tagline: 'Interactive documentation and tutorials for mastering Claude Code',
   favicon: 'img/favicon.svg',
 
+  // Enable Mermaid diagrams in Markdown
+  markdown: {
+    mermaid: true,
+  },
+  // Mermaid theme is included in the themes array at the bottom
+
   // URL configuration
   url: 'https://everything-claude-code.dev',
   baseUrl: '/',
@@ -72,14 +78,7 @@ const config: Config = {
       { name: 'og:type', content: 'website' },
     ],
 
-    // Algolia DocSearch configuration (placeholder)
-    algolia: {
-      appId: 'YOUR_APP_ID',
-      apiKey: 'YOUR_API_KEY',
-      indexName: 'everything-claude-code',
-      contextualSearch: true,
-      searchPagePath: 'search',
-    },
+    // Search is handled by @easyops-cn/docusaurus-search-local plugin
 
     // Announcement bar for important updates
     announcementBar: {
@@ -99,9 +98,8 @@ const config: Config = {
 
     // ECC branding colors
     navbar: {
-      title: 'ECC',
       logo: {
-        alt: 'ECC Logo',
+        alt: '',
         src: 'img/logo.svg',
       },
       items: [
@@ -115,10 +113,6 @@ const config: Config = {
           to: '/docs/tutorials/',
           label: '教程',
           position: 'left',
-        },
-        {
-          type: 'search',
-          position: 'right',
         },
         {
           href: 'https://github.com/affaan-m/everything-claude-code',
@@ -186,6 +180,18 @@ const config: Config = {
       minHeadingLevel: 2,
       maxHeadingLevel: 4,
     },
+
+    // Mermaid configuration for diagrams
+    mermaid: {
+      theme: {
+        light: 'neutral',
+        dark: 'dark',
+      },
+      options: {
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+        fontSize: 14,
+      },
+    },
   } satisfies Preset.ThemeConfig,
 
   // Presets configuration
@@ -235,6 +241,22 @@ const config: Config = {
         min: 640,
         steps: 2,
         disableInDev: false,
+      },
+    ],
+  ],
+
+  // Local search plugin (no external service needed)
+  themes: [
+    '@docusaurus/theme-mermaid',
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        language: ['zh', 'en'],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+        indexBlog: false,
+        docsRouteBasePath: '/docs',
       },
     ],
   ],

@@ -29,3 +29,52 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Hero button group styling */
+.hero .button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Ensure all buttons have consistent border-radius */
+.hero .button {
+  border-radius: 8px;
+}
+
+/* Fix outline button visibility on hero background */
+.hero .button--outline {
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  color: #fff;
+}
+
+.hero .button--outline:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: #fff;
+  color: #fff;
+}
+
+.navbar__brand {
+  gap: 0.5rem;
+}
+
+.navbar__logo {
+  height: 48px !important;
+  width: 48px !important;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__logo img,
+.navbar__logo svg {
+  height: 48px !important;
+  width: 48px !important;
+  max-height: 48px !important;
+  max-width: 48px !important;
+  min-height: 48px;
+  min-width: 48px;
+  object-fit: contain;
+}
