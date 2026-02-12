@@ -63,7 +63,7 @@ export function Quiz({
       </div>
 
       {/* Options */}
-      <div className={styles.options}>
+      <div className={styles.options} role="radiogroup" aria-label={question}>
         {options.map((option, index) => {
           let optionClass = styles.option
           
@@ -84,9 +84,15 @@ export function Quiz({
               key={index}
               className={optionClass}
               onClick={() => handleSelect(index)}
-              role="button"
+              role="radio"
+              aria-checked={selectedIndex === index}
               tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && handleSelect(index)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  handleSelect(index)
+                }
+              }}
             >
               <span className={styles.optionLetter}>
                 {String.fromCharCode(65 + index)}

@@ -4,6 +4,9 @@
  * Generates structured data for better SEO and rich snippets
  */
 
+import React from 'react'
+import { sanitizeForJsonLd } from '../shared/utils'
+
 // ============================================
 // Types
 // ============================================
@@ -45,13 +48,13 @@ export function generateArticleSchema(input: ArticleSchemaInput) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: input.title,
-    description: input.description,
+    headline: sanitizeForJsonLd(input.title),
+    description: sanitizeForJsonLd(input.description),
     datePublished: input.datePublished,
     dateModified: input.dateModified || input.datePublished,
     author: {
       '@type': 'Person',
-      name: input.author,
+      name: sanitizeForJsonLd(input.author),
     },
     image: input.image || undefined,
     mainEntityOfPage: {
@@ -68,15 +71,15 @@ export function generateHowToSchema(input: HowToSchemaInput) {
   return {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
-    name: input.name,
-    description: input.description,
+    name: sanitizeForJsonLd(input.name),
+    description: sanitizeForJsonLd(input.description),
     totalTime: input.totalTime,
     image: input.image,
     step: input.steps.map((step, index) => ({
       '@type': 'HowToStep',
       position: index + 1,
-      name: step.name,
-      text: step.text,
+      name: sanitizeForJsonLd(step.name),
+      text: sanitizeForJsonLd(step.text),
       image: step.image,
     })),
   }
@@ -89,9 +92,9 @@ export function generateWebsiteSchema(input: WebsiteSchemaInput) {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: input.name,
+    name: sanitizeForJsonLd(input.name),
     url: input.url,
-    description: input.description,
+    description: sanitizeForJsonLd(input.description),
     potentialAction: {
       '@type': 'SearchAction',
       target: {

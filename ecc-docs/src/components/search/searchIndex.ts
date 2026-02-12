@@ -19,8 +19,8 @@ interface SearchResult {
   score?: number
 }
 
-// Sample search index - in production, this would be generated at build time
-const searchIndex: SearchDocument[] = [
+// Default search index - in production, this would be generated at build time
+const defaultSearchIndex: SearchDocument[] = [
   {
     title: 'Getting Started',
     url: '/docs/quick-start',
@@ -53,6 +53,9 @@ const searchIndex: SearchDocument[] = [
   },
 ]
 
+// Active search index (replaced immutably)
+let searchIndex: SearchDocument[] = [...defaultSearchIndex]
+
 /**
  * Simple fuzzy search implementation
  */
@@ -76,6 +79,22 @@ function fuzzyMatch(text: string, query: string): number {
   }
   
   return matchCount / queryChars.length
+}
+
+/**
+ * Build search index from document sources.
+ * In production, this would scan the docs directory at build time
+ * and create a comprehensive search index.
+ *
+ * @param documents - Optional custom documents to index
+ * @returns The built search index
+ */
+export function buildSearchIndex(documents?: SearchDocument[]): SearchDocument[] {
+  if (documents) {
+    // Immutable replacement - create a new array instead of mutating
+    searchIndex = [...documents]
+  }
+  return [...searchIndex]
 }
 
 /**

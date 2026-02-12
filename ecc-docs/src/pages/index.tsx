@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from '@theme/Layout'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
+import Translate from '@docusaurus/Translate'
 import styles from './index.module.css'
 
 export default function Home(): JSX.Element {
@@ -16,14 +17,16 @@ export default function Home(): JSX.Element {
                 Everything Claude Code
               </Heading>
               <p className="hero__subtitle">
-                你的 ECC 学习站点已准备就绪：文档、教程、最佳实践，一站搞定。
+                <Translate id="homepage.subtitle">
+                  你的 ECC 学习站点已准备就绪：文档、教程、最佳实践，一站搞定。
+                </Translate>
               </p>
               <div className="button-group">
                 <Link className="button button--secondary button--lg" to="/docs/intro">
-                  开始学习
+                  <Translate id="homepage.button.start">开始学习</Translate>
                 </Link>
                 <Link className="button button--outline button--lg" to="/docs/quick-start">
-                  快速开始
+                  <Translate id="homepage.button.quickstart">快速开始</Translate>
                 </Link>
               </div>
             </div>
@@ -32,20 +35,26 @@ export default function Home(): JSX.Element {
             <div className={styles.tipSection}>
               <div className={styles.tipHeader}>
                 <span className={styles.tipIcon}>☕</span>
-                <span className={styles.tipTitle}>觉得有帮助？</span>
+                <span className={styles.tipTitle}>
+                  <Translate id="homepage.tip.title">觉得有帮助？</Translate>
+                </span>
               </div>
-              <p className={styles.tipSubtitle}>请作者喝杯咖啡，支持创作~</p>
+              <p className={styles.tipSubtitle}>
+                <Translate id="homepage.tip.subtitle">请作者喝杯咖啡，支持创作~</Translate>
+              </p>
               <div className={styles.qrCodes}>
                 <div className={styles.qrItem}>
                   <img src="/img/zfb.jpg" alt="支付宝" className={styles.qrImage} />
-                  <span className={styles.qrLabel}>💙 支付宝</span>
+                  <span className={styles.qrLabel}>💙 <Translate id="homepage.tip.alipay">支付宝</Translate></span>
                 </div>
                 <div className={styles.qrItem}>
                   <img src="/img/wxpay.jpg" alt="微信支付" className={styles.qrImage} />
-                  <span className={styles.qrLabel}>💚 微信支付</span>
+                  <span className={styles.qrLabel}>💚 <Translate id="homepage.tip.wechat">微信支付</Translate></span>
                 </div>
               </div>
-              <p className={styles.tipNote}>小额打赏，心意满满 💝</p>
+              <p className={styles.tipNote}>
+                <Translate id="homepage.tip.note">小额打赏，心意满满 💝</Translate>
+              </p>
             </div>
           </div>
         </div>
@@ -54,16 +63,16 @@ export default function Home(): JSX.Element {
         <section className="container margin-vert--xl">
           <div className="row">
             <div className="col col--4">
-              <Heading as="h3">📚 结构化文档</Heading>
-              <p>从零到一掌握 ECC 的 Agents、Commands、Hooks 与 Rules。</p>
+              <Heading as="h3">📚 <Translate id="homepage.feature1.title">结构化文档</Translate></Heading>
+              <p><Translate id="homepage.feature1.desc">从零到一掌握 ECC 的 Agents、Commands、Hooks 与 Rules。</Translate></p>
             </div>
             <div className="col col--4">
-              <Heading as="h3">🎓 交互式教程</Heading>
-              <p>用真实场景演练 /plan、/tdd、/build-fix 的完整流程。</p>
+              <Heading as="h3">🎓 <Translate id="homepage.feature2.title">交互式教程</Translate></Heading>
+              <p><Translate id="homepage.feature2.desc">用真实场景演练 /plan、/tdd、/build-fix 的完整流程。</Translate></p>
             </div>
             <div className="col col--4">
-              <Heading as="h3">🚀 最佳实践集</Heading>
-              <p>内置 TypeScript、Python、Go 等主流技术栈的实战方案。</p>
+              <Heading as="h3">🚀 <Translate id="homepage.feature3.title">最佳实践集</Translate></Heading>
+              <p><Translate id="homepage.feature3.desc">内置 TypeScript、Python、Go 等主流技术栈的实战方案。</Translate></p>
             </div>
           </div>
         </section>

@@ -1,0 +1,178 @@
+---
+sidebar_position: 2
+title: TDD Masterclass
+description: Master test-driven development with ECC
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🧪 TDD Masterclass
+
+Welcome to the TDD Masterclass! In this tutorial, you'll master the art of test-driven development using ECC's tdd-guide agent.
+
+## 🎯 What is TDD?
+
+**Test-Driven Development (TDD)** is a software development methodology where you:
+
+1. **🔴 Red Phase** - Write a failing test first
+2. **🟢 Green Phase** - Write the minimum code to make it pass
+3. **🔵 Refactor Phase** - Improve the code without changing behavior
+
+This cycle ensures your code is always tested and you only build what's truly needed.
+
+## 🎮 Try the TDD Commands
+
+<CommandSimulator 
+  availableCommands={['/tdd', '/tdd --feature="auth"', '/tdd --fix="bug-123"']}
+  commandOutputs={{
+    '/tdd': '🧪 TDD Guide activated!\n\nI\'m ready to guide you through test-driven development.\n\nUsage:\n  /tdd --feature="feature-name"\n  /tdd --fix="bug-number"\n\nWhat would you like to build or fix?',
+    '/tdd --feature="auth"': '🧪 TDD Guide: User Authentication Feature\n\n📋 Test Plan:\n1. Test user registration validation\n2. Test password hashing\n3. Test login flow\n4. Test session management\n\nLet\'s start with the first test...\n\n🔴 Red Phase: Write a failing test for user registration',
+    '/tdd --fix="bug-123"': '🧪 TDD Guide: Bug Fix Mode\n\n🐛 Analyzing bug-123...\n\nFirst, let\'s write a test that reproduces this bug.\nThis test should fail with the current code.\n\n🔴 Red Phase: Creating reproduction test...'
+  }}
+/>
+
+## 📚 The Red-Green-Refactor Cycle
+
+<StepByStep 
+  title="TDD Cycle: Building a Calculator"
+  steps={[
+    {
+      title: '🔴 Red: Write a Failing Test',
+      description: 'First, write a test for functionality that doesn\'t exist yet. This test must fail.',
+      code: `// calculator.test.ts
+import { add } from './calculator'
+
+describe('Calculator', () => {
+  it('should add two numbers', () => {
+    expect(add(2, 3)).toBe(5)
+  })
+})`,
+      tip: 'Run the test now — it should fail because add() doesn\'t exist yet!'
+    },
+    {
+      title: '🟢 Green: Write the Minimum Code',
+      description: 'Write the simplest code that makes the test pass. Don\'t over-engineer!',
+      code: `// calculator.ts
+export function add(a: number, b: number): number {
+  return a + b
+}`,
+      tip: 'Resist the urge to add extra features. Just make the test pass!'
+    },
+    {
+      title: '🔵 Refactor: Improve the Code',
+      description: 'Now that the test passes, improve code quality without changing behavior.',
+      code: `// calculator.ts (refactored)
+/**
+ * Adds two numbers together
+ * @param a - The first number
+ * @param b - The second number
+ * @returns The sum of a and b
+ */
+export function add(a: number, b: number): number {
+  return a + b
+}`,
+      tip: 'Add documentation, improve naming, extract functions — but keep tests passing!'
+    },
+    {
+      title: '🔄 Repeat: Next Feature',
+      description: 'Now add another test and repeat the cycle!',
+      code: `// Add to calculator.test.ts
+it('should subtract two numbers', () => {
+  expect(subtract(5, 3)).toBe(2)
+})`,
+      tip: 'Each cycle should be small and focused. Ideally 5-10 minutes per cycle.'
+    }
+  ]}
+/>
+
+## 💻 Interactive Code Lab
+
+Try writing your own TDD cycle! Start with a failing test:
+
+<CodePlayground 
+  title="TDD Lab: String Utilities"
+  language="typescript"
+  initialCode={`// Step 1: Write a failing test
+// Test: capitalize('hello') should return 'Hello'
+
+import { capitalize } from './stringUtils'
+
+describe('StringUtils', () => {
+  it('should capitalize first letter', () => {
+    expect(capitalize('hello')).toBe('Hello')
+  })
+})
+
+// Step 2: Now write the function to make the test pass!
+// export function capitalize(str: string): string {
+//   // Your code here
+// }
+`}
+/>
+
+## 🎯 TDD Best Practices
+
+### Do ✅
+- Write the **smallest possible test** first
+- **Run tests frequently** (after every change)
+- **Commit after each green phase**
+- Keep **refactoring sessions short**
+- Give tests **descriptive names**
+
+### Don't ❌
+- Write implementation code before writing tests
+- Write multiple tests at once
+- Skip the refactoring phase
+- Test implementation details
+- Make tests too complex
+
+## ❓ Knowledge Check
+
+<Quiz 
+  question="In TDD, when should you write implementation code?"
+  options={[
+    'Before writing any tests',
+    'After writing a failing test',
+    'At the beginning of the project',
+    'Only during code review'
+  ]}
+  correctAnswer={1}
+  explanation="In TDD, you always write a failing test first (Red phase), then write the minimum code needed to make it pass (Green phase). This ensures you only write code that is truly needed."
+/>
+
+<Quiz 
+  question="What should you do during the refactoring phase?"
+  options={[
+    'Add new features',
+    'Write more tests',
+    'Improve code quality without changing behavior',
+    'Delete failing tests'
+  ]}
+  correctAnswer={2}
+  explanation="The refactoring phase is for improving code quality (better naming, documentation, extracting functions) while keeping all tests passing. Never change behavior during refactoring!"
+/>
+
+<Quiz 
+  question="How long should a typical TDD cycle take?"
+  options={[
+    '1-2 hours',
+    '30-60 minutes',
+    '5-10 minutes',
+    'An entire day'
+  ]}
+  correctAnswer={2}
+  explanation="A typical TDD cycle should be 5-10 minutes. Small, frequent cycles provide faster feedback and make it easier to identify where bugs were introduced. If a cycle takes longer, break it into smaller parts!"
+/>
+
+## 🎉 Congratulations!
+
+You've completed the TDD Masterclass! You learned:
+
+- ✅ The Red-Green-Refactor cycle
+- ✅ TDD best practices
+- ✅ How to use the `/tdd` command in ECC
+- ✅ Writing effective tests
+
+## 📖 Next Steps
+
+Check out the [Interactive Tutorials](/docs/tutorials/) section for more tutorials!

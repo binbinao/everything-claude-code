@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { debounce } from '../shared/utils'
 import styles from './SearchBox.module.css'
 
 interface SearchBoxProps {
@@ -18,6 +19,8 @@ interface SearchBoxProps {
   placeholder?: string
   /** Auto focus on mount */
   autoFocus?: boolean
+  /** Debounce delay in ms (0 = no debounce) */
+  debounceMs?: number
 }
 
 export function SearchBox({
@@ -26,9 +29,24 @@ export function SearchBox({
   showShortcut = true,
   placeholder = 'Search docs...',
   autoFocus = false,
+  debounceMs = 0,
 }: SearchBoxProps) {
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Create debounced search callback
+  const debouncedSearchRef = useRef<ReturnType<typeof debounce> | null>(null)
+  useEffect(() => {
+    if (onSearch && debounceMs > 0) {
+      debouncedSearchRef.current = debounce(onSearch, debounceMs) as ReturnType<typeof debounce>
+    } else {
+      debouncedSearchRef.current = null
+    }
+    return () => {
+      // Cancel any pending debounced call on cleanup
+      debouncedSearchRef.current = null
+    }
+  }, [onSearch, debounceMs])
 
   // Handle keyboard shortcut (Cmd+K / Ctrl+K)
   useEffect(() => {
@@ -50,7 +68,11 @@ export function SearchBox({
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value
     setQuery(newQuery)
-    onSearch?.(newQuery)
+    if (debouncedSearchRef.current) {
+      debouncedSearchRef.current(newQuery)
+    } else {
+      onSearch?.(newQuery)
+    }
   }, [onSearch])
 
   const isMac = typeof navigator !== 'undefined' && navigator.platform.toUpperCase().includes('MAC')

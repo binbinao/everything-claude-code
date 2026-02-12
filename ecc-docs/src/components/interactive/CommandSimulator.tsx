@@ -76,7 +76,7 @@ export function CommandSimulator({
       </div>
 
       {/* Command History */}
-      <div className={styles.terminal}>
+      <div className={styles.terminal} aria-live="polite">
         {history.map((entry, index) => (
           <div key={index} className={styles.historyEntry}>
             <div className={styles.command}>
@@ -122,13 +122,14 @@ export function CommandSimulator({
       </div>
 
       {/* Available Commands */}
-      <div className={styles.commandList}>
+      <div className={styles.commandList} role="list" aria-label="Available commands">
         <span className={styles.commandListTitle}>Available Commands:</span>
         {availableCommands.map(cmd => (
           <button
             key={cmd}
             className={styles.commandButton}
             onClick={() => executeCommand(cmd)}
+            role="listitem"
           >
             {cmd}
           </button>

@@ -78,8 +78,8 @@ export function CodePlayground({
     try {
       await navigator.clipboard.writeText(code)
       // Could show a toast notification here
-    } catch (err) {
-      console.error('Failed to copy code')
+    } catch {
+      // Clipboard API not available or permission denied - silently ignore
     }
   }, [code])
 
@@ -127,6 +127,7 @@ export function CodePlayground({
           readOnly={!editable}
           spellCheck={false}
           data-testid="code-editor"
+          aria-label="Code editor"
         />
         <div className={styles.lineNumbers}>
           {code.split('\n').map((_, i) => (

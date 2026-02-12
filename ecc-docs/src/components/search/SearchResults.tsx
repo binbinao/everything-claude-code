@@ -4,7 +4,8 @@
  * Displays search results with highlighting and navigation
  */
 
-import React from 'react'
+import React, { memo } from 'react'
+import { sanitizeHTML, escapeRegex } from '../shared/utils'
 import styles from './SearchResults.module.css'
 
 interface SearchResult {
@@ -26,23 +27,29 @@ interface SearchResultsProps {
 }
 
 /**
- * Highlights query text within content
+ * Highlights query text within content, with XSS protection.
+ * Sanitizes input text before highlighting to prevent injection.
  */
 function highlightText(text: string, query: string): React.ReactNode {
-  if (!query) return text
+  if (!query) return sanitizeHTML(text)
   
-  const parts = text.split(new RegExp(`(${query})`, 'gi'))
+  // Sanitize text first to prevent XSS
+  const safeText = sanitizeHTML(text)
+  const safeQuery = escapeRegex(sanitizeHTML(query))
+  
+  const parts = safeText.split(new RegExp(`(${safeQuery})`, 'gi'))
+  const sanitizedQuery = sanitizeHTML(query)
   
   return parts.map((part, index) => 
-    part.toLowerCase() === query.toLowerCase() ? (
+    part.toLowerCase() === sanitizedQuery.toLowerCase() ? (
       <mark key={index} className={styles.highlight}>{part}</mark>
     ) : (
-      part
+      <React.Fragment key={index}>{part}</React.Fragment>
     )
   )
 }
 
-export function SearchResults({
+function SearchResultsInner({
   results,
   query = '',
   highlightQuery = false,
@@ -93,5 +100,8 @@ export function SearchResults({
     </div>
   )
 }
+
+// Wrap with React.memo for performance optimization
+export const SearchResults = memo(SearchResultsInner)
 
 export default SearchResults
