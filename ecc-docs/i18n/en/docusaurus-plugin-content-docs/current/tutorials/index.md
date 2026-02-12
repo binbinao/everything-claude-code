@@ -14,6 +14,9 @@ Welcome to the ECC Learning Center! These interactive tutorials will help you ma
 |----------|----------|-------------------|
 | [Hello ECC](./hello-ecc) | 10 min | Your first ECC command, basic concepts |
 | [TDD Masterclass](./tdd-masterclass) | 20 min | Test-driven development with ECC |
+| [Multi-Agent Workflows](./multi-agent-workflow) | 25 min | Agent orchestration patterns |
+| [Custom Hooks](./custom-hooks) | 20 min | Build automation hooks from scratch |
+| [E2E Testing](./e2e-testing) | 20 min | End-to-end testing with Playwright |
 
 ## 📚 Tutorial Features
 
@@ -31,9 +34,9 @@ Each tutorial includes:
 2. **[TDD Masterclass](./tdd-masterclass)** - Learn test-driven development
 
 ### Intermediate
-- Multi-Agent Workflows *(Coming soon)*
-- Custom Hooks Development *(Coming soon)*
-- E2E Testing Strategies *(Coming soon)*
+- **[Multi-Agent Workflows](./multi-agent-workflow)** - Master agent orchestration patterns
+- **[Custom Hooks Development](./custom-hooks)** - Build automation hooks from scratch
+- **[E2E Testing Strategies](./e2e-testing)** - End-to-end testing with Playwright
 
 ### Advanced
 - Performance Optimization *(Coming soon)*

@@ -1,0 +1,183 @@
+---
+sidebar_position: 5
+title: E2E Testing Strategies
+description: Master end-to-end testing with Playwright - Interactive Tutorial
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🎭 E2E Testing Strategies
+
+Welcome to the E2E Testing Strategies tutorial! In this course, you'll learn how to design and implement end-to-end tests using Playwright — validating your application just like a real user would.
+
+:::info Prerequisites
+We recommend completing the [TDD Masterclass](./tdd-masterclass) first to understand the fundamentals of test-driven development.
+:::
+
+## 🎮 Experience E2E Testing Commands
+
+E2E tests simulate real user interactions. Try these commands:
+
+<CommandSimulator 
+  availableCommands={['/e2e Test login flow', '/e2e Test shopping cart', '/e2e --headed', '/e2e --debug']}
+  commandOutputs={{
+    '/e2e Test login flow': '🎭 E2E Runner launched!\n\n📋 User Journey: Login Flow\n\n  Step 1: Navigate to login page ✅\n  Step 2: Enter username ✅\n  Step 3: Enter password ✅\n  Step 4: Click login button ✅\n  Step 5: Verify redirect to homepage ✅\n  Step 6: Verify username displayed ✅\n\n✅ 1 user journey, 6 steps all passed\n⏱ Duration: 1.8s',
+    '/e2e Test shopping cart': '🎭 E2E Runner launched!\n\n📋 User Journey: Shopping Cart Flow\n\n  Step 1: Browse product list ✅\n  Step 2: Click "Add to Cart" ✅\n  Step 3: Open shopping cart ✅\n  Step 4: Verify product info ✅\n  Step 5: Change quantity to 3 ✅\n  Step 6: Verify total price update ✅\n  Step 7: Click checkout ✅\n\n✅ 1 user journey, 7 steps all passed\n⏱ Duration: 2.4s',
+    '/e2e --headed': '🎭 E2E Runner (Headed Mode)\n\n🖥️ Browser window opened!\n\nYou can watch the test execution in real time:\n  - Chrome browser operating automatically\n  - Each step highlights the target element\n  - Network request panel updates live\n\n💡 Tip: Headed mode is great for debugging and demos',
+    '/e2e --debug': '🎭 E2E Runner (Debug Mode)\n\n🔍 Playwright Inspector launched!\n\nDebug tools:\n  - Breakpoint debugging: Pause at any step\n  - Element selector: Locate elements in real time\n  - Step replay: Review execution step by step\n  - Network interception: View all API calls\n\n💡 Tip: Add await page.pause() in your test to set breakpoints'
+  }}
+/>
+
+## 📚 Three-Step E2E Test Design
+
+<StepByStep 
+  title="From User Journey to Playwright Test"
+  steps={[
+    {
+      title: 'Step 1: Define the User Journey',
+      description: 'E2E testing starts not with code, but with user stories. Imagine how a real user would use your application — from opening the page to achieving their goal. A user journey is like a "tour guide route map".',
+      code: '// User Journey: Login Flow\n// \n// As a registered user,\n// I want to log in to my account,\n// So that I can access my dashboard.\n//\n// Steps:\n// 1. Navigate to /login\n// 2. Enter email in email field\n// 3. Enter password in password field\n// 4. Click "Login" button\n// 5. Verify redirect to /dashboard\n// 6. Verify welcome message shows username',
+      tip: 'Each user journey corresponds to one test() function. Write comments first, then code!'
+    },
+    {
+      title: 'Step 2: Create a Page Object',
+      description: 'The Page Object pattern encapsulates page interactions into reusable classes. Think of it as hiring a "personal assistant" for each page — you just say "log in", and the assistant knows which forms to fill and which buttons to click.',
+      code: '// pages/LoginPage.ts\nimport { Page, Locator } from \'@playwright/test\'\n\nexport class LoginPage {\n  readonly page: Page\n  readonly emailInput: Locator\n  readonly passwordInput: Locator\n  readonly loginButton: Locator\n  readonly errorMessage: Locator\n\n  constructor(page: Page) {\n    this.page = page\n    this.emailInput = page.getByLabel(\'Email\')\n    this.passwordInput = page.getByLabel(\'Password\')\n    this.loginButton = page.getByRole(\'button\', { name: \'Login\' })\n    this.errorMessage = page.getByTestId(\'error-message\')\n  }\n\n  async goto() {\n    await this.page.goto(\'/login\')\n  }\n\n  async login(email: string, password: string) {\n    await this.emailInput.fill(email)\n    await this.passwordInput.fill(password)\n    await this.loginButton.click()\n  }\n}',
+      tip: 'Page Objects make test code highly readable: loginPage.login(email, pwd) is much clearer than a bunch of selectors!'
+    },
+    {
+      title: 'Step 3: Write the Playwright Test',
+      description: 'Combine user journeys with Page Objects to write clear, concise E2E tests. A good E2E test reads like a user story.',
+      code: '// tests/login.spec.ts\nimport { test, expect } from \'@playwright/test\'\nimport { LoginPage } from \'../pages/LoginPage\'\n\ntest.describe(\'Login Flow\', () => {\n  test(\'should login with valid credentials\', async ({ page }) => {\n    // Arrange\n    const loginPage = new LoginPage(page)\n    await loginPage.goto()\n\n    // Act\n    await loginPage.login(\'user@example.com\', \'password123\')\n\n    // Assert\n    await expect(page).toHaveURL(\'/dashboard\')\n    await expect(\n      page.getByText(\'Welcome, User\')\n    ).toBeVisible()\n  })\n\n  test(\'should show error for invalid password\', async ({ page }) => {\n    const loginPage = new LoginPage(page)\n    await loginPage.goto()\n\n    await loginPage.login(\'user@example.com\', \'wrong\')\n\n    await expect(loginPage.errorMessage).toBeVisible()\n    await expect(loginPage.errorMessage).toHaveText(\n      \'Invalid credentials\'\n    )\n  })\n})',
+      tip: 'Every test follows the AAA pattern: Arrange → Act → Assert'
+    },
+    {
+      title: 'Step 4: Advanced Techniques — Network Interception & Visual Regression',
+      description: 'True E2E masters also use network interception to mock API responses, and visual regression testing to catch UI changes.',
+      code: '// Advanced: Network interception\ntest(\'should handle API error gracefully\', async ({ page }) => {\n  // Mock API to return error\n  await page.route(\'**/api/login\', route =>\n    route.fulfill({\n      status: 500,\n      body: JSON.stringify({ error: \'Server Error\' })\n    })\n  )\n\n  const loginPage = new LoginPage(page)\n  await loginPage.goto()\n  await loginPage.login(\'user@example.com\', \'pass123\')\n\n  // Should show friendly error message\n  await expect(\n    page.getByText(\'Service temporarily unavailable\')\n  ).toBeVisible()\n})\n\n// Visual regression test\ntest(\'login page should match snapshot\', async ({ page }) => {\n  await page.goto(\'/login\')\n  await expect(page).toHaveScreenshot(\'login-page.png\')\n})',
+      tip: 'Network interception lets you test various scenarios (errors, timeouts, empty data) without depending on the backend'
+    }
+  ]}
+/>
+
+## 💻 Write Your First Playwright Test
+
+Write a complete E2E test in the code playground. Try writing a user journey test for a search feature:
+
+<CodePlayground 
+  title="Playwright E2E Test"
+  language="typescript"
+  initialCode={`// tests/search.spec.ts
+import { test, expect } from '@playwright/test'
+
+// Page Object for Search
+class SearchPage {
+  constructor(private page) {}
+
+  // Locators
+  get searchInput() {
+    return this.page.getByPlaceholder('Search docs...')
+  }
+  get searchResults() {
+    return this.page.getByTestId('search-results')
+  }
+  get resultItems() {
+    return this.page.getByRole('listitem')
+  }
+  get noResults() {
+    return this.page.getByText('No results found')
+  }
+
+  // Actions
+  async search(query: string) {
+    await this.searchInput.fill(query)
+    await this.searchInput.press('Enter')
+  }
+}
+
+// User Journey: Search Documentation
+test.describe('Search Flow', () => {
+
+  test('should find results for valid query', async ({ page }) => {
+    const searchPage = new SearchPage(page)
+    await page.goto('/')
+
+    // User types a search query
+    await searchPage.search('hooks')
+
+    // Should show relevant results
+    await expect(searchPage.searchResults).toBeVisible()
+    await expect(searchPage.resultItems).toHaveCount(3)
+  })
+
+  test('should show empty state for no results', async ({ page }) => {
+    const searchPage = new SearchPage(page)
+    await page.goto('/')
+
+    // User types a query with no matches
+    await searchPage.search('xyznonexistent')
+
+    // Should show friendly empty state
+    await expect(searchPage.noResults).toBeVisible()
+  })
+
+  // Try adding more test cases:
+  // - Test keyboard navigation (Tab, Enter)
+  // - Test search suggestions/autocomplete
+  // - Test clearing search
+})`}
+/>
+
+## ❓ Knowledge Check
+
+<Quiz 
+  question="What should be the first step in E2E testing?"
+  options={[
+    'Write Playwright test code',
+    'Create a Page Object',
+    'Define the user journey',
+    'Configure playwright.config.ts'
+  ]}
+  correctAnswer={2}
+  explanation="E2E testing starts with defining user journeys — describing the complete path a real user takes from start to goal. The user journey is your 'test blueprint'; having the blueprint before writing code ensures your tests cover real scenarios."
+/>
+
+<Quiz 
+  question="What is the biggest advantage of the Page Object pattern?"
+  options={[
+    'Makes tests run faster',
+    'Reduces browser startup time',
+    'Encapsulates page interactions into reusable interfaces, improving maintainability',
+    'Auto-generates test cases'
+  ]}
+  correctAnswer={2}
+  explanation="The Page Object pattern encapsulates DOM selectors and interaction operations in a single class. When the UI changes, you only need to update the Page Object, and all tests that reference it update automatically. This greatly improves test maintainability and readability."
+/>
+
+<Quiz 
+  question="Which Playwright selector is most recommended?"
+  options={[
+    'page.locator(".btn-primary")',
+    'page.locator("#login-btn")',
+    'page.getByRole("button", { name: "Login" })',
+    'page.locator("div > form > button:nth-child(2)")'
+  ]}
+  correctAnswer={2}
+  explanation="Playwright recommends user-facing selectors (like getByRole, getByLabel, getByText) because they simulate a real user's perspective. CSS selectors break easily when the DOM structure changes, while role-based selectors are more stable and naturally comply with accessibility standards."
+/>
+
+## 🎉 Congratulations!
+
+You've completed the E2E Testing Strategies tutorial! You've mastered:
+
+- ✅ User journey-driven test design
+- ✅ Page Object pattern encapsulation
+- ✅ Playwright test writing (AAA pattern)
+- ✅ Network interception and visual regression
+- ✅ Best selector strategies
+
+## 📖 Next Steps
+
+- [Multi-Agent Workflows](./multi-agent-workflow) - Learn agent orchestration
+- [Custom Hooks Development](./custom-hooks) - Create automation hooks
+- [Advanced Topics: Performance](/docs/advanced/performance) - Dive into performance tuning

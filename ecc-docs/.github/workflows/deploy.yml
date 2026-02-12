@@ -87,12 +87,14 @@ jobs:
     needs: deploy
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Health check
+        working-directory: ecc-docs
         run: |
           echo "Verifying deployment health..."
-          # Add health check URL once deployed
-          # curl -f ${{ needs.deploy.outputs.url }} || exit 1
-          echo "Deployment verification complete! ✅"
+          bash scripts/health-check.sh "${{ needs.deploy.outputs.url }}"
           
       - name: Notify success
         run: |

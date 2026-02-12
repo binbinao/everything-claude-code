@@ -9,6 +9,11 @@ on:
   pull_request:
     branches: [main]
 
+# Prevent duplicate runs
+concurrency:
+  group: ecc-docs-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   NODE_VERSION: '20'
 
