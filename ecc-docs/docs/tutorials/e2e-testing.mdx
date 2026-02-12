@@ -1,0 +1,183 @@
+---
+sidebar_position: 5
+title: E2E 测试策略
+description: 使用 Playwright 掌握端到端测试 - 交互式教程
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🎭 E2E 测试策略
+
+欢迎来到 E2E 测试策略教程！在本课程中，你将学习如何使用 Playwright 设计和实施端到端测试 — 像真实用户一样验证你的应用。
+
+:::info 前置知识
+建议先完成 [TDD 大师课](./tdd-masterclass)，了解测试驱动开发的基本概念。
+:::
+
+## 🎮 体验 E2E 测试命令
+
+E2E 测试模拟真实用户操作。试试这些命令：
+
+<CommandSimulator 
+  availableCommands={['/e2e 测试登录流程', '/e2e 测试购物车', '/e2e --headed', '/e2e --debug']}
+  commandOutputs={{
+    '/e2e 测试登录流程': '🎭 E2E Runner 启动！\n\n📋 用户旅程：登录流程\n\n  Step 1: 访问登录页面 ✅\n  Step 2: 填写用户名 ✅\n  Step 3: 填写密码 ✅\n  Step 4: 点击登录按钮 ✅\n  Step 5: 验证跳转到首页 ✅\n  Step 6: 验证用户名显示 ✅\n\n✅ 1 个用户旅程，6 个步骤全部通过\n⏱ 耗时：1.8s',
+    '/e2e 测试购物车': '🎭 E2E Runner 启动！\n\n📋 用户旅程：购物车流程\n\n  Step 1: 浏览商品列表 ✅\n  Step 2: 点击"加入购物车" ✅\n  Step 3: 打开购物车 ✅\n  Step 4: 验证商品信息 ✅\n  Step 5: 修改数量为 3 ✅\n  Step 6: 验证总价更新 ✅\n  Step 7: 点击结账 ✅\n\n✅ 1 个用户旅程，7 个步骤全部通过\n⏱ 耗时：2.4s',
+    '/e2e --headed': '🎭 E2E Runner（有头模式）\n\n🖥️ 浏览器窗口已打开！\n\n你可以实时观看测试执行：\n  - Chrome 浏览器自动操作\n  - 每个步骤高亮显示操作元素\n  - 网络请求面板实时更新\n\n💡 提示：有头模式适合调试和演示',
+    '/e2e --debug': '🎭 E2E Runner（调试模式）\n\n🔍 Playwright Inspector 已启动！\n\n调试工具：\n  - 断点调试：在任意步骤暂停\n  - 元素选择器：实时定位元素\n  - 步骤回放：逐步查看执行过程\n  - 网络拦截：查看所有 API 调用\n\n💡 提示：在测试中添加 await page.pause() 设置断点'
+  }}
+/>
+
+## 📚 E2E 测试设计三步法
+
+<StepByStep 
+  title="从用户旅程到 Playwright 测试"
+  steps={[
+    {
+      title: '第一步：定义用户旅程',
+      description: 'E2E 测试的起点不是代码，而是用户故事。想象一个真实用户会如何使用你的应用 — 从打开页面到完成目标。用户旅程就像一份"导游路线图"。',
+      code: '// User Journey: Login Flow\n// \n// As a registered user,\n// I want to log in to my account,\n// So that I can access my dashboard.\n//\n// Steps:\n// 1. Navigate to /login\n// 2. Enter email in email field\n// 3. Enter password in password field\n// 4. Click "Login" button\n// 5. Verify redirect to /dashboard\n// 6. Verify welcome message shows username',
+      tip: '每个用户旅程对应一个 test() 函数。先写注释，再写代码！'
+    },
+    {
+      title: '第二步：创建 Page Object',
+      description: 'Page Object 模式将页面交互封装成可复用的类。就像给每个页面雇了一个"私人助理" — 你只需说"登录"，助理知道要填哪些表单、点哪个按钮。',
+      code: '// pages/LoginPage.ts\nimport { Page, Locator } from \'@playwright/test\'\n\nexport class LoginPage {\n  readonly page: Page\n  readonly emailInput: Locator\n  readonly passwordInput: Locator\n  readonly loginButton: Locator\n  readonly errorMessage: Locator\n\n  constructor(page: Page) {\n    this.page = page\n    this.emailInput = page.getByLabel(\'Email\')\n    this.passwordInput = page.getByLabel(\'Password\')\n    this.loginButton = page.getByRole(\'button\', { name: \'Login\' })\n    this.errorMessage = page.getByTestId(\'error-message\')\n  }\n\n  async goto() {\n    await this.page.goto(\'/login\')\n  }\n\n  async login(email: string, password: string) {\n    await this.emailInput.fill(email)\n    await this.passwordInput.fill(password)\n    await this.loginButton.click()\n  }\n}',
+      tip: 'Page Object 让测试代码可读性极高：loginPage.login(email, pwd) 比一堆选择器清晰多了！'
+    },
+    {
+      title: '第三步：编写 Playwright 测试',
+      description: '将用户旅程和 Page Object 结合，编写简洁明了的 E2E 测试。好的 E2E 测试读起来就像一个用户故事。',
+      code: '// tests/login.spec.ts\nimport { test, expect } from \'@playwright/test\'\nimport { LoginPage } from \'../pages/LoginPage\'\n\ntest.describe(\'Login Flow\', () => {\n  test(\'should login with valid credentials\', async ({ page }) => {\n    // Arrange\n    const loginPage = new LoginPage(page)\n    await loginPage.goto()\n\n    // Act\n    await loginPage.login(\'user@example.com\', \'password123\')\n\n    // Assert\n    await expect(page).toHaveURL(\'/dashboard\')\n    await expect(\n      page.getByText(\'Welcome, User\')\n    ).toBeVisible()\n  })\n\n  test(\'should show error for invalid password\', async ({ page }) => {\n    const loginPage = new LoginPage(page)\n    await loginPage.goto()\n\n    await loginPage.login(\'user@example.com\', \'wrong\')\n\n    await expect(loginPage.errorMessage).toBeVisible()\n    await expect(loginPage.errorMessage).toHaveText(\n      \'Invalid credentials\'\n    )\n  })\n})',
+      tip: '每个测试遵循 AAA 模式：Arrange（准备）→ Act（执行）→ Assert（断言）'
+    },
+    {
+      title: '第四步：高级技巧 — 网络拦截与视觉回归',
+      description: '真正的 E2E 高手还会使用网络拦截模拟 API 响应，以及视觉回归测试捕获 UI 变化。',
+      code: '// Advanced: Network interception\ntest(\'should handle API error gracefully\', async ({ page }) => {\n  // Mock API to return error\n  await page.route(\'**/api/login\', route =>\n    route.fulfill({\n      status: 500,\n      body: JSON.stringify({ error: \'Server Error\' })\n    })\n  )\n\n  const loginPage = new LoginPage(page)\n  await loginPage.goto()\n  await loginPage.login(\'user@example.com\', \'pass123\')\n\n  // Should show friendly error message\n  await expect(\n    page.getByText(\'Service temporarily unavailable\')\n  ).toBeVisible()\n})\n\n// Visual regression test\ntest(\'login page should match snapshot\', async ({ page }) => {\n  await page.goto(\'/login\')\n  await expect(page).toHaveScreenshot(\'login-page.png\')\n})',
+      tip: '网络拦截让你不依赖后端就能测试各种场景（错误、超时、空数据等）'
+    }
+  ]}
+/>
+
+## 💻 编写你的第一个 Playwright 测试
+
+在代码实验室中编写一个完整的 E2E 测试。尝试为一个搜索功能编写用户旅程测试：
+
+<CodePlayground 
+  title="Playwright E2E 测试"
+  language="typescript"
+  initialCode={`// tests/search.spec.ts
+import { test, expect } from '@playwright/test'
+
+// Page Object for Search
+class SearchPage {
+  constructor(private page) {}
+
+  // Locators
+  get searchInput() {
+    return this.page.getByPlaceholder('Search docs...')
+  }
+  get searchResults() {
+    return this.page.getByTestId('search-results')
+  }
+  get resultItems() {
+    return this.page.getByRole('listitem')
+  }
+  get noResults() {
+    return this.page.getByText('No results found')
+  }
+
+  // Actions
+  async search(query: string) {
+    await this.searchInput.fill(query)
+    await this.searchInput.press('Enter')
+  }
+}
+
+// User Journey: Search Documentation
+test.describe('Search Flow', () => {
+
+  test('should find results for valid query', async ({ page }) => {
+    const searchPage = new SearchPage(page)
+    await page.goto('/')
+
+    // User types a search query
+    await searchPage.search('hooks')
+
+    // Should show relevant results
+    await expect(searchPage.searchResults).toBeVisible()
+    await expect(searchPage.resultItems).toHaveCount(3)
+  })
+
+  test('should show empty state for no results', async ({ page }) => {
+    const searchPage = new SearchPage(page)
+    await page.goto('/')
+
+    // User types a query with no matches
+    await searchPage.search('xyznonexistent')
+
+    // Should show friendly empty state
+    await expect(searchPage.noResults).toBeVisible()
+  })
+
+  // Try adding more test cases:
+  // - Test keyboard navigation (Tab, Enter)
+  // - Test search suggestions/autocomplete
+  // - Test clearing search
+})`}
+/>
+
+## ❓ 知识检测
+
+<Quiz 
+  question="E2E 测试的第一步应该是什么？"
+  options={[
+    '编写 Playwright 测试代码',
+    '创建 Page Object',
+    '定义用户旅程',
+    '配置 playwright.config.ts'
+  ]}
+  correctAnswer={2}
+  explanation="E2E 测试的起点是定义用户旅程 — 描述真实用户从开始到完成目标的完整路径。用户旅程是你的'测试蓝图'，先有蓝图再写代码，才能确保测试覆盖真实场景。"
+/>
+
+<Quiz 
+  question="Page Object 模式的最大优势是什么？"
+  options={[
+    '让测试运行更快',
+    '减少浏览器启动时间',
+    '将页面交互封装为可复用的接口，提高可维护性',
+    '自动生成测试用例'
+  ]}
+  correctAnswer={2}
+  explanation="Page Object 模式将页面的 DOM 选择器和交互操作封装在一个类中。当 UI 变化时，只需修改 Page Object，所有引用它的测试自动更新。这大大提高了测试的可维护性和可读性。"
+/>
+
+<Quiz 
+  question="以下哪种 Playwright 选择器最推荐使用？"
+  options={[
+    'page.locator(\".btn-primary\")',
+    'page.locator(\"#login-btn\")',
+    'page.getByRole(\"button\", { name: \"Login\" })',
+    'page.locator(\"div > form > button:nth-child(2)\")'
+  ]}
+  correctAnswer={2}
+  explanation="Playwright 推荐使用面向用户的选择器（如 getByRole、getByLabel、getByText），因为它们模拟真实用户的视角。CSS 选择器容易因 DOM 结构变化而断裂，而 role-based 选择器更稳定且天然符合无障碍访问标准。"
+/>
+
+## 🎉 恭喜！
+
+你已完成 E2E 测试策略教程！你掌握了：
+
+- ✅ 用户旅程驱动的测试设计
+- ✅ Page Object 模式封装
+- ✅ Playwright 测试编写（AAA 模式）
+- ✅ 网络拦截与视觉回归
+- ✅ 最佳选择器策略
+
+## 📖 下一步
+
+- [多智能体工作流](./multi-agent-workflow) - 学习智能体编排
+- [自定义 Hooks 开发](./custom-hooks) - 创建自动化钩子
+- [高级主题：性能优化](/docs/advanced/performance) - 深入性能调优

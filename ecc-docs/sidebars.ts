@@ -10,6 +10,9 @@ const sidebars: SidebarsConfig = {
         'tutorials/index',
         'tutorials/hello-ecc',
         'tutorials/tdd-masterclass',
+        'tutorials/multi-agent-workflow',
+        'tutorials/custom-hooks',
+        'tutorials/e2e-testing',
       ],
     },
     {

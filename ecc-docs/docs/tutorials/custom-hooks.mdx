@@ -1,0 +1,182 @@
+---
+sidebar_position: 4
+title: 自定义 Hooks 开发
+description: 从零创建 ECC 自动化钩子 - 交互式教程
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🪝 自定义 Hooks 开发
+
+欢迎来到自定义 Hooks 教程！在本课程中，你将学习如何创建自己的 ECC 钩子来自动化重复性任务 — 让你的开发流程像瑞士钟表一样精准运行。
+
+:::info 前置知识
+建议先熟悉 [Hooks 钩子](/docs/core-concepts/hooks) 核心概念。
+:::
+
+## 🎮 体验钩子系统
+
+ECC 的钩子在特定时机自动触发。试试这些命令来了解不同的钩子类型：
+
+<CommandSimulator 
+  availableCommands={['hook:postToolUse', 'hook:preCommit', 'hook:stop', 'hooks --list']}
+  commandOutputs={{
+    'hook:postToolUse': '🪝 PostToolUse 钩子触发！\n\n📁 检测到文件编辑：src/utils/parser.ts\n\n🔄 执行自动化操作：\n  ✅ Prettier 格式化完成\n  ✅ TypeScript 类型检查通过\n  ⚠️ 发现 console.log（第 42 行）\n     建议：生产代码请使用 logger',
+    'hook:preCommit': '🪝 PreCommit 钩子触发！\n\n📋 提交前检查清单：\n  ✅ lint-staged：3 个文件检查通过\n  ✅ type-check：无类型错误\n  ✅ test-affected：12 个相关测试通过\n  ⚠️ console.log 审计：发现 2 处\n\n🚫 提交已阻止！请先移除 console.log',
+    'hook:stop': '🪝 Stop 钩子触发！\n\n📊 会话结束审计报告：\n  📝 本次修改文件：8 个\n  ✅ console.log 审计：全部清除\n  ✅ 测试覆盖率：87%（> 80% 阈值）\n  ✅ 安全扫描：无漏洞\n\n👋 会话安全结束！',
+    'hooks --list': '📋 已配置的钩子列表：\n\n🔧 PostToolUse（工具使用后）：\n  1. prettier - 自动格式化\n  2. tsc-check - 类型检查\n  3. console-warn - console.log 警告\n\n🔒 PreCommit（提交前）：\n  4. lint-staged - 暂存文件检查\n  5. type-check - 全量类型检查\n  6. test-affected - 受影响测试\n\n🛑 Stop（会话结束）：\n  7. console-audit - console.log 审计\n  8. coverage-check - 覆盖率检查'
+  }}
+/>
+
+## 📚 从零创建自定义 Hook
+
+让我们一步一步创建一个实用的自定义钩子：
+
+<StepByStep 
+  title="创建 auto-format Hook"
+  steps={[
+    {
+      title: '理解钩子结构',
+      description: '每个 ECC 钩子由 4 个核心属性组成：name（名称）、trigger（触发条件）、filePattern（文件匹配）、command（执行命令）。就像设置闹钟 — 什么时间(trigger)、闹哪些天(filePattern)、播什么铃声(command)。',
+      code: '// Hook structure\n{\n  "name": "hook-name",        // Unique identifier\n  "trigger": "edit_file",      // When to trigger\n  "filePattern": "*.{ts,tsx}",  // Which files to watch\n  "command": "npx prettier --write ${file}"  // What to execute\n}',
+      tip: '${file} 是内置变量，会自动替换为被编辑的文件路径'
+    },
+    {
+      title: '选择钩子类型',
+      description: '根据你的需求选择合适的钩子类型：postToolUse（每次编辑后立即执行）、preCommit（提交前检查）、stop（会话结束时执行）。',
+      code: '// Three hook types in settings.json\n{\n  "hooks": {\n    "postToolUse": [...],  // After every file edit\n    "preCommit": [...],    // Before git commit\n    "stop": [...]          // Before session ends\n  }\n}',
+      tip: 'postToolUse 最常用 — 实时反馈让问题无处遁形！'
+    },
+    {
+      title: '编写 postToolUse 钩子',
+      description: '我们来创建一个自动格式化钩子。每当编辑 TypeScript 文件后，自动运行 Prettier。',
+      code: '// ~/.claude/settings.json\n{\n  "hooks": {\n    "postToolUse": [\n      {\n        "name": "auto-format",\n        "trigger": "edit_file",\n        "filePattern": "*.{ts,tsx,js,jsx}",\n        "command": "npx prettier --write ${file}"\n      }\n    ]\n  }\n}',
+      tip: '确保项目中已安装 prettier（npm install -D prettier）'
+    },
+    {
+      title: '添加 preCommit 检查钩子',
+      description: '在提交前自动检查代码质量。这是你的最后一道防线 — 确保不合格的代码永远不会进入仓库。',
+      code: '// Add to preCommit hooks\n{\n  "hooks": {\n    "preCommit": [\n      {\n        "name": "no-console-log",\n        "command": "grep -r \\"console.log\\" --include=\\"*.ts\\" src/",\n        "onMatch": "block",\n        "message": "Remove console.log before committing!"\n      },\n      {\n        "name": "run-tests",\n        "command": "npm test -- --bail",\n        "onFailure": "block"\n      }\n    ]\n  }\n}',
+      tip: 'preCommit 钩子失败会阻止提交，保护代码库质量'
+    },
+    {
+      title: '添加 stop 审计钩子',
+      description: '会话结束时做最终审计。就像下班前的安全检查清单 — 确保没有遗留问题。',
+      code: '// Add to stop hooks\n{\n  "hooks": {\n    "stop": [\n      {\n        "name": "console-audit",\n        "command": "grep -rn \\"console.log\\" --include=\\"*.ts\\" src/",\n        "severity": "warn",\n        "message": "Found console.log in modified files"\n      },\n      {\n        "name": "coverage-check",\n        "command": "npm test -- --coverage --silent",\n        "threshold": { "lines": 80 }\n      }\n    ]\n  }\n}',
+      tip: 'stop 钩子是审计性质的，通常使用 warn 而非 block'
+    }
+  ]}
+/>
+
+## 💻 编写你自己的 Hook
+
+在代码实验室中编写一个完整的钩子配置。尝试添加你自己的规则：
+
+<CodePlayground 
+  title="自定义 Hook 配置"
+  language="json"
+  initialCode={`{
+  "hooks": {
+    "postToolUse": [
+      {
+        "name": "auto-format",
+        "trigger": "edit_file",
+        "filePattern": "*.{ts,tsx}",
+        "command": "npx prettier --write \${file}"
+      },
+      {
+        "name": "type-check",
+        "trigger": "edit_file",
+        "filePattern": "*.{ts,tsx}",
+        "command": "npx tsc --noEmit"
+      },
+      {
+        "name": "console-detect",
+        "trigger": "edit_file",
+        "filePattern": "*.{ts,tsx}",
+        "pattern": "console.log",
+        "severity": "warn",
+        "message": "Avoid console.log in production code!"
+      }
+    ],
+    "preCommit": [
+      {
+        "name": "lint-staged",
+        "command": "npx lint-staged"
+      },
+      {
+        "name": "no-debug-code",
+        "command": "grep -rn 'debugger\\\\|console.log' --include='*.ts' src/",
+        "onMatch": "block",
+        "message": "Remove debug statements before committing"
+      }
+    ],
+    "stop": [
+      {
+        "name": "session-summary",
+        "command": "git diff --stat",
+        "severity": "info"
+      },
+      {
+        "name": "todo-reminder",
+        "command": "grep -rn 'TODO\\\\|FIXME' --include='*.ts' src/",
+        "severity": "warn",
+        "message": "Don't forget about these TODOs!"
+      }
+    ]
+  }
+}`}
+/>
+
+## ❓ 知识检测
+
+<Quiz 
+  question="以下哪种钩子类型最适合'每次保存文件后自动运行 Prettier'？"
+  options={[
+    'preCommit',
+    'postToolUse',
+    'stop',
+    'onSave'
+  ]}
+  correctAnswer={1}
+  explanation="postToolUse 钩子在每次工具使用（如 edit_file）后自动触发，非常适合实时格式化、类型检查等即时反馈场景。它是 ECC 中最常用的钩子类型。"
+/>
+
+<Quiz 
+  question="如果 preCommit 钩子检测到 console.log，最佳做法是什么？"
+  options={[
+    '忽略并继续提交',
+    '仅发出警告',
+    '阻止提交并要求移除',
+    '自动删除 console.log'
+  ]}
+  correctAnswer={2}
+  explanation="生产代码中不应包含 console.log（参见项目规则）。preCommit 钩子应使用 'block' 级别阻止提交，强制开发者在提交前移除调试代码。这是代码质量的最后一道防线。"
+/>
+
+<Quiz 
+  question="stop 钩子和 preCommit 钩子的关键区别是什么？"
+  options={[
+    'stop 钩子更快',
+    'stop 钩子在会话结束时执行，preCommit 在提交前执行',
+    'stop 钩子不能阻止操作',
+    'preCommit 钩子不能运行命令'
+  ]}
+  correctAnswer={1}
+  explanation="stop 钩子在会话结束前执行（适合最终审计），preCommit 钩子在 git commit 前执行（适合质量门禁）。两者触发时机不同，用途互补：preCommit 守护每次提交，stop 守护整个会话。"
+/>
+
+## 🎉 恭喜！
+
+你已完成自定义 Hooks 教程！你掌握了：
+
+- ✅ 三种钩子类型：postToolUse、preCommit、stop
+- ✅ 钩子的核心配置结构
+- ✅ 自动格式化与类型检查钩子
+- ✅ console.log 检测与提交阻止
+- ✅ 会话结束审计钩子
+
+## 📖 下一步
+
+- [E2E 测试策略](./e2e-testing) - 掌握端到端测试
+- [Hooks 钩子详解](/docs/core-concepts/hooks) - 深入了解所有钩子

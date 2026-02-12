@@ -1,0 +1,167 @@
+---
+sidebar_position: 3
+title: 多智能体工作流
+description: 掌握多智能体协作编排 - 交互式教程
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🎭 多智能体工作流
+
+欢迎来到进阶教程！在本课程中，你将学习如何组合多个 ECC 智能体形成强大的协作工作流 — 就像指挥一支专业的开发特种部队。
+
+:::info 前置知识
+建议先完成 [Hello ECC](./hello-ecc) 和 [TDD 大师课](./tdd-masterclass) 两个入门教程。
+:::
+
+## 🎮 体验多智能体协作
+
+在实际开发中，一个复杂功能往往需要多个专家协作。试试下面这些命令组合：
+
+<CommandSimulator 
+  availableCommands={['/plan 实现购物车', '/tdd --feature=cart', '/code-review', '/e2e 测试购物流程']}
+  commandOutputs={{
+    '/plan 实现购物车': '🎯 Planner 智能体已激活！\n\n📋 购物车实施计划：\n\n阶段 1：数据模型设计\n  - CartItem 接口定义\n  - CartState 状态管理\n\n阶段 2：核心逻辑\n  - addToCart / removeFromCart\n  - calculateTotal (含折扣)\n\n阶段 3：UI 组件\n  - CartIcon / CartDrawer / CartItem\n\n⏱ 预估时间：2 小时\n⚠️ 风险：并发库存扣减',
+    '/tdd --feature=cart': '🧪 TDD Guide 智能体接手！\n\n📋 测试计划 (基于 Planner 输出)：\n\n🔴 RED 阶段：\n  ✍️ cart.test.ts - 12 个测试用例\n  - addToCart: 4 个用例\n  - removeFromCart: 3 个用例\n  - calculateTotal: 5 个用例\n\n开始编写第一个失败测试...',
+    '/code-review': '🔍 Code Reviewer 智能体分析中...\n\n📊 审查报告：\n  ✅ 安全：无硬编码凭证\n  ✅ 质量：函数均 < 50 行\n  ⚠️ 建议：calculateTotal 可提取为纯函数\n  ⚠️ 建议：添加输入验证 (负数数量)\n\n结论：可以提交 ✅',
+    '/e2e 测试购物流程': '🎭 E2E Runner 智能体启动！\n\n🎬 用户旅程测试：\n  1. 浏览商品列表\n  2. 添加商品到购物车\n  3. 修改商品数量\n  4. 应用优惠券\n  5. 完成结账\n\n✅ 5/5 场景通过\n⏱ 总耗时：3.2s'
+  }}
+/>
+
+## 📚 三大编排模式
+
+多智能体编排有三种核心模式。让我们逐步掌握它们：
+
+<StepByStep 
+  title="掌握三大编排模式"
+  steps={[
+    {
+      title: '模式一：顺序编排',
+      description: '智能体按固定顺序依次执行，前一个的输出作为下一个的输入。就像工厂流水线 — 每个工位完成自己的工序后传递给下一个。',
+      code: '# 顺序流水线\n/plan 实现用户认证      # Step 1: Planner 制定计划\n/tdd --feature=auth     # Step 2: TDD Guide 开发\n/code-review            # Step 3: Reviewer 审查\n/e2e 测试认证流程        # Step 4: E2E Runner 验收',
+      tip: '适用于标准功能开发。每个智能体的输出自动成为下一个的上下文。'
+    },
+    {
+      title: '模式二：并行编排',
+      description: '多个独立的智能体同时工作，最后汇总结果。就像多个医生同时会诊 — 各自从自己的专业角度给出诊断。',
+      code: '# 并行审查 — 3 个智能体同时工作\n同时启动：\n  Agent 1: /code-review    → 代码质量\n  Agent 2: /security       → 安全审计\n  Agent 3: /perf           → 性能分析\n\n汇总 3 份报告 → 统一决策',
+      tip: '适用于代码审查场景。3 个智能体并行只需 1 份时间！'
+    },
+    {
+      title: '模式三：条件编排',
+      description: '根据条件动态选择不同的智能体路径。就像分诊台 — 根据病情严重程度分配不同级别的医生。',
+      code: '# 条件路由\nIF 复杂度 > 高:\n  /plan → /architect → /tdd\nELSE:\n  /tdd  # 简单功能直接 TDD\n\nIF 测试通过:\n  /code-review\nELSE:\n  /tdd  # 回到 TDD 修复',
+      tip: '适用于需要灵活判断的场景。避免对简单任务过度流程化。'
+    },
+    {
+      title: '实战组合：完整功能开发',
+      description: '将三种模式组合使用，构建完整的功能开发流水线。',
+      code: '# 完整流水线示例\n\n# 1. 顺序：规划 → 设计\n/plan 实现支付系统\n/architect 设计支付架构\n\n# 2. 顺序：TDD 逐个模块开发\n/tdd --feature="payment-gateway"\n/tdd --feature="order-processing"\n/tdd --feature="receipt-generation"\n\n# 3. 并行：多维度审查\n/code-review + /security + /perf\n\n# 4. 条件：根据审查结果决定\nIF 有 CRITICAL → 修复后重新审查\nELSE → /e2e 端到端验收',
+      tip: '真实项目中，三种模式往往混合使用。关键是为每个阶段选择最合适的模式。'
+    }
+  ]}
+/>
+
+## 💻 设计你的多智能体 Pipeline
+
+在下面的代码实验室中，尝试为一个真实功能设计多智能体工作流配置：
+
+<CodePlayground 
+  title="多智能体 Pipeline 配置"
+  language="yaml"
+  initialCode={`# multi-agent-pipeline.yaml
+# Try editing this pipeline configuration!
+
+name: "Feature Development Pipeline"
+description: "Standard workflow for new feature development"
+
+stages:
+  # Stage 1: Planning (Sequential)
+  - name: planning
+    agent: planner
+    input: "feature requirement"
+    output: "implementation plan"
+    
+  # Stage 2: Development (Sequential per module)
+  - name: development
+    agent: tdd-guide
+    mode: sequential
+    modules:
+      - "data-model"
+      - "business-logic"
+      - "api-endpoints"
+      - "ui-components"
+    
+  # Stage 3: Review (Parallel)
+  - name: review
+    mode: parallel
+    agents:
+      - code-reviewer   # Code quality
+      - security-reviewer  # Security audit
+    
+  # Stage 4: Validation (Conditional)
+  - name: validation
+    condition: "review.passed == true"
+    agent: e2e-runner
+    fallback:
+      agent: tdd-guide
+      action: "fix issues and re-review"
+
+# Configuration
+config:
+  max_retries: 3
+  timeout_per_stage: "30m"
+  notify_on_failure: true`}
+/>
+
+## ❓ 知识检测
+
+<Quiz 
+  question="以下哪种编排模式最适合'多个专家同时审查同一份代码'的场景？"
+  options={[
+    '顺序编排',
+    '并行编排',
+    '条件编排',
+    '递归编排'
+  ]}
+  correctAnswer={1}
+  explanation="并行编排让多个独立的智能体同时工作并汇总结果，非常适合多维度代码审查场景。代码审查、安全审计、性能分析三个智能体可以同时执行，只需 1 份时间。"
+/>
+
+<Quiz 
+  question="在顺序编排中，如果 TDD Guide 智能体的测试未通过，最佳做法是什么？"
+  options={[
+    '跳过测试，继续下一个智能体',
+    '直接进入代码审查',
+    '回到 TDD Guide 修复后再继续',
+    '终止整个流水线'
+  ]}
+  correctAnswer={2}
+  explanation="TDD 的核心原则是测试必须通过才能继续。如果测试失败，应该回到 TDD Guide（红-绿-重构循环）修复问题。这正是条件编排的典型应用 — 根据结果决定下一步。"
+/>
+
+<Quiz 
+  question="设计多智能体工作流时，最关键的原则是什么？"
+  options={[
+    '尽可能多地使用智能体',
+    '所有任务都使用并行模式',
+    '明确每个智能体的职责边界',
+    '每个智能体只运行一次'
+  ]}
+  correctAnswer={2}
+  explanation="多智能体编排的关键是明确每个智能体的职责边界，避免重复工作。Planner 负责规划、TDD Guide 负责开发、Reviewer 负责审查 — 各司其职，协同高效。"
+/>
+
+## 🎉 恭喜！
+
+你已完成多智能体工作流教程！你掌握了：
+
+- ✅ 顺序编排：流水线式开发流程
+- ✅ 并行编排：多维度同时审查
+- ✅ 条件编排：智能路由决策
+- ✅ 组合编排：真实项目工作流设计
+
+## 📖 下一步
+
+- [自定义 Hooks 开发](./custom-hooks) - 学习创建自动化钩子
+- [E2E 测试策略](./e2e-testing) - 掌握端到端测试
