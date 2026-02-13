@@ -3,7 +3,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "build",
   "installCommand": "npm install",
-  "framework": null,
+  "framework": "docusaurus-2",
   "rewrites": [
     {
       "source": "/((?!assets|static|img|.*\\..*|_next).*)",

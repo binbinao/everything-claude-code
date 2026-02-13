@@ -1,6 +1,18 @@
 import type { Config } from '@docusaurus/types'
 import type * as Preset from '@docusaurus/preset-classic'
 
+// Dynamic deployment configuration:
+// - GitHub Pages: DEPLOY_TARGET=github (set in GitHub Actions)
+// - Vercel: VERCEL=1 (auto-set by Vercel build environment)
+// - Local dev: falls back to Vercel-style config (baseUrl = '/')
+const isGitHubPages = process.env.DEPLOY_TARGET === 'github'
+
+const url = isGitHubPages
+  ? 'https://binbinao.github.io'
+  : 'https://everything-claude-code.vercel.app'
+
+const baseUrl = isGitHubPages ? '/everything-claude-code/' : '/'
+
 const config: Config = {
   // Site metadata
   title: 'Everything Claude Code',
@@ -13,9 +25,9 @@ const config: Config = {
   },
   // Mermaid theme is included in the themes array at the bottom
 
-  // URL configuration
-  url: 'https://binbinao.github.io',
-  baseUrl: '/everything-claude-code/',
+  // URL configuration - dynamic based on deploy target
+  url,
+  baseUrl,
 
   // GitHub pages deployment config
   organizationName: 'binbinao',
@@ -83,7 +95,7 @@ const config: Config = {
     // Announcement bar for important updates
     announcementBar: {
       id: 'support_us',
-      content: '🚀 ECC 学习站点已上线！<a href="/docs/tutorials/">开始交互式教程</a>',
+      content: `🚀 ECC 学习站点已上线！<a href="${baseUrl}docs/tutorials/">开始交互式教程</a>`,
       backgroundColor: '#3b82f6',
       textColor: '#ffffff',
       isCloseable: true,
