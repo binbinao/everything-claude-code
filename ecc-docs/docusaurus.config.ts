@@ -14,11 +14,11 @@ const config: Config = {
   // Mermaid theme is included in the themes array at the bottom
 
   // URL configuration
-  url: 'https://everything-claude-code.dev',
-  baseUrl: '/',
+  url: 'https://binbinao.github.io',
+  baseUrl: '/everything-claude-code/',
 
   // GitHub pages deployment config
-  organizationName: 'affaan-m',
+  organizationName: 'binbinao',
   projectName: 'everything-claude-code',
 
   onBrokenLinks: 'throw',
@@ -160,11 +160,11 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/affaan-m/everything-claude-code',
+              href: 'https://github.com/binbinao/everything-claude-code',
             },
             {
               label: 'Issues',
-              href: 'https://github.com/affaan-m/everything-claude-code/issues',
+              href: 'https://github.com/binbinao/everything-claude-code/issues',
             },
           ],
         },
@@ -206,15 +206,15 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           editUrl:
-            'https://github.com/affaan-m/everything-claude-code/tree/main/ecc-docs/',
-          // Disabled: Vercel deployment doesn't include full git history
+            'https://github.com/binbinao/everything-claude-code/tree/main/ecc-docs/',
+          // Disabled: GitHub Pages deployment doesn't include full git history
           // showLastUpdateTime: true,
           // showLastUpdateAuthor: true,
         },
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://github.com/affaan-m/everything-claude-code/tree/main/ecc-docs/blog/',
+            'https://github.com/binbinao/everything-claude-code/tree/main/ecc-docs/blog/',
         },
         theme: {
           customCss: './src/css/custom.css',
