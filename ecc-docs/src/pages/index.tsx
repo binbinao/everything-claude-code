@@ -3,6 +3,7 @@ import Layout from '@theme/Layout'
 import Link from '@docusaurus/Link'
 import Heading from '@theme/Heading'
 import Translate from '@docusaurus/Translate'
+import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from './index.module.css'
 
 export default function Home(): JSX.Element {
@@ -44,11 +45,11 @@ export default function Home(): JSX.Element {
               </p>
               <div className={styles.qrCodes}>
                 <div className={styles.qrItem}>
-                  <img src="/img/zfb.jpg" alt="支付宝" className={styles.qrImage} />
+                  <img src={useBaseUrl('/img/zfb.jpg')} alt="支付宝" className={styles.qrImage} />
                   <span className={styles.qrLabel}>💙 <Translate id="homepage.tip.alipay">支付宝</Translate></span>
                 </div>
                 <div className={styles.qrItem}>
-                  <img src="/img/wxpay.jpg" alt="微信支付" className={styles.qrImage} />
+                  <img src={useBaseUrl('/img/wxpay.jpg')} alt="微信支付" className={styles.qrImage} />
                   <span className={styles.qrLabel}>💚 <Translate id="homepage.tip.wechat">微信支付</Translate></span>
                 </div>
               </div>

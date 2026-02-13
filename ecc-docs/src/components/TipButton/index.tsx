@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 
 type PaymentMethod = 'alipay' | 'wechat';
@@ -64,7 +65,7 @@ export default function TipButton({ variant = 'default' }: TipButtonProps): JSX.
               {/* QR Code Display */}
               <div className={styles.qrCodeContainer}>
                 <img
-                  src={paymentMethod === 'alipay' ? '/img/zfb.jpg' : '/img/wxpay.jpg'}
+                  src={useBaseUrl(paymentMethod === 'alipay' ? '/img/zfb.jpg' : '/img/wxpay.jpg')}
                   alt={paymentMethod === 'alipay' ? '支付宝收款码' : '微信收款码'}
                   className={styles.qrCode}
                 />

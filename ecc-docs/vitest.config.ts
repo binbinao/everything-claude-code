@@ -65,6 +65,7 @@ export default defineConfig({
       '@theme/Heading': path.resolve(__dirname, 'src/__mocks__/@theme/Heading.tsx'),
       '@docusaurus/Link': path.resolve(__dirname, 'src/__mocks__/@docusaurus/Link.tsx'),
       '@docusaurus/Translate': path.resolve(__dirname, 'src/__mocks__/@docusaurus/Translate.tsx'),
+      '@docusaurus/useBaseUrl': path.resolve(__dirname, 'src/__mocks__/@docusaurus/useBaseUrl.ts'),
       '@theme-original/DocItem/Footer': path.resolve(__dirname, 'src/__mocks__/@theme-original/DocItem/Footer.tsx'),
       '@site/src/components/TipButton': path.resolve(__dirname, 'src/__mocks__/@site/src/components/TipButton.tsx'),
       '@site': path.resolve(__dirname, '.'),

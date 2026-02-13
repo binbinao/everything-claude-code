@@ -41,9 +41,10 @@ describe('ECC Learning Site - Docusaurus Configuration', () => {
     })
 
     it('should have proper URL configuration', () => {
-      // GREEN: URL configured
+      // GREEN: URL configured (dynamic based on DEPLOY_TARGET)
       const configContent = readFileSync(configPath, 'utf-8')
-      expect(configContent).toContain('url:')
+      expect(configContent).toContain('const url')
+      expect(configContent).toContain('const baseUrl')
     })
   })
 })
