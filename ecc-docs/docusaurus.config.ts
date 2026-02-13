@@ -9,7 +9,7 @@ const isGitHubPages = process.env.DEPLOY_TARGET === 'github'
 
 const url = isGitHubPages
   ? 'https://binbinao.github.io'
-  : 'https://everything-claude-code.vercel.app'
+  : 'https://ecc-docs.vercel.app'
 
 const baseUrl = isGitHubPages ? '/everything-claude-code/' : '/'
 
