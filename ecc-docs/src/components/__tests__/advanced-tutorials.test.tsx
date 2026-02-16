@@ -248,4 +248,34 @@ describe('Tutorials Index', () => {
       expect(advancedSection).not.toContain('即将推出')
     }
   })
+
+  it('should include all 3 advanced tutorials in Quick Start table', () => {
+    const indexPath = path.resolve(
+      __dirname,
+      '../../../docs/tutorials/index.md'
+    )
+    const content = fs.readFileSync(indexPath, 'utf-8')
+
+    // Extract the Quick Start table section (between "## 🚀 快速开始" and next "##")
+    const quickStartSection = content
+      .split('## 🚀 快速开始')[1]
+      ?.split(/\n## /)[0]
+
+    expect(quickStartSection).toBeDefined()
+
+    // Quick Start table should contain links to all 3 advanced tutorials
+    expect(quickStartSection).toContain('multi-agent-workflow')
+    expect(quickStartSection).toContain('custom-hooks')
+    expect(quickStartSection).toContain('e2e-testing')
+
+    // Quick Start table should show durations for advanced tutorials
+    expect(quickStartSection).toContain('25 分钟')
+    expect(quickStartSection).toContain('20 分钟')
+
+    // Total rows in table: header + separator + 5 data rows = should have 5 tutorial links
+    const tableRows = quickStartSection!
+      .split('\n')
+      .filter((line) => line.startsWith('|') && line.includes(']('))
+    expect(tableRows.length).toBe(5)
+  })
 })

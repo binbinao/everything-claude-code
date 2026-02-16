@@ -14,6 +14,9 @@ description: 通过动手实践的交互式教程学习 ECC
 |------|------|---------|
 | [Hello ECC](./hello-ecc) | 10 分钟 | 你的第一个 ECC 命令，基础概念 |
 | [TDD 大师课](./tdd-masterclass) | 20 分钟 | 使用 ECC 进行测试驱动开发 |
+| [多智能体工作流](./multi-agent-workflow) | 25 分钟 | 多智能体协作编排模式 |
+| [自定义 Hooks 开发](./custom-hooks) | 20 分钟 | 从零创建自动化钩子 |
+| [E2E 测试策略](./e2e-testing) | 20 分钟 | 使用 Playwright 进行端到端测试 |
 
 ## 📚 教程特色
 
