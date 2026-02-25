@@ -17,6 +17,9 @@ description: 通过动手实践的交互式教程学习 ECC
 | [多智能体工作流](./multi-agent-workflow) | 25 分钟 | 多智能体协作编排模式 |
 | [自定义 Hooks 开发](./custom-hooks) | 20 分钟 | 从零创建自动化钩子 |
 | [E2E 测试策略](./e2e-testing) | 20 分钟 | 使用 Playwright 进行端到端测试 |
+| [性能优化](./performance-optimization) | 25 分钟 | 性能分析、Bundle 优化、React 性能调优 |
+| [安全最佳实践](./security-best-practices) | 25 分钟 | 五层纵深防御、输入验证、密钥管理 |
+| [企业级模式](./enterprise-patterns) | 30 分钟 | Monorepo 架构、模块边界、CI/CD 质量门禁 |
 
 ## 📚 教程特色
 
@@ -39,9 +42,9 @@ description: 通过动手实践的交互式教程学习 ECC
 5. **[E2E 测试策略](./e2e-testing)** - 使用 Playwright 进行端到端测试
 
 ### 高级
-- 性能优化 *（即将推出）*
-- 安全最佳实践 *（即将推出）*
-- 企业级模式 *（即将推出）*
+6. **[性能优化](./performance-optimization)** - 性能分析与优化四步法
+7. **[安全最佳实践](./security-best-practices)** - 构建安全的应用
+8. **[企业级模式](./enterprise-patterns)** - 大型项目架构与治理
 
 ## 💡 学习建议
 

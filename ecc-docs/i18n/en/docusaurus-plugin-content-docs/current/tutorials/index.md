@@ -17,6 +17,9 @@ Welcome to the ECC Learning Center! These interactive tutorials will help you ma
 | [Multi-Agent Workflows](./multi-agent-workflow) | 25 min | Agent orchestration patterns |
 | [Custom Hooks](./custom-hooks) | 20 min | Build automation hooks from scratch |
 | [E2E Testing](./e2e-testing) | 20 min | End-to-end testing with Playwright |
+| [Performance Optimization](./performance-optimization) | 25 min | Performance analysis, bundle optimization, React tuning |
+| [Security Best Practices](./security-best-practices) | 25 min | Defense in depth, input validation, secrets management |
+| [Enterprise Patterns](./enterprise-patterns) | 30 min | Monorepo architecture, module boundaries, CI/CD gates |
 
 ## 📚 Tutorial Features
 
@@ -39,9 +42,9 @@ Each tutorial includes:
 - **[E2E Testing Strategies](./e2e-testing)** - End-to-end testing with Playwright
 
 ### Advanced
-- Performance Optimization *(Coming soon)*
-- Security Best Practices *(Coming soon)*
-- Enterprise Patterns *(Coming soon)*
+6. **[Performance Optimization](./performance-optimization)** - Performance analysis and optimization
+7. **[Security Best Practices](./security-best-practices)** - Build secure applications
+8. **[Enterprise Patterns](./enterprise-patterns)** - Large-scale project architecture
 
 ## 💡 Learning Tips
 

@@ -1,0 +1,183 @@
+---
+sidebar_position: 6
+title: Performance Optimization
+description: Master ECC performance analysis and optimization - Interactive Tutorial
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# ⚡ Performance Optimization
+
+Welcome to the advanced tutorials! In this course, you'll learn how to use ECC for comprehensive performance analysis and optimization — making your application fly like a rocket.
+
+:::info Prerequisites
+It's recommended to complete [TDD Masterclass](./tdd-masterclass) and [Custom Hooks](./custom-hooks) before starting this tutorial.
+:::
+
+## 🎮 Try Performance Analysis Commands
+
+ECC provides a powerful performance analysis toolkit. Try these commands:
+
+<CommandSimulator 
+  availableCommands={['/perf analyze', '/perf profile --cpu', '/perf bundle-size', '/perf lighthouse']}
+  commandOutputs={{
+    '/perf analyze': '⚡ Performance Analyzer started!\n\n📊 Global Performance Report:\n\n🔍 Found 5 performance hotspots:\n  1. ❌ Unoptimized database queries (N+1 problem)\n     → src/api/users.ts:42\n  2. ⚠️ Large bundle size (1.2MB)\n     → Suggest enabling Tree Shaking\n  3. ⚠️ Frequently re-rendering component without React.memo\n     → src/components/UserList.tsx\n  4. 💡 Cacheable API responses\n     → src/api/products.ts:18\n  5. 💡 Images not using next/image\n     → src/pages/home.tsx:55\n\n📈 Optimization potential: 40% faster load time',
+    '/perf profile --cpu': '⚡ CPU Profiler started!\n\n🔥 CPU Flame Graph Analysis:\n\n  Top 5 time-consuming functions:\n  ┌─────────────────────────────────┐\n  │ calculatePermissions   │ 34.2% │\n  │ parseJSON              │ 22.1% │\n  │ renderUserList         │ 15.3% │\n  │ validateSchema         │ 12.8% │\n  │ formatCurrency         │  8.4% │\n  └─────────────────────────────────┘\n\n💡 Tip: calculatePermissions can be optimized with memoization\n💡 Tip: parseJSON — consider using a streaming parser',
+    '/perf bundle-size': '📦 Bundle Size Analyzer\n\n📊 Current Bundle Composition:\n  Total: 1.2MB (gzipped: 380KB)\n\n  ┌──────────────────────────────────┐\n  │ lodash          │ 280KB │ 23.3% │\n  │ moment          │ 220KB │ 18.3% │\n  │ react-dom       │ 180KB │ 15.0% │\n  │ chart.js        │ 150KB │ 12.5% │\n  │ your code       │ 120KB │ 10.0% │\n  │ others          │ 250KB │ 20.9% │\n  └──────────────────────────────────┘\n\n🔧 Optimization suggestions:\n  1. lodash → lodash-es (Tree Shakeable)\n  2. moment → dayjs (2KB alternative)\n  3. Estimated savings: 450KB (37.5%)',
+    '/perf lighthouse': '🏗️ Lighthouse Performance Audit\n\n📊 Scores:\n  Performance:    72 🟡\n  Accessibility:  95 🟢\n  Best Practices: 88 🟢\n  SEO:            92 🟢\n\n⏱ Core Web Vitals:\n  LCP: 3.2s ❌ (target < 2.5s)\n  FID: 120ms 🟡 (target < 100ms)\n  CLS: 0.05 🟢 (target < 0.1)\n\n🔧 Top 3 improvements:\n  1. Lazy load below-the-fold images\n  2. Preconnect to critical third-party origins\n  3. Reduce unused JavaScript'
+  }}
+/>
+
+## 📚 Four-Step Performance Optimization
+
+<StepByStep 
+  title="Systematic Performance Optimization Process"
+  steps={[
+    {
+      title: 'Step 1: Measure — Know Your Baseline',
+      description: 'The golden rule of performance optimization: don\'t guess, use data. Like a doctor running tests before prescribing — you need to "diagnose" before you can "treat".',
+      code: '# Step 1: Measure current performance\n\n# Run full performance audit\n/perf analyze\n\n# Profile CPU usage\n/perf profile --cpu\n\n# Analyze bundle size\n/perf bundle-size\n\n# Run Lighthouse audit\n/perf lighthouse\n\n# Record baseline metrics\n/perf baseline --save',
+      tip: 'Always establish a performance baseline first — otherwise you can\'t quantify improvements!'
+    },
+    {
+      title: 'Step 2: Analyze — Find the Bottleneck',
+      description: 'Based on measurement data, identify the biggest performance bottlenecks. Follow the Pareto Principle (80/20 rule) — 20% of issues often cause 80% of performance loss.',
+      code: '# Prioritize by impact\n# Example analysis results:\n\n# HIGH IMPACT (fix first)\n# 1. N+1 database queries → batch loading\n# 2. Oversized bundle (lodash + moment)\n\n# MEDIUM IMPACT\n# 3. Missing React.memo on list items\n# 4. Uncached API responses\n\n# LOW IMPACT (fix later)\n# 5. Unoptimized images\n\n# Use ECC to create optimization plan\n/plan optimize top 3 performance issues',
+      tip: 'Fix the highest-impact issues first. Don\'t waste time on low-impact items — that\'s premature optimization!'
+    },
+    {
+      title: 'Step 3: Optimize — Apply Targeted Fixes',
+      description: 'Implement specific optimization solutions for each bottleneck. ECC\'s TDD workflow ensures optimizations don\'t introduce new bugs.',
+      code: '# Fix #1: N+1 Query → DataLoader\n/tdd --feature="dataloader-optimization"\n\n# Fix #2: Bundle Size → Tree Shaking\n# Replace lodash with lodash-es\nnpm uninstall lodash\nnpm install lodash-es\n# Replace moment with dayjs\nnpm uninstall moment\nnpm install dayjs\n\n# Fix #3: React Memoization\n/tdd --feature="memoize-user-list"\n\n# Verify each fix individually\n/perf analyze --compare=baseline',
+      tip: 'Change only one thing at a time! Multiple simultaneous changes make it impossible to know which one worked.'
+    },
+    {
+      title: 'Step 4: Verify — Continuous Monitoring',
+      description: 'After optimization, re-measure and compare with the baseline. Set up a Performance Budget to prevent regression — like setting a spending limit.',
+      code: '# Compare with baseline\n/perf analyze --compare=baseline\n\n# Set performance budget in CI\n# performance-budget.json\n{\n  "bundles": [\n    {\n      "name": "main",\n      "maxSize": "200KB"\n    }\n  ],\n  "lighthouse": {\n    "performance": 90,\n    "lcp": "2.5s",\n    "fid": "100ms",\n    "cls": 0.1\n  }\n}\n\n# Add to preCommit hooks\n/hooks add perf-budget --preCommit',
+      tip: 'Performance budgets are the best way to prevent regression. Just like TDD prevents feature regression!'
+    }
+  ]}
+/>
+
+## 💻 Hands-on: Optimize React Component Performance
+
+Practice core React performance optimization techniques in the code playground:
+
+<CodePlayground 
+  title="React Performance Optimization"
+  language="typescript"
+  initialCode={`// Before: Unoptimized component
+// Every parent re-render causes ALL items to re-render
+
+import { useState, useMemo, useCallback, memo } from 'react'
+
+// ❌ BEFORE: No memoization
+function UserListBefore({ users, onSelect }) {
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id} onClick={() => onSelect(user.id)}>
+          {user.name} - {formatRole(user.role)}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+// ✅ AFTER: Optimized with memo + useCallback
+const UserItem = memo(function UserItem({ user, onSelect }) {
+  return (
+    <li onClick={() => onSelect(user.id)}>
+      {user.name} - {formatRole(user.role)}
+    </li>
+  )
+})
+
+function UserListAfter({ users, onSelect }) {
+  // Memoize the callback to prevent unnecessary re-renders
+  const handleSelect = useCallback((id: string) => {
+    onSelect(id)
+  }, [onSelect])
+
+  // Memoize expensive computation
+  const sortedUsers = useMemo(() => 
+    [...users].sort((a, b) => a.name.localeCompare(b.name)),
+    [users]
+  )
+
+  return (
+    <ul>
+      {sortedUsers.map(user => (
+        <UserItem 
+          key={user.id} 
+          user={user} 
+          onSelect={handleSelect} 
+        />
+      ))}
+    </ul>
+  )
+}
+
+// Helper function
+function formatRole(role: string): string {
+  return role.charAt(0).toUpperCase() + role.slice(1)
+}
+
+// Try it: Add virtualization for large lists
+// Hint: Use react-window or @tanstack/virtual`}
+/>
+
+## ❓ Knowledge Check
+
+<Quiz 
+  question="What should be the first step of performance optimization?"
+  options={[
+    'Immediately start rewriting slow code',
+    'Upgrade to the latest framework version',
+    'Measure current performance and establish a baseline',
+    'Add more caching'
+  ]}
+  correctAnswer={2}
+  explanation="The golden rule: measure first, optimize second. Without a baseline, you can't quantify improvements or know if you're optimizing in the right direction. It's like weighing yourself before starting a diet — otherwise, how would you know how much you've lost?"
+/>
+
+<Quiz 
+  question="Which approach most effectively reduces JavaScript bundle size?"
+  options={[
+    'Minify all variable names',
+    'Use Tree Shaking to remove unused code + replace with lightweight libraries',
+    'Merge all code into a single file',
+    'Remove code comments'
+  ]}
+  correctAnswer={1}
+  explanation="Tree Shaking automatically removes unused exports, and combined with lightweight replacements (e.g., moment → dayjs saves 218KB), it's the most effective way to reduce bundle size. Variable minification is just the final step of minification."
+/>
+
+<Quiz 
+  question="When should you use React.memo?"
+  options={[
+    'Wrap every component with React.memo',
+    'Only for components with stable props and expensive rendering',
+    'Only for class components',
+    'Only for the root component'
+  ]}
+  correctAnswer={1}
+  explanation="React.memo is best for: (1) components whose props change less frequently than the parent renders, (2) components with expensive rendering logic. Overusing memo adds memory overhead and comparison cost. Remember: don't optimize prematurely — use Profiler to confirm bottlenecks first!"
+/>
+
+## 🎉 Congratulations!
+
+You've completed the Performance Optimization tutorial! You've mastered:
+
+- ✅ Four-step optimization: Measure → Analyze → Optimize → Verify
+- ✅ ECC performance analysis toolkit
+- ✅ Bundle size optimization strategies
+- ✅ React component optimization (memo/useMemo/useCallback)
+- ✅ Performance budgets and continuous monitoring
+
+## 📖 Next Steps
+
+- [Security Best Practices](./security-best-practices) - Build secure applications
+- [Enterprise Patterns](./enterprise-patterns) - Large-scale project architecture
+- [Advanced Topics: Performance](/docs/advanced/performance) - Deep dive into performance

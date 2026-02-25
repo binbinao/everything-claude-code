@@ -13,6 +13,9 @@ const sidebars: SidebarsConfig = {
         'tutorials/multi-agent-workflow',
         'tutorials/custom-hooks',
         'tutorials/e2e-testing',
+        'tutorials/performance-optimization',
+        'tutorials/security-best-practices',
+        'tutorials/enterprise-patterns',
       ],
     },
     {

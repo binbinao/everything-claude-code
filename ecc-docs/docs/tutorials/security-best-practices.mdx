@@ -1,0 +1,169 @@
+---
+sidebar_position: 7
+title: 安全最佳实践
+description: 构建安全的应用 - 交互式教程
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🔒 安全最佳实践
+
+欢迎来到安全最佳实践教程！在本课程中，你将学习如何利用 ECC 识别和修复安全漏洞 — 让你的应用像银行金库一样坚不可摧。
+
+:::info 前置知识
+建议先完成 [TDD 大师课](./tdd-masterclass) 和 [自定义 Hooks 开发](./custom-hooks) 两个进阶教程。
+:::
+
+## 🎮 体验安全扫描命令
+
+ECC 内置了强大的安全审计工具。试试这些命令：
+
+<CommandSimulator 
+  availableCommands={['/security scan', '/security audit --deps', '/security secrets-check', '/security review']}
+  commandOutputs={{
+    '/security scan': '🔒 Security Scanner 启动！\n\n🔍 代码安全扫描报告：\n\n❌ CRITICAL（2 个）：\n  1. SQL 注入风险\n     → src/api/users.ts:28\n     → 使用字符串拼接构建查询\n  2. 硬编码 API 密钥\n     → src/config/payment.ts:5\n\n⚠️ HIGH（3 个）：\n  3. XSS 漏洞：未转义用户输入\n     → src/components/Comment.tsx:12\n  4. 不安全的 JWT 配置（无过期时间）\n     → src/auth/token.ts:15\n  5. 路径遍历风险\n     → src/api/files.ts:33\n\n💡 MEDIUM（2 个）：\n  6. 缺少 CORS 配置\n  7. 缺少 Rate Limiting',
+    '/security audit --deps': '📦 依赖安全审计\n\n扫描 342 个依赖包...\n\n❌ CRITICAL（1 个）：\n  lodash@4.17.20\n  → 原型污染漏洞 (CVE-2021-23337)\n  → 修复：升级到 4.17.21+\n\n⚠️ HIGH（2 个）：\n  node-fetch@2.6.1\n  → 信息泄露 (CVE-2022-0235)\n  → 修复：升级到 2.6.7+\n\n  jsonwebtoken@8.5.1\n  → 不安全的默认算法\n  → 修复：升级到 9.0.0+\n\n🔧 自动修复命令：\n  npm audit fix --force',
+    '/security secrets-check': '🔑 Secrets 检测器\n\n扫描代码库中的敏感信息...\n\n❌ 发现 3 个硬编码密钥：\n\n  1. AWS Access Key\n     → .env.example:3\n     → AKIA*****（已部分隐藏）\n\n  2. Stripe Secret Key\n     → src/config/payment.ts:5\n     → sk_live_*****\n\n  3. Database Password\n     → docker-compose.yml:12\n     → 明文密码\n\n🔧 建议：\n  1. 使用环境变量管理密钥\n  2. 添加 .gitignore 规则\n  3. 考虑使用 Vault 或 AWS Secrets Manager',
+    '/security review': '🔍 Security Reviewer 智能体激活！\n\n📋 综合安全评估报告：\n\n🏆 安全评分：62/100 🟡\n\n✅ 做得好的：\n  - 使用 bcrypt 哈希密码\n  - HTTPS 已启用\n  - 使用了 helmet 中间件\n\n❌ 需要改进的：\n  - 输入验证不完整\n  - 缺少 CSP 头\n  - 会话管理需要加强\n  - API 缺少速率限制\n\n📊 OWASP Top 10 覆盖率：6/10'
+  }}
+/>
+
+## 📚 安全防御五层模型
+
+<StepByStep 
+  title="构建纵深防御体系"
+  steps={[
+    {
+      title: '第一层：输入验证 — 门口的保安',
+      description: '永远不要信任用户输入！输入验证是安全防御的第一道门。就像机场安检 — 所有进入的东西都必须过扫描仪。使用 Zod 进行严格的类型和格式验证。',
+      code: '// ❌ DANGEROUS: No validation\napp.post("/api/users", (req, res) => {\n  db.query(`SELECT * FROM users WHERE id = ${req.body.id}`)\n})\n\n// ✅ SECURE: Zod validation + parameterized query\nimport { z } from "zod"\n\nconst UserQuerySchema = z.object({\n  id: z.string().uuid(),  // Must be valid UUID\n  email: z.string().email().max(255),\n  role: z.enum(["user", "admin"])\n})\n\napp.post("/api/users", (req, res) => {\n  const validated = UserQuerySchema.parse(req.body)\n  db.query("SELECT * FROM users WHERE id = $1", [validated.id])\n})',
+      tip: '使用 Zod 不仅验证类型，还验证格式（email/uuid/url）。一行代码防止 SQL 注入！'
+    },
+    {
+      title: '第二层：认证与授权 — 身份证和通行证',
+      description: '认证（Authentication）确认"你是谁"，授权（Authorization）决定"你能做什么"。两者缺一不可 — 就像进入公司需要刷工卡（认证），但不是所有房间你都能进（授权）。',
+      code: '// Secure JWT configuration\nimport jwt from "jsonwebtoken"\n\n// ❌ INSECURE JWT\nconst token = jwt.sign({ userId: user.id }, "secret123")\n\n// ✅ SECURE JWT\nconst token = jwt.sign(\n  { \n    userId: user.id,\n    role: user.role \n  },\n  process.env.JWT_SECRET,  // Environment variable\n  {\n    algorithm: "HS256",\n    expiresIn: "1h",       // Token expiration\n    issuer: "my-app",\n    audience: "my-app-users"\n  }\n)\n\n// Role-based authorization middleware\nfunction requireRole(role: string) {\n  return (req, res, next) => {\n    if (req.user.role !== role) {\n      return res.status(403).json({ error: "Forbidden" })\n    }\n    next()\n  }\n}\n\n// Usage\napp.delete("/api/users/:id", requireRole("admin"), deleteUser)',
+      tip: 'JWT 必须设置过期时间！没有过期时间的 token 就像一张永不失效的门禁卡。'
+    },
+    {
+      title: '第三层：密钥管理 — 保险箱',
+      description: '硬编码密钥是安全大忌！就像把保险箱密码写在保险箱门上一样荒谬。使用环境变量和密钥管理服务。',
+      code: '// ❌ NEVER: Hardcoded secrets\nconst stripe = new Stripe("sk_live_xxxxx")\nconst dbUrl = "postgres://admin:password123@localhost"\n\n// ✅ ALWAYS: Environment variables\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)\nconst dbUrl = process.env.DATABASE_URL!\n\n// Validate environment at startup\nconst EnvSchema = z.object({\n  STRIPE_SECRET_KEY: z.string().startsWith("sk_"),\n  DATABASE_URL: z.string().url(),\n  JWT_SECRET: z.string().min(32),\n  NODE_ENV: z.enum(["development", "production", "test"])\n})\n\ntry {\n  EnvSchema.parse(process.env)\n} catch (e) {\n  console.error("Missing environment variables:", e.errors)\n  process.exit(1)\n}\n\n// .gitignore - MUST include:\n// .env\n// .env.local\n// .env.production',
+      tip: '启动时验证环境变量，提前发现配置问题。别等到生产环境才发现密钥没配！'
+    },
+    {
+      title: '第四层：依赖安全 — 供应链防护',
+      description: '你的代码可能只占 10%，但 node_modules 里有 90% 的第三方代码。一个有漏洞的依赖就可能让整个应用沦陷。定期审计是必修课。',
+      code: '# Audit dependencies\nnpm audit\n\n# Auto-fix vulnerabilities\nnpm audit fix\n\n# Check for outdated packages\nnpm outdated\n\n# Use ECC security hook in preCommit\n{\n  "hooks": {\n    "preCommit": [\n      {\n        "name": "dep-audit",\n        "command": "npm audit --audit-level=high",\n        "onFailure": "block",\n        "message": "Fix high-severity vulnerabilities before committing"\n      }\n    ]\n  }\n}\n\n# Lock file is your friend!\n# Always commit package-lock.json\n# It ensures reproducible builds',
+      tip: '在 CI/CD 中添加 npm audit，每次构建前自动检查依赖安全。'
+    },
+    {
+      title: '第五层：HTTP 安全头 — 盔甲',
+      description: '安全 HTTP 头就像给你的应用穿上盔甲。它们告诉浏览器如何安全地处理你的内容。helmet 中间件是 Express/Next.js 的必备护甲。',
+      code: '// Next.js: next.config.js\nconst securityHeaders = [\n  {\n    key: "Content-Security-Policy",\n    value: "default-src \'self\'; script-src \'self\'"\n  },\n  {\n    key: "X-Frame-Options",\n    value: "DENY"  // Prevent clickjacking\n  },\n  {\n    key: "X-Content-Type-Options",\n    value: "nosniff"  // Prevent MIME sniffing\n  },\n  {\n    key: "Strict-Transport-Security",\n    value: "max-age=31536000; includeSubDomains"\n  },\n  {\n    key: "Referrer-Policy",\n    value: "strict-origin-when-cross-origin"\n  }\n]\n\nmodule.exports = {\n  async headers() {\n    return [{ source: "/(.*)", headers: securityHeaders }]\n  }\n}',
+      tip: 'CSP（Content-Security-Policy）是防御 XSS 最强大的武器。从严格策略开始，按需放宽。'
+    }
+  ]}
+/>
+
+## 💻 实战：修复安全漏洞
+
+在代码实验室中实践识别并修复常见安全漏洞：
+
+<CodePlayground 
+  title="修复安全漏洞实战"
+  language="typescript"
+  initialCode={`// Security Fix Exercise
+// Identify and fix all security issues in this API
+
+import { z } from 'zod'
+
+// ❌ VULNERABLE API (5 security issues - can you find them all?)
+const API_KEY = "sk_live_abc123xyz"  // Issue 1: ?
+
+export async function handleRequest(req: Request) {
+  const body = await req.json()
+  
+  // Issue 2: No input validation
+  const { email, password, role } = body
+  
+  // Issue 3: SQL injection risk
+  const query = \`SELECT * FROM users WHERE email = '\${email}'\`
+  
+  // Issue 4: Plain text password storage
+  await db.execute(query)
+  await db.execute(
+    \`INSERT INTO users (email, password, role) 
+     VALUES ('\${email}', '\${password}', '\${role}')\`
+  )
+  
+  // Issue 5: Sensitive data in response
+  return Response.json({ 
+    success: true, 
+    password: password,
+    apiKey: API_KEY 
+  })
+}
+
+// ✅ TODO: Rewrite the function above with all fixes applied
+// Hints:
+// 1. Move secrets to environment variables
+// 2. Add Zod validation schema
+// 3. Use parameterized queries
+// 4. Hash passwords with bcrypt
+// 5. Never return sensitive data in responses`}
+/>
+
+## ❓ 知识检测
+
+<Quiz 
+  question="以下哪种做法最能有效防止 SQL 注入？"
+  options={[
+    '过滤特殊字符（如引号）',
+    '使用参数化查询（Parameterized Queries）',
+    '限制输入长度',
+    '使用 HTTPS'
+  ]}
+  correctAnswer={1}
+  explanation="参数化查询将数据和 SQL 指令完全分离，从根本上消除了 SQL 注入的可能性。过滤特殊字符容易遗漏，限制长度治标不治本，HTTPS 解决的是传输安全而非注入问题。"
+/>
+
+<Quiz 
+  question="JWT token 不设置过期时间会导致什么问题？"
+  options={[
+    '性能下降',
+    'Token 体积变大',
+    'Token 一旦泄露将永久有效，攻击者可无限期使用',
+    '无法刷新 Token'
+  ]}
+  correctAnswer={2}
+  explanation="没有过期时间的 JWT 意味着一旦被窃取（通过 XSS、日志泄露等），攻击者可以永久冒充该用户。设置合理的过期时间（如 1 小时）并配合 Refresh Token 机制，是 JWT 安全的基本要求。"
+/>
+
+<Quiz 
+  question="OWASP Top 10 中排名第一的安全风险是什么？"
+  options={[
+    'XSS（跨站脚本）',
+    '注入攻击（如 SQL 注入）',
+    '失效的访问控制（Broken Access Control）',
+    'CSRF（跨站请求伪造）'
+  ]}
+  correctAnswer={2}
+  explanation="在 OWASP Top 10 (2021) 中，失效的访问控制（Broken Access Control）升至第一位。这意味着大量应用未能正确限制用户可以访问哪些资源和执行哪些操作。输入验证 + 角色授权是最关键的防线。"
+/>
+
+## 🎉 恭喜！
+
+你已完成安全最佳实践教程！你掌握了：
+
+- ✅ 五层纵深防御模型
+- ✅ Zod 输入验证防注入
+- ✅ JWT 安全配置与角色授权
+- ✅ 密钥管理与环境变量
+- ✅ 依赖安全审计与 HTTP 安全头
+
+## 📖 下一步
+
+- [企业级模式](./enterprise-patterns) - 大型项目架构模式
+- [性能优化](./performance-optimization) - 性能分析与调优
+- [自定义 Hooks 开发](./custom-hooks) - 创建安全审计钩子
