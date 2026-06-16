@@ -1,12 +1,14 @@
 ---
 sidebar_position: 2
 title: Commands 斜杠命令
-description: ECC 的 31+ 个斜杠命令详解
+description: ECC v2.0.0 的 92 个斜杠命令详解
 ---
 
 # ⚡ Commands 斜杠命令
 
 **斜杠命令** 是触发 ECC 功能的快捷方式，就像 Slack 或 Discord 中的命令一样简单直观。
+
+> **v2.0.0 更新**：命令数量从 31 个扩展到 **92 个**，新增了 `orch-*` 编排器家族和许多工作流工具。
 
 ## 什么是斜杠命令？
 
@@ -16,65 +18,171 @@ description: ECC 的 31+ 个斜杠命令详解
 /plan 实现购物车功能
 /tdd --feature="user-auth"
 /e2e --url=http://localhost:3000
+/orch-build-mvp "todo app with React"
 ```
 
-## 命令分类
+## 92 个命令分类
 
 ### 🏗️ 规划类命令
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
 | `/plan` | 制定实施计划 | `/plan 添加支付功能` |
-| `/architect` | 架构设计 | `/architect 微服务拆分方案` |
-| `/estimate` | 工作量估算 | `/estimate 重构认证模块` |
+| `/plan-prd` | PRD 模式规划 | `/plan-prd 新产品` |
+| `/feature-dev` | 完整功能开发 | `/feature-dev` |
+| `/prp-plan` | PRP 模式规划 | `/prp-plan` |
+| `/prp-prd` | PRP PRD | `/prp-prd` |
+| `/project-init` | 初始化项目 | `/project-init` |
+| `/projects` | 项目管理 | `/projects` |
 
 ### 🧪 开发类命令
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
 | `/tdd` | 测试驱动开发 | `/tdd --feature="login"` |
-| `/build-and-fix` | 修复构建错误 | `/build-and-fix` |
-| `/debug` | 调试问题 | `/debug TypeError: undefined` |
+| `/build-fix` | 修复构建错误 | `/build-fix` |
+| `/prp-implement` | PRP 实现 | `/prp-implement` |
+| `/prp-commit` | PRP 提交 | `/prp-commit` |
+| `/gradle-build` | Gradle 构建 | `/gradle-build` |
 
 ### 🔍 审查类命令
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
 | `/code-review` | 代码审查 | `/code-review src/auth.ts` |
+| `/security-scan` | 安全扫描 | `/security-scan` |
 | `/security` | 安全审计 | `/security` |
-| `/perf` | 性能分析 | `/perf --file=api.ts` |
+| `/review-pr` | 审查 PR | `/review-pr` |
+| `/quality-gate` | 质量门 | `/quality-gate` |
+| `/test-coverage` | 覆盖率分析 | `/test-coverage` |
+| `/harness-audit` | 框架审计 | `/harness-audit` |
 
 ### 🧹 维护类命令
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
-| `/refactor` | 重构代码 | `/refactor 提取公共逻辑` |
-| `/cleanup` | 清理死代码 | `/cleanup` |
-| `/deps` | 依赖管理 | `/deps update` |
+| `/refactor-clean` | 重构清理 | `/refactor-clean 提取公共逻辑` |
+| `/prune` | 死代码清理 | `/prune` |
+| `/auto-update` | 自动更新 | `/auto-update` |
+| `/promote` | 提升/发布 | `/promote` |
 
 ### 📝 文档类命令
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
-| `/doc` | 生成文档 | `/doc src/utils.ts` |
-| `/readme` | 更新 README | `/readme` |
-| `/changelog` | 生成变更日志 | `/changelog` |
+| `/update-docs` | 更新文档 | `/update-docs` |
+| `/update-codemaps` | 更新代码地图 | `/update-codemaps` |
+| `/prp-pr` | PRP PR | `/prp-pr` |
+| `/pr` | 创建 PR | `/pr` |
+| `/ecc-guide` | ECC 指南 | `/ecc-guide` |
 
 ### 🧪 测试类命令
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
 | `/e2e` | 端到端测试 | `/e2e 测试登录流程` |
-| `/test` | 运行测试 | `/test --coverage` |
-| `/snapshot` | 快照测试 | `/snapshot update` |
+| `/cpp-test` | C++ 测试 | `/cpp-test` |
+| `/go-test` | Go 测试 | `/go-test` |
+| `/react-test` | React 测试 | `/react-test` |
+| `/rust-test` | Rust 测试 | `/rust-test` |
+| `/kotlin-test` | Kotlin 测试 | `/kotlin-test` |
+| `/flutter-test` | Flutter 测试 | `/flutter-test` |
 
-### 🔧 Git 类命令
+### 🔧 语言构建命令
 
-| 命令 | 说明 | 示例 |
-|------|------|------|
-| `/commit` | 生成提交信息 | `/commit` |
-| `/pr` | 创建 PR 描述 | `/pr` |
-| `/branch` | 分支管理 | `/branch feature/auth` |
+| 命令 | 说明 |
+|------|------|
+| `/cpp-build` | C++ 构建 |
+| `/cpp-review` | C++ 审查 |
+| `/go-build` | Go 构建 |
+| `/go-review` | Go 审查 |
+| `/rust-build` | Rust 构建 |
+| `/rust-review` | Rust 审查 |
+| `/react-build` | React 构建 |
+| `/react-review` | React 审查 |
+| `/vue-review` | Vue 审查 |
+| `/kotlin-build` | Kotlin 构建 |
+| `/kotlin-review` | Kotlin 审查 |
+| `/swift-build` | Swift 构建（间接） |
+| `/flutter-build` | Flutter 构建 |
+| `/flutter-review` | Flutter 审查 |
+| `/fastapi-review` | FastAPI 审查 |
+| `/python-review` | Python 审查 |
+| `/gan-build` | GAN 构建 |
+| `/gan-design` | GAN 设计 |
+
+### 🎯 编排器命令（v2.0.0 新增家族）
+
+```bash
+/orch-build-mvp "description"   # 快速构建 MVP
+/orch-add-feature              # 添加新功能
+/orch-fix-defect               # 修复缺陷
+/orch-refine-code              # 重构代码
+/orch-change-feature           # 修改现有功能
+```
+
+### 🌐 多智能体编排
+
+| 命令 | 说明 |
+|------|------|
+| `/multi-execute` | 多智能体执行 |
+| `/multi-plan` | 多智能体规划 |
+| `/multi-backend` | 后端多服务编排 |
+| `/multi-frontend` | 前端多服务编排 |
+| `/multi-workflow` | 通用多服务工作流 |
+| `/pm2` | PM2 服务生命周期管理 |
+
+### 🧠 学习与本能
+
+| 命令 | 说明 |
+|------|------|
+| `/learn` | 提取会话中的模式 |
+| `/learn-eval` | 评估学习质量 |
+| `/instinct-status` | 查看已学习的本能 |
+| `/instinct-export` | 导出本能 |
+| `/instinct-import` | 导入本能 |
+| `/evolve` | 聚合成技能 |
+| `/skill-create` | 从 git 历史创建技能 |
+| `/skill-health` | 技能健康检查 |
+
+### 📦 Epic 工作流
+
+| 命令 | 说明 |
+|------|------|
+| `/epic-claim` | 认领 Epic |
+| `/epic-decompose` | 分解 Epic |
+| `/epic-publish` | 发布 Epic |
+| `/epic-review` | 审查 Epic |
+| `/epic-sync` | 同步 Epic |
+| `/epic-unblock` | 解除阻塞 |
+| `/epic-validate` | 验证 Epic |
+
+### 🔄 会话管理
+
+| 命令 | 说明 |
+|------|------|
+| `/sessions` | 查看会话历史 |
+| `/save-session` | 保存会话 |
+| `/resume-session` | 恢复会话 |
+| `/checkpoint` | 保存验证状态 |
+| `/aside` | 旁白笔记 |
+| `/loop-start` | 启动循环 |
+| `/loop-status` | 循环状态 |
+| `/santa-loop` | 圣诞循环（自动监控） |
+
+### 🛠️ 实用工具
+
+| 命令 | 说明 |
+|------|------|
+| `/cost-report` | 成本报告 |
+| `/jira` | Jira 集成 |
+| `/marketing-campaign` | 营销活动 |
+| `/model-route` | 模型路由 |
+| `/setup-pm` | 配置包管理器 |
+| `/hookify` | Hookify 配置 |
+| `/hookify-list` | Hookify 列表 |
+| `/hookify-help` | Hookify 帮助 |
+| `/hookify-configure` | Hookify 配置 |
 
 ## 常用命令详解
 
@@ -95,6 +203,14 @@ description: ECC 的 31+ 个斜杠命令详解
 - ✅ 风险评估
 - ✅ 分阶段计划
 - ✅ 时间估算
+
+### `/orch-build-mvp` - 编排 MVP（v2.0.0 新增）
+
+**功能**：通过编排多个智能体快速构建 MVP
+
+```bash
+/orch-build-mvp "Real-time chat with React + WebSocket + Node.js"
+```
 
 ### `/tdd` - 测试驱动开发
 
@@ -141,7 +257,20 @@ description: ECC 的 31+ 个斜杠命令详解
 /e2e 测试评论发布流程
 
 # 5. 提交代码
-/commit
+/pr
+```
+
+v2.0.0 推荐的快速 MVP 工作流：
+
+```bash
+# 1. 编排 MVP
+/orch-build-mvp "MVP for todo app"
+
+# 2. 添加功能
+/orch-add-feature "user authentication"
+
+# 3. 质量门
+/quality-gate
 ```
 
 ## 自定义命令

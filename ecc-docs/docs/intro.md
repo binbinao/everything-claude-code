@@ -8,32 +8,45 @@ sidebar_position: 1
 
 ## ✨ 这是什么？
 
-**Everything Claude Code (ECC)** 是一套**生产级**的 Claude Code 配置集合，由 Anthropic 黑客马拉松冠军打造。
+**Everything Claude Code (ECC)** 是一套**生产级**的 Claude Code 配置集合，由 Anthropic 黑客马拉松冠军打造。**v2.0.0** 已升级为跨 AI Agent 框架的**操作控制系统**（Hermes Operator）。
 
 ```bash
 ┌─────────────────────────────────────────────────────────┐
-│  你现在的开发状态：                                        │
-│  ❌ 手动查文档                                             │
-│  ❌ 反复说同样的话                                         │
-│  ❌ 代码风格不一致                                         │
+│  ECC v2.0.0  —  Harness-Native Agent OS                 │
 ├─────────────────────────────────────────────────────────┤
-│  使用 ECC 后的状态：                                       │
-│  ✅ 13+ 专业智能体自动协作                                  │
-│  ✅ 31+ 斜杠命令一键执行                                    │
-│  ✅ 28+ 技能库覆盖全栈                                     │
-│  ✅ 自动化钩子智能触发                                     │
+│  🤖 67 个专业智能体                                      │
+│  ⚡ 92 个斜杠命令                                       │
+│  📚 271 个技能库覆盖全栈                                 │
+│  🎣 20+ 自动化钩子                                       │
+│  📏 22 个语言规则包                                      │
+│  🌐 跨 7+ AI 框架支持                                    │
 └─────────────────────────────────────────────────────────┘
 ```
 
+## 🌐 跨框架支持（v2.0.0 新特性）
+
+ECC 不再只是 Claude Code 的配置 — 它现在是一套**跨 AI Agent 框架**的操作控制平面：
+
+| 框架 | 支持度 | 配置文件目录 |
+|------|--------|------------|
+| **Claude Code** | ⭐ 一等公民 | `.claude-plugin/` |
+| **Codex** | ✅ 完整 | `.codex/`, `.codex-plugin/` |
+| **OpenCode** | ✅ 完整 | `.opencode/` |
+| **Cursor** | ✅ 完整 | `.cursor/` |
+| **Gemini** | ✅ 完整 | `.gemini/` |
+| **Zed** | ✅ 完整 | 配置在 settings.json |
+| **GitHub Copilot** | ✅ 完整 | `.github/copilot-instructions.md` |
+| **Terminal / Dmux** | ✅ 完整 | — |
+
 ## 🎯 核心能力
 
-| 组件 | 数量 | 作用 |
-|------|------|------|
-| 🤖 **Agents** | 13+ | 架构师、代码审查员、安全专家、TDD教练... |
-| ⚡ **Commands** | 31+ | `/plan`, `/tdd`, `/code-review`, `/build-fix`... |
-| 📚 **Skills** | 28+ | 前端、后端、Python、Go、安全等全栈技能 |
+| 组件 | 数量（v2.0.0） | 作用 |
+|------|--------|------|
+| 🤖 **Agents** | 67 | 架构师、代码审查员、安全专家、TDD教练、语言专属审查员 |
+| ⚡ **Commands** | 92 | `/plan`, `/tdd`, `/code-review`, `/build-fix`, `/orch-*` 等 |
+| 📚 **Skills** | 271 | 编码、研究、安全、媒体、企业运维、Agent 工作流 |
 | 🎣 **Hooks** | 20+ | 智能触发代码检查、格式化等自动化操作 |
-| 📏 **Rules** | 全覆盖 | TypeScript/Python/Go 编码规范 |
+| 📏 **Rules** | 22 个语言包 | TypeScript/Python/Go/Rust/Ruby/Swift/Vue/React 等 |
 
 ## 🚀 5分钟快速开始
 
@@ -41,20 +54,28 @@ sidebar_position: 1
 
 ```bash
 # 添加市场
-codebuddy plugin marketplace add https://github.com/affaan-m/everything-claude-code
+/plugin marketplace add https://github.com/affaan-m/ECC
 
 # 安装插件
-codebuddy plugin install everything-claude-code@everything-claude-code
+/plugin install ecc
 ```
+
+> **升级到 v2.0.0**：现有用户执行 `/plugin update ecc`
 
 ### 2️⃣ 安装规则
 
 ```bash
-# 复制通用规则
-cp -r rules/common/* .codebuddy/rules/
+# 复制通用规则（必须）
+cp -r rules/common/* ~/.claude/rules/
 
-# 如果需要 TypeScript 规则
-cp -r rules/typescript/* .codebuddy/rules/
+# 选择你的语言/框架（v2.0.0 增加了更多）
+cp -r rules/typescript/* ~/.claude/rules/    # TypeScript
+cp -r rules/python/* ~/.claude/rules/        # Python
+cp -r rules/golang/* ~/.claude/rules/         # Go
+cp -r rules/rust/* ~/.claude/rules/           # Rust
+cp -r rules/vue/* ~/.claude/rules/            # Vue
+cp -r rules/react/* ~/.claude/rules/          # React
+cp -r rules/swift/* ~/.claude/rules/          # Swift
 ```
 
 ### 3️⃣ 开干！
@@ -65,7 +86,36 @@ cp -r rules/typescript/* .codebuddy/rules/
 /tdd
 /code-review
 /build-fix
+/orch-build-mvp "MVP for todo app"    # v2.0.0 新增 orchestrator 命令
 ```
+
+## 🆕 v2.0.0 重磅新功能
+
+### 🎯 Hermes Operator
+
+ECC v2.0.0 引入了 **Hermes 操作员**概念 — 跨 AI 框架的统一控制层：
+
+- **`ecc.session.v1`** — 框架中立的会话适配器（Claude Code, Codex, OpenCode, dmux）
+- **`ecc.mcp.v1`** — MCP 服务器清单，跨框架统一视图，支持碎片化检测
+- **Worktree-lifecycle service** — 确定性冲突预测和安全 GC
+
+### ⚡ orch-* 编排器家族
+
+```
+/orch-build-mvp        # 快速构建 MVP
+/orch-add-feature      # 添加功能
+/orch-fix-defect       # 修复缺陷
+/orch-refine-code      # 优化代码
+/orch-change-feature   # 修改现有功能
+```
+
+### 🚀 性能优化包
+
+- `parallel-execution-optimizer` — 并行执行优化
+- `benchmark-optimization-loop` — 基准优化循环
+- `data-throughput-accelerator` — 数据吞吐加速
+- `latency-critical-systems` — 低延迟系统
+- `recursive-decision-ledger` — 递归决策账本
 
 ## 📚 学习路径
 
@@ -94,39 +144,62 @@ graph LR
 
 ### 🤖 Agents - 智能体团队
 
-就像餐厅有不同岗位，每个智能体有自己的专长：
+就像餐厅有不同岗位，每个智能体有自己的专长。v2.0.0 已扩展到 67 个，涵盖：
 
-| 智能体 | 职责 | 使用场景 |
-|--------|------|----------|
-| **planner** | 功能规划师 | 制定实现计划、任务分解 |
-| **architect** | 系统架构师 | 技术选型、架构决策 |
-| **code-reviewer** | 代码审查员 | 质量、安全、可维护性检查 |
-| **security-reviewer** | 安全专家 | 漏洞分析、安全审计 |
-| **tdd-guide** | TDD教练 | 红绿重构循环指导 |
-| **e2e-runner** | E2E测试员 | Playwright测试生成与执行 |
+| 分类 | 示例 |
+|------|------|
+| **核心** | planner, architect, code-reviewer, security-reviewer, tdd-guide |
+| **语言专属** | python-reviewer, rust-reviewer, vue-reviewer, kotlin-reviewer, swift-reviewer, php-reviewer, csharp-reviewer, fsharp-reviewer, flutter-reviewer, fastapi-reviewer, mle-reviewer, typescript-reviewer, react-reviewer, database-reviewer |
+| **构建** | build-error-resolver, cpp-build-resolver, dart-build-resolver, django-build-resolver, go-build-resolver, java-build-resolver, kotlin-build-resolver, pytorch-build-resolver, react-build-resolver, rust-build-resolver, swift-build-resolver, harmonyos-app-resolver |
+| **专业** | chief-of-staff, code-architect, code-explorer, code-simplifier, comment-analyzer, conversation-analyzer, doc-updater, docs-lookup, e2e-runner, harness-optimizer, healthcare-reviewer, homelab-architect, loop-operator, marketing-agent, network-architect, network-config-reviewer, network-troubleshooter, opensource-forker, opensource-packager, opensource-sanitizer, performance-optimizer, pr-test-analyzer, refactor-cleaner, seo-specialist, silent-failure-hunter, spec-miner, type-design-analyzer |
 
 ### ⚡ Commands - 斜杠命令
 
-像操作超级英雄技能一样，输入 `/` 就能召唤各种能力：
+92 个命令，按类别：
 
 ```bash
-/plan "I need to add real-time notifications"  # 制定实现计划
-/tdd                                           # 启动TDD工作流  
-/code-review                                   # 代码审查
-/build-fix                                     # 自动修复构建错误
-/e2e --url=http://localhost:3000              # E2E测试
+# 规划
+/plan "I need to add real-time notifications"
+/plan-prd                              # PRD 模式规划
+/feature-dev                           # 完整功能开发
+
+# 开发
+/tdd                                   # TDD 工作流
+/build-fix                             # 修复构建错误
+/pm2                                   # PM2 服务生命周期
+
+# 审查
+/code-review                           # 代码审查
+/security-scan                         # 安全扫描
+/review-pr                             # PR 审查
+
+# 编排（v2.0.0）
+/orch-build-mvp "mvp description"      # 快速 MVP
+/orch-add-feature                      # 添加功能
+/orch-fix-defect                       # 修复缺陷
+/multi-execute                         # 多智能体执行
+/multi-plan                            # 多智能体规划
+
+# 技能管理
+/learn /learn-eval                     # 提取模式
+/instinct-status                       # 查看学习本能
+/evolve                                # 聚合成技能
+/skill-create                          # 从 git 历史创建技能
 ```
 
 ### 📚 Skills - 主题技能库
 
-技能是工作流定义，包含特定领域的最佳实践：
+271 个技能按 11 大类组织：
 
-- **frontend-patterns** - React/Next.js 模式与最佳实践
-- **backend-patterns** - API、数据库、缓存设计模式
-- **python-patterns** - Python 惯用法与最佳实践
-- **django-patterns** - Django 框架模式
-- **continuous-learning** - 自动从会话提取模式
-- **tdd-workflow** - 完整TDD方法论
+- **编程** — frontend-patterns, backend-patterns, golang-patterns, python-patterns, django-patterns, springboot-patterns
+- **研究** — deep-research, article-writing, brand-discovery
+- **安全** — security-review, django-security, springboot-security
+- **测试** — cpp-testing, tdd-workflow, e2e-testing
+- **Agent 工作流** — autonomous-agent-harness, agent-architecture-audit, agent-eval
+- **媒体/演示** — slidev, blender-motion-state-inspection
+- **企业运维** — kubernetes-patterns, clickhouse-io, postgresql
+- **AI 优化** — parallel-execution-optimizer, benchmark-optimization-loop, latency-critical-systems
+- **学习系统** — continuous-learning, continuous-learning-v2, instinct-export
 
 ### 🎣 Hooks - 自动化钩子
 
@@ -136,16 +209,15 @@ Hooks 能在特定事件发生时自动执行操作：
 - **PreToolUse** - 工具使用前拦截检查
 - **PostToolUse** - 工具使用后格式化代码
 - **Stop** - 每次响应后检查 console.log
+- **dry-run mode** (v2.0.0) - 干跑模式，不真正执行
 
 ### 📏 Rules - 行为准则
 
-Rules 是AI在**所有任务**中都必须遵守的指导原则：
+22 个语言规则包：
 
-- 编码风格、不可变性、文件组织
-- 提交格式、PR流程
-- TDD、80%覆盖率要求
-- 模型选择、上下文管理
-- 设计模式、安全检查
+**通用**: common
+**语言**: typescript, python, golang, java, kotlin, rust, swift, ruby, php, perl, csharp, dart, fsharp, cpp, arkts
+**框架**: react, vue, nuxt, angular, web
 
 ## 🎓 比喻理解
 
@@ -157,6 +229,7 @@ Rules 是AI在**所有任务**中都必须遵守的指导原则：
 | **Hooks** | 自动化助手 | 智能家居的自动触发 |
 | **Rules** | 行为准则 | 公司的员工手册 |
 | **Contexts** | 工作模式 | 演员换戏服切换场景 |
+| **Hermes (v2.0.0)** | 操作员 | 跨 AI 框架的总指挥 |
 
 ## 🔥 实战入门
 
@@ -195,6 +268,15 @@ Rules 是AI在**所有任务**中都必须遵守的指导原则：
 /code-review --files="src/auth/*.ts"
 ```
 
+### 示例4：v2.0.0 编排器（新增）
+
+```bash
+# 快速 MVP 构建
+/orch-build-mvp "Todo app with React + Node.js"
+
+/orch-add-feature "user authentication"
+```
+
 ## 🌟 下一步
 
 选择你想深入学习的主题：
@@ -203,6 +285,7 @@ Rules 是AI在**所有任务**中都必须遵守的指导原则：
 - 🧠 [核心概念](core-concepts/) - 深入理解 Agents/Commands/Skills/Hooks/Rules
 - 🛠️ [实战指南](guides/) - TypeScript/Python/Go 项目实战
 - 🚀 [高级主题](advanced/) - 多智能体编排、性能优化、故障排查
+- 📜 [v2.0.0 更新日志](releases/v2.0.0) - 最新版本重大变化
 
 ---
 

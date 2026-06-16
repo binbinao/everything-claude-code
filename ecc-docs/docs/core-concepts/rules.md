@@ -1,12 +1,14 @@
 ---
 sidebar_position: 5
 title: Rules 规则
-description: ECC 的编码规则和团队约定
+description: ECC v2.0.0 的 22 个语言规则包详解
 ---
 
 # 📏 Rules 规则
 
 **Rules（规则）** 是 AI 必须始终遵守的准则，确保代码质量和团队一致性。
+
+> **v2.0.0 更新**：规则包从 8 个扩展到 **22 个**，新增了 Rust/Vue/React/Ruby/Swift/PHP/Perl/Kotlin/Dart/F#/ArkTS/C++ 等多个语言生态。
 
 ## 什么是规则？
 
@@ -16,6 +18,44 @@ description: ECC 的编码规则和团队约定
 - 🏗️ 架构约定（目录结构、分层设计）
 - 🧪 测试要求（覆盖率、测试策略）
 
+## 22 个规则包
+
+### 🌍 通用规则（必装）
+
+| 规则包 | 说明 |
+|--------|------|
+| `common` | 通用规则：编码风格、安全、测试、性能 |
+
+### 🧑‍💻 主流语言
+
+| 规则包 | 说明 |
+|--------|------|
+| `typescript` | TypeScript/JavaScript |
+| `python` | Python |
+| `golang` | Go |
+| `java` | Java |
+| `cpp` | C++（v2.0.0 新增） |
+| `csharp` | C#（v2.0.0 新增） |
+| `fsharp` | F#（v2.0.0 新增） |
+| `rust` | Rust（v2.0.0 新增） |
+| `ruby` | Ruby（v2.0.0 新增） |
+| `swift` | Swift（v2.0.0 新增） |
+| `kotlin` | Kotlin（v2.0.0 新增） |
+| `dart` | Dart（v2.0.0 新增） |
+| `php` | PHP（v2.0.0 新增） |
+| `perl` | Perl（v2.0.0 新增） |
+| `arkts` | ArkTS（v2.0.0 新增） |
+
+### 🎨 前端框架
+
+| 规则包 | 说明 |
+|--------|------|
+| `react` | React（v2.0.0 新增） |
+| `vue` | Vue（v2.0.0 新增） |
+| `nuxt` | Nuxt（v2.0.0 新增） |
+| `angular` | Angular（v2.0.0 新增） |
+| `web` | Web 通用（v2.0.0 新增） |
+
 ## 规则层级
 
 ### 1. 全局规则
@@ -24,22 +64,25 @@ description: ECC 的编码规则和团队约定
 
 ```
 ~/.claude/rules/
-├── common/
+├── common/                  # 通用
 │   ├── coding-style.md
 │   ├── security.md
 │   └── testing.md
-└── typescript/
-    ├── coding-style.md
-    └── patterns.md
+├── typescript/              # 语言
+├── python/
+├── golang/
+├── rust/                    # v2.0.0 新增
+├── vue/                     # v2.0.0 新增
+└── react/                   # v2.0.0 新增
 ```
 
 ### 2. 项目规则
 
-适用于特定项目，配置在项目根目录的 `.codebuddy/rules/`：
+适用于特定项目，配置在项目根目录的 `.claude/rules/`：
 
 ```
 your-project/
-└── .codebuddy/rules/
+└── .claude/rules/
     ├── project-conventions.md
     └── api-design.md
 ```
@@ -133,18 +176,58 @@ graph TD
 
 ## 安装语言规则包
 
-ECC 提供预配置的语言规则包：
+ECC 提供 22 个预配置的语言规则包：
 
 ```bash
-# 安装 TypeScript 规则
-cp -r rules/typescript/* ~/.codebuddy/rules/
+# 通用规则（必须）
+cp -r rules/common/* ~/.claude/rules/
 
-# 安装 Python 规则
-cp -r rules/python/* ~/.codebuddy/rules/
-
-# 安装 Go 规则
-cp -r rules/golang/* ~/.codebuddy/rules/
+# 选择你的语言（v2.0.0 选项）
+cp -r rules/typescript/* ~/.claude/rules/
+cp -r rules/python/* ~/.claude/rules/
+cp -r rules/golang/* ~/.claude/rules/
+cp -r rules/rust/* ~/.claude/rules/        # v2.0.0
+cp -r rules/vue/* ~/.claude/rules/         # v2.0.0
+cp -r rules/react/* ~/.claude/rules/       # v2.0.0
+cp -r rules/swift/* ~/.claude/rules/       # v2.0.0
+cp -r rules/ruby/* ~/.claude/rules/        # v2.0.0
 ```
+
+## v2.0.0 新增语言规则亮点
+
+### Rust 规则
+- 内存安全与所有权检查
+- 错误处理惯用法
+- 异步模式
+
+### Vue 规则
+- Composition API 优先
+- 响应式系统最佳实践
+- 组件命名规范
+
+### React 规则
+- Hooks 使用规范
+- 性能优化（memo, useMemo, useCallback）
+- Context API vs 状态管理
+
+### Swift 规则
+- Swift 6 并发规则
+- Actor 模型
+- 协议导向设计
+
+## 跨框架规则分发（v2.0.0 新增）
+
+ECC v2.0.0 的规则现在支持跨 AI 框架：
+
+```
+rules/
+├── common/            # 通用
+├── typescript/        # TS
+├── ...
+└── (通过 .claude-plugin/、.codex/、.opencode/ 等分发)
+```
+
+不同框架通过相应的插件机制加载同一套规则。
 
 ## 最佳实践
 
@@ -153,6 +236,7 @@ cp -r rules/golang/* ~/.codebuddy/rules/
 3. **说明原因** - 解释为什么需要这个规则
 4. **允许例外** - 明确什么情况下可以例外
 5. **定期更新** - 随着项目演进更新规则
+6. **按需加载** - 只安装你项目用的语言规则包
 
 ---
 

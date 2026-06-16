@@ -42,18 +42,30 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: '🛠️ 实战指南',
       items: [
+        'guides/index',
         'guides/typescript',
         'guides/python',
         'guides/golang',
+        'guides/deployment',
       ],
     },
     {
       type: 'category',
       label: '🚀 高级主题',
       items: [
+        'advanced/index',
         'advanced/multi-agent',
         'advanced/performance',
         'advanced/troubleshooting',
+        'advanced/hermes-operator',
+        'advanced/deployment-guide',
+      ],
+    },
+    {
+      type: 'category',
+      label: '📜 版本更新',
+      items: [
+        'releases/v2.0.0',
       ],
     },
   ],
