@@ -1,14 +1,14 @@
 ---
 sidebar_position: 5
 title: Rules 规则
-description: ECC v2.0.0 的 22 个语言规则包详解
+description: ECC v2.0.0 的 21 个语言规则包详解
 ---
 
 # 📏 Rules 规则
 
 **Rules（规则）** 是 AI 必须始终遵守的准则，确保代码质量和团队一致性。
 
-> **v2.0.0 更新**：规则包从 8 个扩展到 **22 个**，新增了 Rust/Vue/React/Ruby/Swift/PHP/Perl/Kotlin/Dart/F#/ArkTS/C++ 等多个语言生态。
+> **v2.0.0 更新**：规则包从 8 个扩展到 **21 个**，新增了 Rust/Vue/React/Ruby/Swift/PHP/Perl/Kotlin/Dart/F#/ArkTS/C++ 等多个语言生态。
 
 ## 什么是规则？
 
@@ -18,7 +18,7 @@ description: ECC v2.0.0 的 22 个语言规则包详解
 - 🏗️ 架构约定（目录结构、分层设计）
 - 🧪 测试要求（覆盖率、测试策略）
 
-## 22 个规则包
+## 21 个规则包
 
 ### 🌍 通用规则（必装）
 
@@ -176,21 +176,26 @@ graph TD
 
 ## 安装语言规则包
 
-ECC 提供 22 个预配置的语言规则包：
+ECC 提供 21 个预配置的语言规则包：
 
 ```bash
 # 通用规则（必须）
-cp -r rules/common/* ~/.claude/rules/
+cp -r rules/common/* ~/.claude/rules/ecc/
 
 # 选择你的语言（v2.0.0 选项）
-cp -r rules/typescript/* ~/.claude/rules/
-cp -r rules/python/* ~/.claude/rules/
-cp -r rules/golang/* ~/.claude/rules/
-cp -r rules/rust/* ~/.claude/rules/        # v2.0.0
-cp -r rules/vue/* ~/.claude/rules/         # v2.0.0
-cp -r rules/react/* ~/.claude/rules/       # v2.0.0
-cp -r rules/swift/* ~/.claude/rules/       # v2.0.0
-cp -r rules/ruby/* ~/.claude/rules/        # v2.0.0
+cp -r rules/typescript/* ~/.claude/rules/ecc/
+cp -r rules/python/* ~/.claude/rules/ecc/
+cp -r rules/golang/* ~/.claude/rules/ecc/
+cp -r rules/rust/* ~/.claude/rules/ecc/        # v2.0.0
+cp -r rules/vue/* ~/.claude/rules/ecc/         # v2.0.0
+cp -r rules/react/* ~/.claude/rules/ecc/       # v2.0.0
+cp -r rules/swift/* ~/.claude/rules/ecc/       # v2.0.0
+cp -r rules/ruby/* ~/.claude/rules/ecc/        # v2.0.0
+cp -r rules/kotlin/* ~/.claude/rules/ecc/      # v2.0.0
+cp -r rules/dart/* ~/.claude/rules/ecc/        # v2.0.0
+cp -r rules/php/* ~/.claude/rules/ecc/         # v2.0.0
+cp -r rules/perl/* ~/.claude/rules/ecc/        # v2.0.0
+cp -r rules/arkts/* ~/.claude/rules/ecc/       # v2.0.0
 ```
 
 ## v2.0.0 新增语言规则亮点

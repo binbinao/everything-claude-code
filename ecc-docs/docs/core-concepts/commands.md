@@ -119,6 +119,7 @@ description: ECC v2.0.0 的 92 个斜杠命令详解
 /orch-fix-defect               # 修复缺陷
 /orch-refine-code              # 重构代码
 /orch-change-feature           # 修改现有功能
+/orch-pipeline                 # 自定义编排管道（v2.0.0）
 ```
 
 ### 🌐 多智能体编排
