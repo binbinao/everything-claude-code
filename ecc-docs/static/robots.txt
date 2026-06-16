@@ -1,0 +1,17 @@
+# Robots.txt for ECC Learning Site
+# Allow all crawlers to index the site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://ecc-docs.vercel.app/sitemap.xml
+
+# Disallow admin/internal paths (if any)
+Disallow: /api/
+Disallow: /_next/
+
+# Allow important assets
+Allow: /assets/
+Allow: /img/
+Allow: /static/

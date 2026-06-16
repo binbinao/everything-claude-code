@@ -1,0 +1,167 @@
+---
+sidebar_position: 8
+title: 企业级模式
+description: 大型项目架构与治理模式 - 交互式教程
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🏢 企业级模式
+
+欢迎来到企业级模式教程！在本课程中，你将学习如何利用 ECC 构建可扩展、可维护的大型项目架构 — 像搭建摩天大楼一样，地基决定高度。
+
+:::info 前置知识
+建议先完成所有进阶教程，尤其是 [多智能体工作流](./multi-agent-workflow) 和 [自定义 Hooks 开发](./custom-hooks)。
+:::
+
+## 🎮 体验企业级命令
+
+ECC 为大型项目提供了专门的治理和架构工具。试试这些命令：
+
+<CommandSimulator 
+  availableCommands={['/architect analyze', '/plan monorepo-setup', '/architect boundaries', '/security + /perf + /code-review']}
+  commandOutputs={{
+    '/architect analyze': '🏗️ Architect 智能体分析中...\n\n📊 项目架构报告：\n\n📁 项目结构：Monorepo (Turborepo)\n  ├── apps/web        (Next.js 前端)\n  ├── apps/api        (Express 后端)\n  ├── packages/ui     (共享 UI 组件库)\n  ├── packages/shared (共享类型和工具)\n  └── packages/config (共享配置)\n\n📈 代码健康度：\n  模块耦合度：中等 🟡\n  代码重复率：8% 🟢\n  测试覆盖率：72% 🟡\n  类型安全：95% 🟢\n\n⚠️ 架构风险：\n  1. apps/web 直接导入 apps/api 内部模块\n  2. 3 个循环依赖\n  3. shared 包体积过大（需拆分）',
+    '/plan monorepo-setup': '🎯 Planner 制定 Monorepo 搭建计划\n\n📋 实施计划（4 个阶段）：\n\n阶段 1：基础设施（2h）\n  - 初始化 Turborepo\n  - 配置工作空间\n  - 设置共享 tsconfig\n\n阶段 2：包结构（3h）\n  - 创建 packages/ui\n  - 创建 packages/shared\n  - 创建 packages/config\n\n阶段 3：应用迁移（4h）\n  - 迁移 web 应用\n  - 迁移 api 服务\n  - 更新导入路径\n\n阶段 4：CI/CD（2h）\n  - 配置增量构建\n  - 设置缓存策略\n  - 配置并行测试',
+    '/architect boundaries': '🏗️ 模块边界检查\n\n📊 依赖关系分析：\n\n✅ 合法依赖：\n  apps/web → packages/ui ✅\n  apps/web → packages/shared ✅\n  apps/api → packages/shared ✅\n\n❌ 违规依赖（3 个）：\n  1. apps/web → apps/api/src/models ❌\n     → 应通过 packages/shared 共享类型\n  2. packages/ui → apps/web/src/hooks ❌\n     → UI 包不应依赖应用层\n  3. packages/shared ↔ packages/ui ❌\n     → 循环依赖！\n\n🔧 修复建议：\n  1. 将共享类型提取到 packages/shared\n  2. 将共享 hooks 提取到 packages/hooks\n  3. 打破循环依赖：拆分 shared 包',
+    '/security + /perf + /code-review': '🎭 并行审查（3 个智能体同时工作）\n\n⏱ 总耗时：45s（并行执行）\n\n📋 汇总报告：\n\n🔒 安全审查：\n  评分：88/100 🟢\n  发现 2 个 MEDIUM 风险\n\n⚡ 性能审查：\n  Lighthouse：91 🟢\n  Bundle：380KB（优）\n  发现 1 个优化建议\n\n📝 代码审查：\n  质量：A 级 🟢\n  发现 3 个 LOW 级改进建议\n\n✅ 综合结论：可以发布'
+  }}
+/>
+
+## 📚 企业级架构四大支柱
+
+<StepByStep 
+  title="构建企业级项目架构"
+  steps={[
+    {
+      title: '支柱一：Monorepo 架构',
+      description: 'Monorepo 将多个相关项目放在同一个仓库中管理。就像一个大型购物中心 — 不同的店铺（应用）共享基础设施（水电、停车场），独立运营但协同管理。Turborepo 是 JavaScript 生态中最流行的 Monorepo 工具。',
+      code: '# Project structure\nmy-enterprise-app/\n├── turbo.json              # Turborepo config\n├── package.json            # Root workspace config\n├── apps/\n│   ├── web/                # Next.js frontend\n│   │   ├── package.json\n│   │   └── src/\n│   ├── api/                # Express backend\n│   │   ├── package.json\n│   │   └── src/\n│   └── admin/              # Admin dashboard\n│       ├── package.json\n│       └── src/\n├── packages/\n│   ├── ui/                 # Shared UI components\n│   ├── shared/             # Shared types & utils\n│   ├── config/             # Shared configs\n│   └── hooks/              # Shared React hooks\n└── tooling/\n    ├── eslint-config/      # Shared ESLint rules\n    ├── tsconfig/           # Shared TypeScript config\n    └── testing/            # Shared test utilities',
+      tip: 'Turborepo 的远程缓存可以让 CI 构建速度提升 10 倍！'
+    },
+    {
+      title: '支柱二：模块边界与依赖治理',
+      description: '大型项目最大的敌人是"意大利面条式"的依赖关系。模块边界就像城市规划中的分区制度 — 住宅区、商业区、工业区各有规则，不能乱建。',
+      code: '// turbo.json - Define pipeline dependencies\n{\n  "$schema": "https://turbo.build/schema.json",\n  "pipeline": {\n    "build": {\n      "dependsOn": ["^build"],  // Build dependencies first\n      "outputs": ["dist/**", ".next/**"]\n    },\n    "test": {\n      "dependsOn": ["build"]\n    },\n    "lint": {\n      "outputs": []\n    }\n  }\n}\n\n// Enforce module boundaries\n// packages/ui/package.json\n{\n  "name": "@myapp/ui",\n  "dependencies": {\n    "@myapp/shared": "workspace:*"  // ✅ Allowed\n    // "@myapp/api": ❌ NOT allowed!\n  }\n}\n\n// Use ECC to enforce boundaries\n// /architect boundaries --strict',
+      tip: '约定：packages/ 只能依赖其他 packages/，不能依赖 apps/。apps/ 可以依赖 packages/。'
+    },
+    {
+      title: '支柱三：共享组件库与设计系统',
+      description: '企业级项目的 UI 一致性靠共享组件库保证。就像连锁品牌的装修标准 — 不管哪个门店，用户都能获得一致的体验。',
+      code: '// packages/ui/src/Button/Button.tsx\nimport { cva, type VariantProps } from "class-variance-authority"\n\nconst buttonVariants = cva(\n  "inline-flex items-center justify-center rounded-md font-medium transition-colors",\n  {\n    variants: {\n      variant: {\n        primary: "bg-blue-600 text-white hover:bg-blue-700",\n        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",\n        danger: "bg-red-600 text-white hover:bg-red-700",\n      },\n      size: {\n        sm: "h-8 px-3 text-sm",\n        md: "h-10 px-4 text-base",\n        lg: "h-12 px-6 text-lg",\n      },\n    },\n    defaultVariants: {\n      variant: "primary",\n      size: "md",\n    },\n  }\n)\n\ninterface ButtonProps \n  extends React.ButtonHTMLAttributes<HTMLButtonElement>,\n    VariantProps<typeof buttonVariants> {\n  isLoading?: boolean\n}\n\nexport function Button({ variant, size, isLoading, children, ...props }: ButtonProps) {\n  return (\n    <button className={buttonVariants({ variant, size })} disabled={isLoading} {...props}>\n      {isLoading ? <Spinner /> : children}\n    </button>\n  )\n}',
+      tip: '使用 CVA（Class Variance Authority）管理组件变体，比传统 className 拼接优雅 10 倍！'
+    },
+    {
+      title: '支柱四：CI/CD 与质量门禁',
+      description: '企业级项目的质量靠自动化流水线守护。ECC 的多智能体并行审查就是你的"自动化质量大门" — 只有通过所有检查的代码才能合入主分支。',
+      code: '# .github/workflows/ci.yml\nname: CI Pipeline\n\non:\n  pull_request:\n    branches: [main]\n\njobs:\n  quality-gate:\n    runs-on: ubuntu-latest\n    strategy:\n      matrix:\n        check: [lint, typecheck, test, security]\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n      - run: npm ci\n      \n      - name: Lint\n        if: matrix.check == \'lint\'\n        run: turbo lint\n        \n      - name: Type Check\n        if: matrix.check == \'typecheck\'\n        run: turbo typecheck\n        \n      - name: Test\n        if: matrix.check == \'test\'\n        run: turbo test -- --coverage\n        \n      - name: Security Audit\n        if: matrix.check == \'security\'\n        run: npm audit --audit-level=high\n\n  # All checks must pass\n  merge-gate:\n    needs: [quality-gate]\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo "All quality gates passed! ✅"',
+      tip: 'GitHub Actions 的 matrix strategy 让 4 项检查并行执行，只花 1 份时间！'
+    }
+  ]}
+/>
+
+## 💻 设计你的 Monorepo 架构
+
+在代码实验室中设计一个完整的企业级 Monorepo 配置：
+
+<CodePlayground 
+  title="Turborepo 配置实战"
+  language="json"
+  initialCode={`{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "**/.env.*local"
+  ],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts"]
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "outputs": ["playwright-report/**"]
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "clean": {
+      "cache": false
+    }
+  },
+  "globalEnv": [
+    "NODE_ENV",
+    "CI"
+  ],
+  "remoteCache": {
+    "enabled": true
+  }
+}`}
+/>
+
+## ❓ 知识检测
+
+<Quiz 
+  question="Monorepo 架构的最大优势是什么？"
+  options={[
+    '减少 Git 仓库数量',
+    '代码共享、统一版本管理和原子化提交',
+    '减少磁盘空间占用',
+    '加快单个包的构建速度'
+  ]}
+  correctAnswer={1}
+  explanation="Monorepo 的核心价值在于：(1) 跨项目共享代码（packages/），(2) 统一版本管理（一个 PR 同时更新前后端），(3) 原子化提交（确保相关变更一起发布）。Turborepo 的增量构建和远程缓存还能大幅加速 CI。"
+/>
+
+<Quiz 
+  question="以下哪种依赖关系是违反模块边界原则的？"
+  options={[
+    'apps/web → packages/ui',
+    'apps/api → packages/shared',
+    'packages/ui → apps/web/src/hooks',
+    'packages/config → 无外部依赖'
+  ]}
+  correctAnswer={2}
+  explanation="packages/（底层包）不应该依赖 apps/（应用层），这会导致循环依赖和紧耦合。正确的依赖方向是单向的：apps → packages。如果 UI 组件需要 hooks，应该创建独立的 packages/hooks。"
+/>
+
+<Quiz 
+  question="Turborepo 的远程缓存（Remote Cache）解决了什么问题？"
+  options={[
+    '减少 node_modules 大小',
+    '加密构建产物',
+    '在 CI 和团队成员之间共享构建缓存，避免重复构建',
+    '自动部署到生产环境'
+  ]}
+  correctAnswer={2}
+  explanation="远程缓存让团队成员和 CI 服务器共享构建结果。如果同事已经构建过某个包且代码没有变化，你的机器会直接使用缓存结果而不是重新构建。这在大型 Monorepo 中可以将 CI 时间缩短 80% 以上。"
+/>
+
+## 🎉 恭喜！
+
+你已完成企业级模式教程！你掌握了：
+
+- ✅ Monorepo 架构设计（Turborepo）
+- ✅ 模块边界与依赖治理
+- ✅ 共享组件库与设计系统
+- ✅ CI/CD 质量门禁流水线
+- ✅ 多智能体并行审查
+
+## 📖 下一步
+
+- [性能优化](./performance-optimization) - 优化大型项目性能
+- [安全最佳实践](./security-best-practices) - 企业级安全实践
+- [高级主题：性能优化详解](/docs/advanced/performance) - 深入高级主题

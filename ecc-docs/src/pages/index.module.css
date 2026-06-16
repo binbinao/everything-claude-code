@@ -1,0 +1,165 @@
+/* Homepage Styles */
+
+/* Hero Row - Two Column Layout */
+.heroRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+/* Left Column - Main Content */
+.heroContent {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Right Column - Tip Section */
+.tipSection {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  max-width: 340px;
+}
+
+.tipHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.tipIcon {
+  font-size: 1.5rem;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.tipTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.tipSubtitle {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0 0 1rem;
+}
+
+/* QR Codes Container */
+.qrCodes {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.qrItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  /* Fixed size container for consistent layout */
+  width: 120px;
+}
+
+.qrImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  border: 2px solid #eee;
+  /* Use contain to preserve original aspect ratio */
+  object-fit: contain;
+  /* Add background for images with different aspect ratios */
+  background-color: #fff;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.qrImage:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.qrLabel {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.tipNote {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0;
+}
+
+/* Dark Mode */
+[data-theme='dark'] .tipSection {
+  background: rgba(30, 30, 40, 0.95);
+}
+
+[data-theme='dark'] .tipTitle {
+  color: #f0f0f0;
+}
+
+[data-theme='dark'] .tipSubtitle {
+  color: #aaa;
+}
+
+[data-theme='dark'] .qrLabel {
+  color: #ddd;
+}
+
+[data-theme='dark'] .qrImage {
+  border-color: #444;
+}
+
+[data-theme='dark'] .tipNote {
+  color: #999;
+}
+
+/* Responsive */
+@media (max-width: 996px) {
+  .heroRow {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .heroContent {
+    order: 1;
+  }
+  
+  .tipSection {
+    order: 2;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .qrCodes {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .qrItem {
+    width: 100px;
+  }
+  
+  .qrImage {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .tipSection {
+    padding: 1rem;
+  }
+}

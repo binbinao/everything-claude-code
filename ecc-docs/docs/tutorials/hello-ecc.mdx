@@ -1,0 +1,125 @@
+---
+sidebar_position: 1
+title: Hello ECC
+description: 你的第一个 ECC 命令 - 交互式教程
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🎯 Hello ECC - 你的第一个命令
+
+欢迎来到你的第一个交互式 ECC 教程！在本课程中，你将学习如何使用你的第一个 ECC 命令。
+
+## 🎮 试试命令模拟器
+
+让我们从体验 ECC 命令开始。在下方输入命令或点击可用命令：
+
+<CommandSimulator 
+  availableCommands={['/plan', '/tdd', '/e2e', '/code-review']}
+  commandOutputs={{
+    '/plan': '🎯 规划模式已激活！\n\n我将为你的功能创建详细的实施计划。\n\n你今天想构建什么？',
+    '/tdd': '🧪 TDD 指南已激活！\n\n让我带你完成红-绿-重构循环：\n\n1. 🔴 红色：编写一个失败的测试\n2. 🟢 绿色：编写代码使测试通过\n3. 🔵 重构：改进代码',
+    '/e2e': '🎭 E2E 运行器已激活！\n\n我将帮助你使用 Playwright 测试用户流程。\n\n你想测试什么流程？',
+    '/code-review': '🔍 代码审查模式！\n\n我将分析你的代码：\n- 代码质量\n- 安全问题\n- 性能问题\n- 最佳实践'
+  }}
+/>
+
+## 📚 分步指南：你的第一个 /plan 命令
+
+按照以下步骤掌握 `/plan` 命令：
+
+<StepByStep 
+  title="使用 /plan 命令"
+  steps={[
+    {
+      title: '打开 Claude Code',
+      description: '确保你已安装 Claude Code 并在项目目录中打开。',
+      tip: '你可以在聊天中输入 /help 来验证'
+    },
+    {
+      title: '输入 /plan',
+      description: '在 Claude Code 聊天中，输入 /plan 后跟你想要构建的内容。',
+      code: '/plan 创建一个用户认证系统',
+      tip: '具体说明你想要什么！'
+    },
+    {
+      title: '审查计划',
+      description: 'Claude 将生成一个包含阶段、风险和时间估算的详细实施计划。',
+      tip: '你可以在确认之前要求修改'
+    },
+    {
+      title: '确认并执行',
+      description: '说"是"或"继续"开始实施计划。',
+      tip: 'Claude 将系统地完成每个阶段'
+    }
+  ]}
+/>
+
+## 💻 动手试试：配置示例
+
+这是一个 ECC 配置示例。尝试修改它：
+
+<CodePlayground 
+  title="ECC CLAUDE.md 配置"
+  language="markdown"
+  initialCode={`# ECC 配置示例
+
+## 命令
+- /plan - 创建实施计划
+- /tdd - 测试驱动开发指南
+- /e2e - 端到端测试
+
+## 智能体
+- planner：复杂功能规划
+- tdd-guide：TDD 指导
+- e2e-runner：Playwright 测试
+
+## 快速开始
+1. 输入 /plan 开始规划
+2. 确认计划
+3. 见证奇迹！`}
+/>
+
+## ❓ 知识检测
+
+让我们测试一下你的理解：
+
+<Quiz 
+  question="你应该使用什么命令来创建详细的实施计划？"
+  options={[
+    '/plan',
+    '/build',
+    '/create',
+    '/make'
+  ]}
+  correctAnswer={0}
+  explanation="/plan 命令会激活规划智能体，它会创建一个包含阶段、风险和时间估算的综合实施计划。"
+/>
+
+<Quiz 
+  question="TDD（测试驱动开发）的三个阶段是什么？"
+  options={[
+    '编写、测试、部署',
+    '红色、绿色、重构',
+    '规划、编码、审查',
+    '构建、测试、发布'
+  ]}
+  correctAnswer={1}
+  explanation="TDD 遵循红-绿-重构循环：首先编写一个失败的测试（红色），然后编写代码使测试通过（绿色），最后改进代码（重构）。"
+/>
+
+## 🎉 恭喜！
+
+你已完成第一个 ECC 教程！你学到了：
+
+- ✅ 如何使用命令模拟器
+- ✅ `/plan` 的分步流程
+- ✅ ECC 配置基础
+- ✅ TDD 基础知识
+
+## 📖 下一步
+
+准备好继续了吗？查看这些教程：
+
+- [TDD 大师课](/docs/tutorials/tdd-masterclass) - 深入了解测试驱动开发
+- 更多教程即将推出！

@@ -1,0 +1,169 @@
+---
+sidebar_position: 7
+title: Security Best Practices
+description: Build secure applications with ECC - Interactive Tutorial
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🔒 Security Best Practices
+
+Welcome to the Security Best Practices tutorial! In this course, you'll learn how to use ECC to identify and fix security vulnerabilities — making your application as secure as a bank vault.
+
+:::info Prerequisites
+It's recommended to complete [TDD Masterclass](./tdd-masterclass) and [Custom Hooks](./custom-hooks) before starting this tutorial.
+:::
+
+## 🎮 Try Security Scanning Commands
+
+ECC comes with powerful security auditing tools. Try these commands:
+
+<CommandSimulator 
+  availableCommands={['/security scan', '/security audit --deps', '/security secrets-check', '/security review']}
+  commandOutputs={{
+    '/security scan': '🔒 Security Scanner started!\n\n🔍 Code Security Scan Report:\n\n❌ CRITICAL (2):\n  1. SQL Injection risk\n     → src/api/users.ts:28\n     → Using string concatenation to build queries\n  2. Hardcoded API key\n     → src/config/payment.ts:5\n\n⚠️ HIGH (3):\n  3. XSS vulnerability: unescaped user input\n     → src/components/Comment.tsx:12\n  4. Insecure JWT config (no expiration)\n     → src/auth/token.ts:15\n  5. Path traversal risk\n     → src/api/files.ts:33\n\n💡 MEDIUM (2):\n  6. Missing CORS configuration\n  7. Missing Rate Limiting',
+    '/security audit --deps': '📦 Dependency Security Audit\n\nScanning 342 dependencies...\n\n❌ CRITICAL (1):\n  lodash@4.17.20\n  → Prototype pollution (CVE-2021-23337)\n  → Fix: Upgrade to 4.17.21+\n\n⚠️ HIGH (2):\n  node-fetch@2.6.1\n  → Information disclosure (CVE-2022-0235)\n  → Fix: Upgrade to 2.6.7+\n\n  jsonwebtoken@8.5.1\n  → Insecure default algorithm\n  → Fix: Upgrade to 9.0.0+\n\n🔧 Auto-fix command:\n  npm audit fix --force',
+    '/security secrets-check': '🔑 Secrets Detector\n\nScanning codebase for sensitive data...\n\n❌ Found 3 hardcoded secrets:\n\n  1. AWS Access Key\n     → .env.example:3\n     → AKIA***** (partially hidden)\n\n  2. Stripe Secret Key\n     → src/config/payment.ts:5\n     → sk_live_*****\n\n  3. Database Password\n     → docker-compose.yml:12\n     → Plaintext password\n\n🔧 Recommendations:\n  1. Use environment variables for secrets\n  2. Add .gitignore rules\n  3. Consider Vault or AWS Secrets Manager',
+    '/security review': '🔍 Security Reviewer agent activated!\n\n📋 Comprehensive Security Assessment:\n\n🏆 Security Score: 62/100 🟡\n\n✅ Well done:\n  - Using bcrypt for password hashing\n  - HTTPS enabled\n  - Using helmet middleware\n\n❌ Needs improvement:\n  - Incomplete input validation\n  - Missing CSP headers\n  - Session management needs hardening\n  - APIs missing rate limiting\n\n📊 OWASP Top 10 Coverage: 6/10'
+  }}
+/>
+
+## 📚 Five-Layer Defense Model
+
+<StepByStep 
+  title="Building Defense in Depth"
+  steps={[
+    {
+      title: 'Layer 1: Input Validation — The Front Gate Security',
+      description: 'Never trust user input! Input validation is the first line of defense. Like airport security — everything entering must go through the scanner. Use Zod for strict type and format validation.',
+      code: '// ❌ DANGEROUS: No validation\napp.post("/api/users", (req, res) => {\n  db.query(`SELECT * FROM users WHERE id = ${req.body.id}`)\n})\n\n// ✅ SECURE: Zod validation + parameterized query\nimport { z } from "zod"\n\nconst UserQuerySchema = z.object({\n  id: z.string().uuid(),  // Must be valid UUID\n  email: z.string().email().max(255),\n  role: z.enum(["user", "admin"])\n})\n\napp.post("/api/users", (req, res) => {\n  const validated = UserQuerySchema.parse(req.body)\n  db.query("SELECT * FROM users WHERE id = $1", [validated.id])\n})',
+      tip: 'Zod validates not just types but also formats (email/uuid/url). One line of code prevents SQL injection!'
+    },
+    {
+      title: 'Layer 2: Authentication & Authorization — ID Badge and Access Pass',
+      description: 'Authentication confirms "who you are", authorization decides "what you can do". Both are essential — like entering a company requires swiping your badge (authentication), but not every room is accessible to you (authorization).',
+      code: '// Secure JWT configuration\nimport jwt from "jsonwebtoken"\n\n// ❌ INSECURE JWT\nconst token = jwt.sign({ userId: user.id }, "secret123")\n\n// ✅ SECURE JWT\nconst token = jwt.sign(\n  { \n    userId: user.id,\n    role: user.role \n  },\n  process.env.JWT_SECRET,  // Environment variable\n  {\n    algorithm: "HS256",\n    expiresIn: "1h",       // Token expiration\n    issuer: "my-app",\n    audience: "my-app-users"\n  }\n)\n\n// Role-based authorization middleware\nfunction requireRole(role: string) {\n  return (req, res, next) => {\n    if (req.user.role !== role) {\n      return res.status(403).json({ error: "Forbidden" })\n    }\n    next()\n  }\n}\n\n// Usage\napp.delete("/api/users/:id", requireRole("admin"), deleteUser)',
+      tip: 'JWT must have an expiration time! A token without expiration is like a building access card that never expires.'
+    },
+    {
+      title: 'Layer 3: Secrets Management — The Vault',
+      description: 'Hardcoded secrets are a cardinal sin! It\'s like writing the safe combination on the safe door. Use environment variables and secret management services.',
+      code: '// ❌ NEVER: Hardcoded secrets\nconst stripe = new Stripe("sk_live_xxxxx")\nconst dbUrl = "postgres://admin:password123@localhost"\n\n// ✅ ALWAYS: Environment variables\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)\nconst dbUrl = process.env.DATABASE_URL!\n\n// Validate environment at startup\nconst EnvSchema = z.object({\n  STRIPE_SECRET_KEY: z.string().startsWith("sk_"),\n  DATABASE_URL: z.string().url(),\n  JWT_SECRET: z.string().min(32),\n  NODE_ENV: z.enum(["development", "production", "test"])\n})\n\ntry {\n  EnvSchema.parse(process.env)\n} catch (e) {\n  console.error("Missing environment variables:", e.errors)\n  process.exit(1)\n}\n\n// .gitignore - MUST include:\n// .env\n// .env.local\n// .env.production',
+      tip: 'Validate environment variables at startup to catch config issues early. Don\'t wait until production to find out a key is missing!'
+    },
+    {
+      title: 'Layer 4: Dependency Security — Supply Chain Defense',
+      description: 'Your code might only be 10% of the app, but node_modules contains 90% of third-party code. A single vulnerable dependency can compromise the entire application. Regular auditing is mandatory.',
+      code: '# Audit dependencies\nnpm audit\n\n# Auto-fix vulnerabilities\nnpm audit fix\n\n# Check for outdated packages\nnpm outdated\n\n# Use ECC security hook in preCommit\n{\n  "hooks": {\n    "preCommit": [\n      {\n        "name": "dep-audit",\n        "command": "npm audit --audit-level=high",\n        "onFailure": "block",\n        "message": "Fix high-severity vulnerabilities before committing"\n      }\n    ]\n  }\n}\n\n# Lock file is your friend!\n# Always commit package-lock.json\n# It ensures reproducible builds',
+      tip: 'Add npm audit to your CI/CD pipeline to automatically check dependency security before every build.'
+    },
+    {
+      title: 'Layer 5: HTTP Security Headers — The Armor',
+      description: 'Security HTTP headers are like putting armor on your application. They tell browsers how to safely handle your content. The helmet middleware is essential armor for Express/Next.js.',
+      code: '// Next.js: next.config.js\nconst securityHeaders = [\n  {\n    key: "Content-Security-Policy",\n    value: "default-src \'self\'; script-src \'self\'"\n  },\n  {\n    key: "X-Frame-Options",\n    value: "DENY"  // Prevent clickjacking\n  },\n  {\n    key: "X-Content-Type-Options",\n    value: "nosniff"  // Prevent MIME sniffing\n  },\n  {\n    key: "Strict-Transport-Security",\n    value: "max-age=31536000; includeSubDomains"\n  },\n  {\n    key: "Referrer-Policy",\n    value: "strict-origin-when-cross-origin"\n  }\n]\n\nmodule.exports = {\n  async headers() {\n    return [{ source: "/(.*)", headers: securityHeaders }]\n  }\n}',
+      tip: 'CSP (Content-Security-Policy) is the most powerful weapon against XSS. Start with a strict policy and loosen as needed.'
+    }
+  ]}
+/>
+
+## 💻 Hands-on: Fix Security Vulnerabilities
+
+Practice identifying and fixing common security vulnerabilities in the code playground:
+
+<CodePlayground 
+  title="Security Vulnerability Fix Exercise"
+  language="typescript"
+  initialCode={`// Security Fix Exercise
+// Identify and fix all security issues in this API
+
+import { z } from 'zod'
+
+// ❌ VULNERABLE API (5 security issues - can you find them all?)
+const API_KEY = "sk_live_abc123xyz"  // Issue 1: ?
+
+export async function handleRequest(req: Request) {
+  const body = await req.json()
+  
+  // Issue 2: No input validation
+  const { email, password, role } = body
+  
+  // Issue 3: SQL injection risk
+  const query = \`SELECT * FROM users WHERE email = '\${email}'\`
+  
+  // Issue 4: Plain text password storage
+  await db.execute(query)
+  await db.execute(
+    \`INSERT INTO users (email, password, role) 
+     VALUES ('\${email}', '\${password}', '\${role}')\`
+  )
+  
+  // Issue 5: Sensitive data in response
+  return Response.json({ 
+    success: true, 
+    password: password,
+    apiKey: API_KEY 
+  })
+}
+
+// ✅ TODO: Rewrite the function above with all fixes applied
+// Hints:
+// 1. Move secrets to environment variables
+// 2. Add Zod validation schema
+// 3. Use parameterized queries
+// 4. Hash passwords with bcrypt
+// 5. Never return sensitive data in responses`}
+/>
+
+## ❓ Knowledge Check
+
+<Quiz 
+  question="Which approach most effectively prevents SQL injection?"
+  options={[
+    'Filter special characters (like quotes)',
+    'Use Parameterized Queries',
+    'Limit input length',
+    'Use HTTPS'
+  ]}
+  correctAnswer={1}
+  explanation="Parameterized queries completely separate data from SQL instructions, fundamentally eliminating SQL injection. Filtering special characters is error-prone, length limits only address the symptom, and HTTPS solves transport security — not injection."
+/>
+
+<Quiz 
+  question="What problem does a JWT without an expiration time cause?"
+  options={[
+    'Performance degradation',
+    'Larger token size',
+    'Once leaked, the token is valid forever — attackers can use it indefinitely',
+    'Unable to refresh the token'
+  ]}
+  correctAnswer={2}
+  explanation="A JWT without expiration means that once stolen (via XSS, log leakage, etc.), an attacker can impersonate that user forever. Setting a reasonable expiration (e.g., 1 hour) combined with a Refresh Token mechanism is a basic JWT security requirement."
+/>
+
+<Quiz 
+  question="What is the #1 security risk in the OWASP Top 10?"
+  options={[
+    'XSS (Cross-Site Scripting)',
+    'Injection attacks (e.g., SQL injection)',
+    'Broken Access Control',
+    'CSRF (Cross-Site Request Forgery)'
+  ]}
+  correctAnswer={2}
+  explanation="In OWASP Top 10 (2021), Broken Access Control rose to #1. This means many applications fail to properly restrict which resources users can access and what actions they can perform. Input validation + role-based authorization is the most critical defense."
+/>
+
+## 🎉 Congratulations!
+
+You've completed the Security Best Practices tutorial! You've mastered:
+
+- ✅ Five-layer defense-in-depth model
+- ✅ Zod input validation to prevent injection
+- ✅ Secure JWT configuration and role-based authorization
+- ✅ Secrets management with environment variables
+- ✅ Dependency security auditing and HTTP security headers
+
+## 📖 Next Steps
+
+- [Enterprise Patterns](./enterprise-patterns) - Large-scale project architecture
+- [Performance Optimization](./performance-optimization) - Performance analysis and tuning
+- [Custom Hooks](./custom-hooks) - Create security audit hooks

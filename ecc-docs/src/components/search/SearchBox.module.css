@@ -1,0 +1,68 @@
+/**
+ * SearchBox Component Styles
+ */
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-background-color);
+  transition: all 0.2s;
+  min-width: 240px;
+}
+
+.searchBox:focus-within {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.searchIcon {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  color: var(--ifm-font-color-base);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--ifm-color-emphasis-500);
+}
+
+.shortcut {
+  display: flex;
+  gap: 4px;
+}
+
+.shortcut kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  font-family: inherit;
+  background: var(--ifm-color-emphasis-100);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  color: var(--ifm-color-emphasis-600);
+}
+
+@media (max-width: 768px) {
+  .searchBox {
+    min-width: unset;
+  }
+  
+  .shortcut {
+    display: none;
+  }
+}

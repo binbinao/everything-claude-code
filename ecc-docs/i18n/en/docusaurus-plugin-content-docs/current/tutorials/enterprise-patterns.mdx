@@ -1,0 +1,167 @@
+---
+sidebar_position: 8
+title: Enterprise Patterns
+description: Large-scale project architecture and governance - Interactive Tutorial
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🏢 Enterprise Patterns
+
+Welcome to the Enterprise Patterns tutorial! In this course, you'll learn how to use ECC to build scalable, maintainable large-scale project architectures — like building a skyscraper, the foundation determines the height.
+
+:::info Prerequisites
+It's recommended to complete all intermediate tutorials, especially [Multi-Agent Workflows](./multi-agent-workflow) and [Custom Hooks](./custom-hooks).
+:::
+
+## 🎮 Try Enterprise-Level Commands
+
+ECC provides specialized governance and architecture tools for large projects. Try these commands:
+
+<CommandSimulator 
+  availableCommands={['/architect analyze', '/plan monorepo-setup', '/architect boundaries', '/security + /perf + /code-review']}
+  commandOutputs={{
+    '/architect analyze': '🏗️ Architect agent analyzing...\n\n📊 Project Architecture Report:\n\n📁 Structure: Monorepo (Turborepo)\n  ├── apps/web        (Next.js frontend)\n  ├── apps/api        (Express backend)\n  ├── packages/ui     (Shared UI components)\n  ├── packages/shared (Shared types & utils)\n  └── packages/config (Shared configuration)\n\n📈 Code Health:\n  Module Coupling: Medium 🟡\n  Code Duplication: 8% 🟢\n  Test Coverage: 72% 🟡\n  Type Safety: 95% 🟢\n\n⚠️ Architecture Risks:\n  1. apps/web imports apps/api internal modules directly\n  2. 3 circular dependencies detected\n  3. shared package is too large (needs splitting)',
+    '/plan monorepo-setup': '🎯 Planner creating Monorepo setup plan\n\n📋 Implementation Plan (4 phases):\n\nPhase 1: Infrastructure (2h)\n  - Initialize Turborepo\n  - Configure workspaces\n  - Set up shared tsconfig\n\nPhase 2: Package Structure (3h)\n  - Create packages/ui\n  - Create packages/shared\n  - Create packages/config\n\nPhase 3: App Migration (4h)\n  - Migrate web application\n  - Migrate API service\n  - Update import paths\n\nPhase 4: CI/CD (2h)\n  - Configure incremental builds\n  - Set up caching strategy\n  - Configure parallel testing',
+    '/architect boundaries': '🏗️ Module Boundary Check\n\n📊 Dependency Analysis:\n\n✅ Valid Dependencies:\n  apps/web → packages/ui ✅\n  apps/web → packages/shared ✅\n  apps/api → packages/shared ✅\n\n❌ Violations (3):\n  1. apps/web → apps/api/src/models ❌\n     → Should share types via packages/shared\n  2. packages/ui → apps/web/src/hooks ❌\n     → UI package must not depend on app layer\n  3. packages/shared ↔ packages/ui ❌\n     → Circular dependency!\n\n🔧 Fix suggestions:\n  1. Extract shared types to packages/shared\n  2. Extract shared hooks to packages/hooks\n  3. Break circular dependency: split shared package',
+    '/security + /perf + /code-review': '🎭 Parallel Review (3 agents working simultaneously)\n\n⏱ Total time: 45s (parallel execution)\n\n📋 Summary Report:\n\n🔒 Security Review:\n  Score: 88/100 🟢\n  Found 2 MEDIUM risks\n\n⚡ Performance Review:\n  Lighthouse: 91 🟢\n  Bundle: 380KB (Good)\n  Found 1 optimization suggestion\n\n📝 Code Review:\n  Quality: A Grade 🟢\n  Found 3 LOW-level improvement suggestions\n\n✅ Overall: Ready for release'
+  }}
+/>
+
+## 📚 Four Pillars of Enterprise Architecture
+
+<StepByStep 
+  title="Building Enterprise-Grade Project Architecture"
+  steps={[
+    {
+      title: 'Pillar 1: Monorepo Architecture',
+      description: 'A Monorepo keeps multiple related projects in one repository. Like a large shopping mall — different stores (apps) share infrastructure (electricity, parking), operate independently but are managed together. Turborepo is the most popular Monorepo tool in the JavaScript ecosystem.',
+      code: '# Project structure\nmy-enterprise-app/\n├── turbo.json              # Turborepo config\n├── package.json            # Root workspace config\n├── apps/\n│   ├── web/                # Next.js frontend\n│   │   ├── package.json\n│   │   └── src/\n│   ├── api/                # Express backend\n│   │   ├── package.json\n│   │   └── src/\n│   └── admin/              # Admin dashboard\n│       ├── package.json\n│       └── src/\n├── packages/\n│   ├── ui/                 # Shared UI components\n│   ├── shared/             # Shared types & utils\n│   ├── config/             # Shared configs\n│   └── hooks/              # Shared React hooks\n└── tooling/\n    ├── eslint-config/      # Shared ESLint rules\n    ├── tsconfig/           # Shared TypeScript config\n    └── testing/            # Shared test utilities',
+      tip: 'Turborepo\'s remote cache can speed up CI builds by 10x!'
+    },
+    {
+      title: 'Pillar 2: Module Boundaries & Dependency Governance',
+      description: 'The biggest enemy of large projects is "spaghetti" dependencies. Module boundaries are like city zoning — residential, commercial, and industrial zones each have rules and can\'t be built randomly.',
+      code: '// turbo.json - Define pipeline dependencies\n{\n  "$schema": "https://turbo.build/schema.json",\n  "pipeline": {\n    "build": {\n      "dependsOn": ["^build"],  // Build dependencies first\n      "outputs": ["dist/**", ".next/**"]\n    },\n    "test": {\n      "dependsOn": ["build"]\n    },\n    "lint": {\n      "outputs": []\n    }\n  }\n}\n\n// Enforce module boundaries\n// packages/ui/package.json\n{\n  "name": "@myapp/ui",\n  "dependencies": {\n    "@myapp/shared": "workspace:*"  // ✅ Allowed\n    // "@myapp/api": ❌ NOT allowed!\n  }\n}\n\n// Use ECC to enforce boundaries\n// /architect boundaries --strict',
+      tip: 'Convention: packages/ can only depend on other packages/, never on apps/. apps/ can depend on packages/.'
+    },
+    {
+      title: 'Pillar 3: Shared Component Library & Design System',
+      description: 'UI consistency in enterprise projects relies on shared component libraries. Like franchise brand decoration standards — regardless of the location, users get a consistent experience.',
+      code: '// packages/ui/src/Button/Button.tsx\nimport { cva, type VariantProps } from "class-variance-authority"\n\nconst buttonVariants = cva(\n  "inline-flex items-center justify-center rounded-md font-medium transition-colors",\n  {\n    variants: {\n      variant: {\n        primary: "bg-blue-600 text-white hover:bg-blue-700",\n        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",\n        danger: "bg-red-600 text-white hover:bg-red-700",\n      },\n      size: {\n        sm: "h-8 px-3 text-sm",\n        md: "h-10 px-4 text-base",\n        lg: "h-12 px-6 text-lg",\n      },\n    },\n    defaultVariants: {\n      variant: "primary",\n      size: "md",\n    },\n  }\n)\n\ninterface ButtonProps \n  extends React.ButtonHTMLAttributes<HTMLButtonElement>,\n    VariantProps<typeof buttonVariants> {\n  isLoading?: boolean\n}\n\nexport function Button({ variant, size, isLoading, children, ...props }: ButtonProps) {\n  return (\n    <button className={buttonVariants({ variant, size })} disabled={isLoading} {...props}>\n      {isLoading ? <Spinner /> : children}\n    </button>\n  )\n}',
+      tip: 'Use CVA (Class Variance Authority) to manage component variants — 10x more elegant than traditional className concatenation!'
+    },
+    {
+      title: 'Pillar 4: CI/CD & Quality Gates',
+      description: 'Enterprise project quality is guarded by automated pipelines. ECC\'s multi-agent parallel review is your "automated quality gate" — only code that passes all checks can merge to main.',
+      code: '# .github/workflows/ci.yml\nname: CI Pipeline\n\non:\n  pull_request:\n    branches: [main]\n\njobs:\n  quality-gate:\n    runs-on: ubuntu-latest\n    strategy:\n      matrix:\n        check: [lint, typecheck, test, security]\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n      - run: npm ci\n      \n      - name: Lint\n        if: matrix.check == \'lint\'\n        run: turbo lint\n        \n      - name: Type Check\n        if: matrix.check == \'typecheck\'\n        run: turbo typecheck\n        \n      - name: Test\n        if: matrix.check == \'test\'\n        run: turbo test -- --coverage\n        \n      - name: Security Audit\n        if: matrix.check == \'security\'\n        run: npm audit --audit-level=high\n\n  # All checks must pass\n  merge-gate:\n    needs: [quality-gate]\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo "All quality gates passed! ✅"',
+      tip: 'GitHub Actions matrix strategy runs 4 checks in parallel, taking only the time of one!'
+    }
+  ]}
+/>
+
+## 💻 Design Your Monorepo Architecture
+
+Design a complete enterprise-level Monorepo configuration in the code playground:
+
+<CodePlayground 
+  title="Turborepo Configuration"
+  language="json"
+  initialCode={`{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "**/.env.*local"
+  ],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts"]
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "outputs": ["playwright-report/**"]
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "clean": {
+      "cache": false
+    }
+  },
+  "globalEnv": [
+    "NODE_ENV",
+    "CI"
+  ],
+  "remoteCache": {
+    "enabled": true
+  }
+}`}
+/>
+
+## ❓ Knowledge Check
+
+<Quiz 
+  question="What is the biggest advantage of Monorepo architecture?"
+  options={[
+    'Fewer Git repositories',
+    'Code sharing, unified version management, and atomic commits',
+    'Less disk space usage',
+    'Faster build speed for individual packages'
+  ]}
+  correctAnswer={1}
+  explanation="The core value of Monorepo lies in: (1) Cross-project code sharing (packages/), (2) Unified version management (one PR updates both frontend and backend), (3) Atomic commits (ensuring related changes are released together). Turborepo's incremental builds and remote cache also significantly accelerate CI."
+/>
+
+<Quiz 
+  question="Which dependency relationship violates module boundary principles?"
+  options={[
+    'apps/web → packages/ui',
+    'apps/api → packages/shared',
+    'packages/ui → apps/web/src/hooks',
+    'packages/config → no external dependencies'
+  ]}
+  correctAnswer={2}
+  explanation="packages/ (lower-level packages) should never depend on apps/ (application layer) — this causes circular dependencies and tight coupling. The correct dependency direction is unidirectional: apps → packages. If UI components need hooks, create an independent packages/hooks."
+/>
+
+<Quiz 
+  question="What problem does Turborepo's Remote Cache solve?"
+  options={[
+    'Reducing node_modules size',
+    'Encrypting build artifacts',
+    'Sharing build cache between CI and team members to avoid redundant builds',
+    'Auto-deploying to production'
+  ]}
+  correctAnswer={2}
+  explanation="Remote cache lets team members and CI servers share build results. If a colleague has already built a package and the code hasn't changed, your machine uses the cached result instead of rebuilding. In large Monorepos, this can reduce CI time by over 80%."
+/>
+
+## 🎉 Congratulations!
+
+You've completed the Enterprise Patterns tutorial! You've mastered:
+
+- ✅ Monorepo architecture design (Turborepo)
+- ✅ Module boundaries and dependency governance
+- ✅ Shared component library and design system
+- ✅ CI/CD quality gate pipelines
+- ✅ Multi-agent parallel review
+
+## 📖 Next Steps
+
+- [Performance Optimization](./performance-optimization) - Optimize large-scale project performance
+- [Security Best Practices](./security-best-practices) - Enterprise-level security practices
+- [Advanced Topics: Performance](/docs/advanced/performance) - Deep dive into advanced topics

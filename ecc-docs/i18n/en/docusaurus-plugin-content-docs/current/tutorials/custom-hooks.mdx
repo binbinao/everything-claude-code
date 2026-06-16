@@ -1,0 +1,182 @@
+---
+sidebar_position: 4
+title: Custom Hooks Development
+description: Create ECC automation hooks from scratch - Interactive Tutorial
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🪝 Custom Hooks Development
+
+Welcome to the Custom Hooks tutorial! In this course, you'll learn how to create your own ECC hooks to automate repetitive tasks — making your development workflow run like a Swiss watch.
+
+:::info Prerequisites
+We recommend familiarizing yourself with [Hooks](/docs/core-concepts/hooks) core concepts first.
+:::
+
+## 🎮 Experience the Hook System
+
+ECC hooks trigger automatically at specific moments. Try these commands to explore different hook types:
+
+<CommandSimulator 
+  availableCommands={['hook:postToolUse', 'hook:preCommit', 'hook:stop', 'hooks --list']}
+  commandOutputs={{
+    'hook:postToolUse': '🪝 PostToolUse hook triggered!\n\n📁 File edit detected: src/utils/parser.ts\n\n🔄 Running automated actions:\n  ✅ Prettier formatting complete\n  ✅ TypeScript type check passed\n  ⚠️ Found console.log (line 42)\n     Suggestion: Use logger for production code',
+    'hook:preCommit': '🪝 PreCommit hook triggered!\n\n📋 Pre-commit checklist:\n  ✅ lint-staged: 3 files checked\n  ✅ type-check: No type errors\n  ✅ test-affected: 12 related tests passed\n  ⚠️ console.log audit: 2 found\n\n🚫 Commit blocked! Please remove console.log first',
+    'hook:stop': '🪝 Stop hook triggered!\n\n📊 Session-end audit report:\n  📝 Files modified this session: 8\n  ✅ console.log audit: All clear\n  ✅ Test coverage: 87% (> 80% threshold)\n  ✅ Security scan: No vulnerabilities\n\n👋 Session ended safely!',
+    'hooks --list': '📋 Configured hooks list:\n\n🔧 PostToolUse (after tool use):\n  1. prettier - Auto-format\n  2. tsc-check - Type check\n  3. console-warn - console.log warning\n\n🔒 PreCommit (before commit):\n  4. lint-staged - Staged file check\n  5. type-check - Full type check\n  6. test-affected - Affected tests\n\n🛑 Stop (session end):\n  7. console-audit - console.log audit\n  8. coverage-check - Coverage check'
+  }}
+/>
+
+## 📚 Create a Custom Hook from Scratch
+
+Let's create a practical custom hook step by step:
+
+<StepByStep 
+  title="Create an auto-format Hook"
+  steps={[
+    {
+      title: 'Understand Hook Structure',
+      description: 'Every ECC hook consists of 4 core properties: name (identifier), trigger (trigger condition), filePattern (file matching), and command (execution command). Think of it like setting an alarm — what time (trigger), which days (filePattern), what ringtone (command).',
+      code: '// Hook structure\n{\n  "name": "hook-name",        // Unique identifier\n  "trigger": "edit_file",      // When to trigger\n  "filePattern": "*.{ts,tsx}",  // Which files to watch\n  "command": "npx prettier --write ${file}"  // What to execute\n}',
+      tip: '${file} is a built-in variable that automatically resolves to the edited file path'
+    },
+    {
+      title: 'Choose Hook Type',
+      description: 'Choose the right hook type based on your needs: postToolUse (execute immediately after each edit), preCommit (check before commit), stop (execute at session end).',
+      code: '// Three hook types in settings.json\n{\n  "hooks": {\n    "postToolUse": [...],  // After every file edit\n    "preCommit": [...],    // Before git commit\n    "stop": [...]          // Before session ends\n  }\n}',
+      tip: 'postToolUse is the most common — real-time feedback leaves bugs nowhere to hide!'
+    },
+    {
+      title: 'Write a postToolUse Hook',
+      description: 'Let\'s create an auto-formatting hook. Every time a TypeScript file is edited, Prettier runs automatically.',
+      code: '// ~/.claude/settings.json\n{\n  "hooks": {\n    "postToolUse": [\n      {\n        "name": "auto-format",\n        "trigger": "edit_file",\n        "filePattern": "*.{ts,tsx,js,jsx}",\n        "command": "npx prettier --write ${file}"\n      }\n    ]\n  }\n}',
+      tip: 'Make sure prettier is installed in your project (npm install -D prettier)'
+    },
+    {
+      title: 'Add preCommit Check Hooks',
+      description: 'Automatically check code quality before committing. This is your last line of defense — ensuring substandard code never enters the repository.',
+      code: '// Add to preCommit hooks\n{\n  "hooks": {\n    "preCommit": [\n      {\n        "name": "no-console-log",\n        "command": "grep -r \\"console.log\\" --include=\\"*.ts\\" src/",\n        "onMatch": "block",\n        "message": "Remove console.log before committing!"\n      },\n      {\n        "name": "run-tests",\n        "command": "npm test -- --bail",\n        "onFailure": "block"\n      }\n    ]\n  }\n}',
+      tip: 'preCommit hook failures block the commit, protecting code quality'
+    },
+    {
+      title: 'Add stop Audit Hooks',
+      description: 'Run a final audit when the session ends. Like a safety checklist before leaving the office — making sure nothing is left behind.',
+      code: '// Add to stop hooks\n{\n  "hooks": {\n    "stop": [\n      {\n        "name": "console-audit",\n        "command": "grep -rn \\"console.log\\" --include=\\"*.ts\\" src/",\n        "severity": "warn",\n        "message": "Found console.log in modified files"\n      },\n      {\n        "name": "coverage-check",\n        "command": "npm test -- --coverage --silent",\n        "threshold": { "lines": 80 }\n      }\n    ]\n  }\n}',
+      tip: 'stop hooks are audit-oriented, typically using warn rather than block'
+    }
+  ]}
+/>
+
+## 💻 Write Your Own Hook
+
+Write a complete hook configuration in the code playground. Try adding your own rules:
+
+<CodePlayground 
+  title="Custom Hook Configuration"
+  language="json"
+  initialCode={`{
+  "hooks": {
+    "postToolUse": [
+      {
+        "name": "auto-format",
+        "trigger": "edit_file",
+        "filePattern": "*.{ts,tsx}",
+        "command": "npx prettier --write \${file}"
+      },
+      {
+        "name": "type-check",
+        "trigger": "edit_file",
+        "filePattern": "*.{ts,tsx}",
+        "command": "npx tsc --noEmit"
+      },
+      {
+        "name": "console-detect",
+        "trigger": "edit_file",
+        "filePattern": "*.{ts,tsx}",
+        "pattern": "console.log",
+        "severity": "warn",
+        "message": "Avoid console.log in production code!"
+      }
+    ],
+    "preCommit": [
+      {
+        "name": "lint-staged",
+        "command": "npx lint-staged"
+      },
+      {
+        "name": "no-debug-code",
+        "command": "grep -rn 'debugger\\\\|console.log' --include='*.ts' src/",
+        "onMatch": "block",
+        "message": "Remove debug statements before committing"
+      }
+    ],
+    "stop": [
+      {
+        "name": "session-summary",
+        "command": "git diff --stat",
+        "severity": "info"
+      },
+      {
+        "name": "todo-reminder",
+        "command": "grep -rn 'TODO\\\\|FIXME' --include='*.ts' src/",
+        "severity": "warn",
+        "message": "Don't forget about these TODOs!"
+      }
+    ]
+  }
+}`}
+/>
+
+## ❓ Knowledge Check
+
+<Quiz 
+  question="Which hook type is best suited for 'automatically running Prettier after each file save'?"
+  options={[
+    'preCommit',
+    'postToolUse',
+    'stop',
+    'onSave'
+  ]}
+  correctAnswer={1}
+  explanation="The postToolUse hook triggers automatically after each tool use (like edit_file), making it perfect for real-time formatting, type checking, and other instant feedback scenarios. It's the most commonly used hook type in ECC."
+/>
+
+<Quiz 
+  question="If a preCommit hook detects console.log, what's the best practice?"
+  options={[
+    'Ignore and continue committing',
+    'Only issue a warning',
+    'Block the commit and require removal',
+    'Automatically delete the console.log'
+  ]}
+  correctAnswer={2}
+  explanation="Production code should not contain console.log (per project rules). preCommit hooks should use 'block' level to prevent commits, forcing developers to remove debug code before committing. This is the last line of defense for code quality."
+/>
+
+<Quiz 
+  question="What is the key difference between stop hooks and preCommit hooks?"
+  options={[
+    'stop hooks are faster',
+    'stop hooks run at session end, preCommit runs before commits',
+    'stop hooks cannot block operations',
+    'preCommit hooks cannot run commands'
+  ]}
+  correctAnswer={1}
+  explanation="stop hooks execute before the session ends (ideal for final audits), while preCommit hooks execute before git commit (ideal for quality gates). They have different trigger points and complementary purposes: preCommit guards each commit, stop guards the entire session."
+/>
+
+## 🎉 Congratulations!
+
+You've completed the Custom Hooks tutorial! You've mastered:
+
+- ✅ Three hook types: postToolUse, preCommit, stop
+- ✅ Core hook configuration structure
+- ✅ Auto-formatting and type-checking hooks
+- ✅ console.log detection and commit blocking
+- ✅ Session-end audit hooks
+
+## 📖 Next Steps
+
+- [E2E Testing Strategies](./e2e-testing) - Master end-to-end testing
+- [Hooks Deep Dive](/docs/core-concepts/hooks) - Learn all about hooks

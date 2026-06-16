@@ -1,0 +1,14 @@
+{
+  "item.label.文档": {
+    "message": "Docs",
+    "description": "Navbar item with label 文档"
+  },
+  "item.label.教程": {
+    "message": "Tutorials",
+    "description": "Navbar item with label 教程"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

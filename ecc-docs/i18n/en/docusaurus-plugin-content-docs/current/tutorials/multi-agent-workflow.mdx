@@ -1,0 +1,167 @@
+---
+sidebar_position: 3
+title: Multi-Agent Workflows
+description: Master multi-agent collaborative orchestration - Interactive Tutorial
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# 🎭 Multi-Agent Workflows
+
+Welcome to the advanced tutorials! In this course, you'll learn how to combine multiple ECC agents into powerful collaborative workflows — like commanding an elite development special forces team.
+
+:::info Prerequisites
+We recommend completing [Hello ECC](./hello-ecc) and [TDD Masterclass](./tdd-masterclass) before starting this tutorial.
+:::
+
+## 🎮 Experience Multi-Agent Collaboration
+
+In real-world development, a complex feature often requires multiple experts working together. Try these command combinations:
+
+<CommandSimulator 
+  availableCommands={['/plan Implement shopping cart', '/tdd --feature=cart', '/code-review', '/e2e Test shopping flow']}
+  commandOutputs={{
+    '/plan Implement shopping cart': '🎯 Planner agent activated!\n\n📋 Shopping Cart Implementation Plan:\n\nPhase 1: Data Model Design\n  - CartItem interface definition\n  - CartState state management\n\nPhase 2: Core Logic\n  - addToCart / removeFromCart\n  - calculateTotal (with discounts)\n\nPhase 3: UI Components\n  - CartIcon / CartDrawer / CartItem\n\n⏱ Estimated time: 2 hours\n⚠️ Risk: Concurrent inventory deduction',
+    '/tdd --feature=cart': '🧪 TDD Guide agent takes over!\n\n📋 Test Plan (based on Planner output):\n\n🔴 RED Phase:\n  ✍️ cart.test.ts - 12 test cases\n  - addToCart: 4 cases\n  - removeFromCart: 3 cases\n  - calculateTotal: 5 cases\n\nWriting first failing test...',
+    '/code-review': '🔍 Code Reviewer agent analyzing...\n\n📊 Review Report:\n  ✅ Security: No hardcoded credentials\n  ✅ Quality: All functions < 50 lines\n  ⚠️ Suggestion: Extract calculateTotal as a pure function\n  ⚠️ Suggestion: Add input validation (negative quantities)\n\nVerdict: Ready to commit ✅',
+    '/e2e Test shopping flow': '🎭 E2E Runner agent launched!\n\n🎬 User Journey Tests:\n  1. Browse product list\n  2. Add product to cart\n  3. Modify product quantity\n  4. Apply coupon code\n  5. Complete checkout\n\n✅ 5/5 scenarios passed\n⏱ Total time: 3.2s'
+  }}
+/>
+
+## 📚 Three Core Orchestration Patterns
+
+Multi-agent orchestration comes in three core patterns. Let's master them step by step:
+
+<StepByStep 
+  title="Master the Three Orchestration Patterns"
+  steps={[
+    {
+      title: 'Pattern 1: Sequential Orchestration',
+      description: 'Agents execute in a fixed order, with each agent\'s output feeding into the next. Like an assembly line — each station completes its task before passing the work along.',
+      code: '# Sequential Pipeline\n/plan Implement user auth     # Step 1: Planner creates plan\n/tdd --feature=auth          # Step 2: TDD Guide develops\n/code-review                 # Step 3: Reviewer audits\n/e2e Test auth flow          # Step 4: E2E Runner validates',
+      tip: 'Best for standard feature development. Each agent\'s output automatically becomes the next agent\'s context.'
+    },
+    {
+      title: 'Pattern 2: Parallel Orchestration',
+      description: 'Multiple independent agents work simultaneously, then results are aggregated. Like a medical consultation — multiple doctors examine the patient from their own specialty perspective.',
+      code: '# Parallel Review — 3 agents working simultaneously\nLaunch in parallel:\n  Agent 1: /code-review    → Code quality\n  Agent 2: /security       → Security audit\n  Agent 3: /perf           → Performance analysis\n\nAggregate 3 reports → Unified decision',
+      tip: 'Perfect for code review scenarios. 3 agents in parallel takes only 1 unit of time!'
+    },
+    {
+      title: 'Pattern 3: Conditional Orchestration',
+      description: 'Dynamically choose different agent paths based on conditions. Like a hospital triage desk — routing patients to different specialists based on severity.',
+      code: '# Conditional Routing\nIF complexity > high:\n  /plan → /architect → /tdd\nELSE:\n  /tdd  # Simple features go straight to TDD\n\nIF tests pass:\n  /code-review\nELSE:\n  /tdd  # Back to TDD to fix',
+      tip: 'Best for scenarios requiring flexible judgment. Avoid over-engineering simple tasks.'
+    },
+    {
+      title: 'Real-World Combo: Complete Feature Development',
+      description: 'Combine all three patterns to build a complete feature development pipeline.',
+      code: '# Complete Pipeline Example\n\n# 1. Sequential: Plan → Design\n/plan Implement payment system\n/architect Design payment architecture\n\n# 2. Sequential: TDD per module\n/tdd --feature="payment-gateway"\n/tdd --feature="order-processing"\n/tdd --feature="receipt-generation"\n\n# 3. Parallel: Multi-dimensional review\n/code-review + /security + /perf\n\n# 4. Conditional: Decide based on results\nIF has CRITICAL → Fix and re-review\nELSE → /e2e End-to-end validation',
+      tip: 'In real projects, all three patterns are often mixed. The key is choosing the right pattern for each phase.'
+    }
+  ]}
+/>
+
+## 💻 Design Your Multi-Agent Pipeline
+
+In the code playground below, try designing a multi-agent workflow configuration for a real feature:
+
+<CodePlayground 
+  title="Multi-Agent Pipeline Configuration"
+  language="yaml"
+  initialCode={`# multi-agent-pipeline.yaml
+# Try editing this pipeline configuration!
+
+name: "Feature Development Pipeline"
+description: "Standard workflow for new feature development"
+
+stages:
+  # Stage 1: Planning (Sequential)
+  - name: planning
+    agent: planner
+    input: "feature requirement"
+    output: "implementation plan"
+    
+  # Stage 2: Development (Sequential per module)
+  - name: development
+    agent: tdd-guide
+    mode: sequential
+    modules:
+      - "data-model"
+      - "business-logic"
+      - "api-endpoints"
+      - "ui-components"
+    
+  # Stage 3: Review (Parallel)
+  - name: review
+    mode: parallel
+    agents:
+      - code-reviewer   # Code quality
+      - security-reviewer  # Security audit
+    
+  # Stage 4: Validation (Conditional)
+  - name: validation
+    condition: "review.passed == true"
+    agent: e2e-runner
+    fallback:
+      agent: tdd-guide
+      action: "fix issues and re-review"
+
+# Configuration
+config:
+  max_retries: 3
+  timeout_per_stage: "30m"
+  notify_on_failure: true`}
+/>
+
+## ❓ Knowledge Check
+
+<Quiz 
+  question="Which orchestration pattern is best suited for 'multiple experts reviewing the same code simultaneously'?"
+  options={[
+    'Sequential Orchestration',
+    'Parallel Orchestration',
+    'Conditional Orchestration',
+    'Recursive Orchestration'
+  ]}
+  correctAnswer={1}
+  explanation="Parallel orchestration lets multiple independent agents work simultaneously and aggregate results, making it ideal for multi-dimensional code review. Code review, security audit, and performance analysis can all run at once, taking only 1 unit of time."
+/>
+
+<Quiz 
+  question="In sequential orchestration, what's the best approach when the TDD Guide agent's tests fail?"
+  options={[
+    'Skip the tests and continue to the next agent',
+    'Go directly to code review',
+    'Return to TDD Guide to fix before continuing',
+    'Terminate the entire pipeline'
+  ]}
+  correctAnswer={2}
+  explanation="The core principle of TDD is that tests must pass before proceeding. If tests fail, you should loop back to the TDD Guide (Red-Green-Refactor cycle) to fix the issues. This is a classic application of conditional orchestration — deciding next steps based on results."
+/>
+
+<Quiz 
+  question="What is the most critical principle when designing multi-agent workflows?"
+  options={[
+    'Use as many agents as possible',
+    'Use parallel mode for all tasks',
+    'Define clear responsibility boundaries for each agent',
+    'Each agent should only run once'
+  ]}
+  correctAnswer={2}
+  explanation="The key to multi-agent orchestration is defining clear responsibility boundaries for each agent to avoid duplicate work. Planner handles planning, TDD Guide handles development, Reviewer handles auditing — each plays their role for efficient collaboration."
+/>
+
+## 🎉 Congratulations!
+
+You've completed the Multi-Agent Workflows tutorial! You've mastered:
+
+- ✅ Sequential Orchestration: Assembly-line development process
+- ✅ Parallel Orchestration: Multi-dimensional simultaneous review
+- ✅ Conditional Orchestration: Intelligent routing decisions
+- ✅ Combined Orchestration: Real-world project workflow design
+
+## 📖 Next Steps
+
+- [Custom Hooks Development](./custom-hooks) - Learn to create automation hooks
+- [E2E Testing Strategies](./e2e-testing) - Master end-to-end testing

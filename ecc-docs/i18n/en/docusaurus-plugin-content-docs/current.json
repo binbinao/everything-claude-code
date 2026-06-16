@@ -1,0 +1,26 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.🎓 交互式教程": {
+    "message": "🎓 Interactive Tutorials",
+    "description": "The label for category 🎓 交互式教程 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.🚀 快速开始": {
+    "message": "🚀 Quick Start",
+    "description": "The label for category 🚀 快速开始 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.📚 核心概念": {
+    "message": "📚 Core Concepts",
+    "description": "The label for category 📚 核心概念 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.🛠️ 实战指南": {
+    "message": "🛠️ Practical Guides",
+    "description": "The label for category 🛠️ 实战指南 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.🚀 高级主题": {
+    "message": "🚀 Advanced Topics",
+    "description": "The label for category 🚀 高级主题 in sidebar tutorialSidebar"
+  }
+}

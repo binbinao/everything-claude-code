@@ -1,0 +1,80 @@
+/**
+ * Offline Indicator Component Styles
+ */
+
+.indicator {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.top {
+  top: 0;
+}
+
+.bottom {
+  bottom: 0;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.icon {
+  font-size: 1.1rem;
+}
+
+.text {
+  font-weight: 600;
+}
+
+.cached {
+  opacity: 0.9;
+  padding-left: 8px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Position adjustments */
+.top .content {
+  border-radius: 0 0 8px 8px;
+}
+
+.bottom .content {
+  border-radius: 8px 8px 0 0;
+}
+
+@media (max-width: 480px) {
+  .content {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+  
+  .cached {
+    display: none;
+  }
+}

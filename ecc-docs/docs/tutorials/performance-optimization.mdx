@@ -1,0 +1,183 @@
+---
+sidebar_position: 6
+title: 性能优化
+description: 掌握 ECC 性能分析与优化策略 - 交互式教程
+---
+
+import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
+
+# ⚡ 性能优化
+
+欢迎来到高级教程！在本课程中，你将学习如何利用 ECC 进行全方位的性能分析与优化 — 让你的应用像火箭一样飞速运行。
+
+:::info 前置知识
+建议先完成 [TDD 大师课](./tdd-masterclass) 和 [自定义 Hooks 开发](./custom-hooks) 两个进阶教程。
+:::
+
+## 🎮 体验性能分析命令
+
+ECC 提供了一套强大的性能分析工具链。试试这些命令：
+
+<CommandSimulator 
+  availableCommands={['/perf analyze', '/perf profile --cpu', '/perf bundle-size', '/perf lighthouse']}
+  commandOutputs={{
+    '/perf analyze': '⚡ Performance Analyzer 启动！\n\n📊 全局性能报告：\n\n🔍 检测到 5 个性能热点：\n  1. ❌ 未优化的数据库查询（N+1 问题）\n     → src/api/users.ts:42\n  2. ⚠️ 大型 Bundle 体积（1.2MB）\n     → 建议启用 Tree Shaking\n  3. ⚠️ 未使用 React.memo 的频繁渲染组件\n     → src/components/UserList.tsx\n  4. 💡 可缓存的 API 响应\n     → src/api/products.ts:18\n  5. 💡 图片未使用 next/image 优化\n     → src/pages/home.tsx:55\n\n📈 优化潜力：加载速度可提升 40%',
+    '/perf profile --cpu': '⚡ CPU Profiler 启动！\n\n🔥 CPU 火焰图分析：\n\n  Top 5 耗时函数：\n  ┌─────────────────────────────────┐\n  │ calculatePermissions   │ 34.2% │\n  │ parseJSON              │ 22.1% │\n  │ renderUserList         │ 15.3% │\n  │ validateSchema         │ 12.8% │\n  │ formatCurrency         │  8.4% │\n  └─────────────────────────────────┘\n\n💡 建议：calculatePermissions 可使用 memoization 优化\n💡 建议：parseJSON 考虑使用 streaming parser',
+    '/perf bundle-size': '📦 Bundle Size 分析器\n\n📊 当前 Bundle 组成：\n  Total: 1.2MB (gzipped: 380KB)\n\n  ┌──────────────────────────────────┐\n  │ lodash          │ 280KB │ 23.3% │\n  │ moment          │ 220KB │ 18.3% │\n  │ react-dom       │ 180KB │ 15.0% │\n  │ chart.js        │ 150KB │ 12.5% │\n  │ your code       │ 120KB │ 10.0% │\n  │ others          │ 250KB │ 20.9% │\n  └──────────────────────────────────┘\n\n🔧 优化建议：\n  1. lodash → lodash-es（Tree Shakeable）\n  2. moment → dayjs（2KB 替代品）\n  3. 预估节省：450KB（37.5%）',
+    '/perf lighthouse': '🏗️ Lighthouse 性能审计\n\n📊 评分：\n  Performance:    72 🟡\n  Accessibility:  95 🟢\n  Best Practices: 88 🟢\n  SEO:            92 🟢\n\n⏱ Core Web Vitals：\n  LCP: 3.2s ❌（目标 < 2.5s）\n  FID: 120ms 🟡（目标 < 100ms）\n  CLS: 0.05 🟢（目标 < 0.1）\n\n🔧 Top 3 改进建议：\n  1. 延迟加载首屏外图片\n  2. 预连接关键第三方域名\n  3. 减少未使用的 JavaScript'
+  }}
+/>
+
+## 📚 性能优化四步法
+
+<StepByStep 
+  title="系统化性能优化流程"
+  steps={[
+    {
+      title: '第一步：度量 — 知己知彼',
+      description: '性能优化的第一条黄金法则：不要猜测，用数据说话。就像医生看病先做检查 — 你需要先"诊断"才能"开药"。',
+      code: '# Step 1: Measure current performance\n\n# Run full performance audit\n/perf analyze\n\n# Profile CPU usage\n/perf profile --cpu\n\n# Analyze bundle size\n/perf bundle-size\n\n# Run Lighthouse audit\n/perf lighthouse\n\n# Record baseline metrics\n/perf baseline --save',
+      tip: '永远先建立性能基准线（baseline），否则优化后无法量化改进效果！'
+    },
+    {
+      title: '第二步：分析 — 找到瓶颈',
+      description: '根据度量数据，识别最大的性能瓶颈。遵循帕累托法则（80/20 原则）— 20% 的问题往往导致 80% 的性能损失。',
+      code: '# Prioritize by impact\n# Example analysis results:\n\n# HIGH IMPACT (fix first)\n# 1. N+1 database queries → batch loading\n# 2. Oversized bundle (lodash + moment)\n\n# MEDIUM IMPACT\n# 3. Missing React.memo on list items\n# 4. Uncached API responses\n\n# LOW IMPACT (fix later)\n# 5. Unoptimized images\n\n# Use ECC to create optimization plan\n/plan optimize top 3 performance issues',
+      tip: '先解决影响最大的问题。别在低影响项上浪费时间 — 这叫"过早优化"！'
+    },
+    {
+      title: '第三步：优化 — 对症下药',
+      description: '针对每个瓶颈实施具体的优化方案。ECC 的 TDD 流程确保优化不会引入新的 bug。',
+      code: '# Fix #1: N+1 Query → DataLoader\n/tdd --feature="dataloader-optimization"\n\n# Fix #2: Bundle Size → Tree Shaking\n# Replace lodash with lodash-es\nnpm uninstall lodash\nnpm install lodash-es\n# Replace moment with dayjs\nnpm uninstall moment\nnpm install dayjs\n\n# Fix #3: React Memoization\n/tdd --feature="memoize-user-list"\n\n# Verify each fix individually\n/perf analyze --compare=baseline',
+      tip: '每次只改一个东西！多项同时修改时无法确定哪个改动真正有效。'
+    },
+    {
+      title: '第四步：验证 — 持续监控',
+      description: '优化完成后，重新度量并与基准线对比。设置性能预算（Performance Budget）防止性能退化 — 就像给支出设上限一样。',
+      code: '# Compare with baseline\n/perf analyze --compare=baseline\n\n# Set performance budget in CI\n# performance-budget.json\n{\n  "bundles": [\n    {\n      "name": "main",\n      "maxSize": "200KB"\n    }\n  ],\n  "lighthouse": {\n    "performance": 90,\n    "lcp": "2.5s",\n    "fid": "100ms",\n    "cls": 0.1\n  }\n}\n\n# Add to preCommit hooks\n/hooks add perf-budget --preCommit',
+      tip: '性能预算是防止退化的最好手段。就像 TDD 防止功能退化一样！'
+    }
+  ]}
+/>
+
+## 💻 实战：优化 React 组件性能
+
+在代码实验室中实践 React 性能优化的核心技巧：
+
+<CodePlayground 
+  title="React 性能优化实战"
+  language="typescript"
+  initialCode={`// Before: Unoptimized component
+// Every parent re-render causes ALL items to re-render
+
+import { useState, useMemo, useCallback, memo } from 'react'
+
+// ❌ BEFORE: No memoization
+function UserListBefore({ users, onSelect }) {
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id} onClick={() => onSelect(user.id)}>
+          {user.name} - {formatRole(user.role)}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+// ✅ AFTER: Optimized with memo + useCallback
+const UserItem = memo(function UserItem({ user, onSelect }) {
+  return (
+    <li onClick={() => onSelect(user.id)}>
+      {user.name} - {formatRole(user.role)}
+    </li>
+  )
+})
+
+function UserListAfter({ users, onSelect }) {
+  // Memoize the callback to prevent unnecessary re-renders
+  const handleSelect = useCallback((id: string) => {
+    onSelect(id)
+  }, [onSelect])
+
+  // Memoize expensive computation
+  const sortedUsers = useMemo(() => 
+    [...users].sort((a, b) => a.name.localeCompare(b.name)),
+    [users]
+  )
+
+  return (
+    <ul>
+      {sortedUsers.map(user => (
+        <UserItem 
+          key={user.id} 
+          user={user} 
+          onSelect={handleSelect} 
+        />
+      ))}
+    </ul>
+  )
+}
+
+// Helper function
+function formatRole(role: string): string {
+  return role.charAt(0).toUpperCase() + role.slice(1)
+}
+
+// Try it: Add virtualization for large lists
+// Hint: Use react-window or @tanstack/virtual`}
+/>
+
+## ❓ 知识检测
+
+<Quiz 
+  question="性能优化的第一步应该是什么？"
+  options={[
+    '立即开始重写慢的代码',
+    '升级到最新版本的框架',
+    '度量当前性能，建立基准线',
+    '添加更多缓存'
+  ]}
+  correctAnswer={2}
+  explanation="性能优化的黄金法则：先度量，后优化。没有基准线就无法量化优化效果，也无法判断优化方向是否正确。就像减肥前先称体重一样 — 否则怎么知道瘦了多少？"
+/>
+
+<Quiz 
+  question="以下哪种方式最能有效减少 JavaScript Bundle 体积？"
+  options={[
+    '压缩所有变量名',
+    '用 Tree Shaking 移除未使用的代码 + 替换轻量库',
+    '将所有代码合并到一个文件',
+    '删除代码注释'
+  ]}
+  correctAnswer={1}
+  explanation="Tree Shaking 可以自动移除未使用的导出，配合替换轻量替代库（如 moment → dayjs 节省 218KB），是减小 Bundle 体积最有效的方式。压缩变量名只是最后一步的 minification。"
+/>
+
+<Quiz 
+  question="React.memo 的正确使用场景是？"
+  options={[
+    '所有组件都应该用 React.memo 包裹',
+    '仅用于接收稳定 props 且渲染开销大的组件',
+    '仅用于类组件',
+    '仅用于根组件'
+  ]}
+  correctAnswer={1}
+  explanation="React.memo 适用于：(1) 接收的 props 变化频率低于父组件渲染频率，(2) 组件渲染开销较大。滥用 memo 反而会增加内存开销和比较成本。记住：不要过早优化，先用 Profiler 确认瓶颈！"
+/>
+
+## 🎉 恭喜！
+
+你已完成性能优化教程！你掌握了：
+
+- ✅ 性能优化四步法：度量 → 分析 → 优化 → 验证
+- ✅ ECC 性能分析工具链
+- ✅ Bundle 体积优化策略
+- ✅ React 组件性能优化（memo/useMemo/useCallback）
+- ✅ 性能预算与持续监控
+
+## 📖 下一步
+
+- [安全最佳实践](./security-best-practices) - 构建安全的应用
+- [企业级模式](./enterprise-patterns) - 大型项目架构
+- [高级主题：性能优化详解](/docs/advanced/performance) - 深入性能调优

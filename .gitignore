@@ -102,3 +102,14 @@ ecc2/target/
 assets/images/security/badrudi-exploit.mp4
 
 .aider*
+
+# ecc-docs wrapper (feat/ecc-docs-cn branch)
+ecc-docs/.docusaurus/
+ecc-docs/.vercel/
+ecc-docs/build/
+ecc-docs/node_modules/
+.vercel/
+.codebuddy/
+
+# Personal Chinese teaching notes (kept in _mydoc/, but exclude macOS noise)
+/_mydoc/.DS_Store
