@@ -19,12 +19,12 @@ import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/co
 ECC 内置了强大的安全审计工具。试试这些命令：
 
 <CommandSimulator 
-  availableCommands={['/security scan', '/security audit --deps', '/security secrets-check', '/security review']}
+  availableCommands={['/security-scan scan', '/security-scan audit --deps', '/security-scan secrets-check', '/security-scan review']}
   commandOutputs={{
-    '/security scan': '🔒 Security Scanner 启动！\n\n🔍 代码安全扫描报告：\n\n❌ CRITICAL（2 个）：\n  1. SQL 注入风险\n     → src/api/users.ts:28\n     → 使用字符串拼接构建查询\n  2. 硬编码 API 密钥\n     → src/config/payment.ts:5\n\n⚠️ HIGH（3 个）：\n  3. XSS 漏洞：未转义用户输入\n     → src/components/Comment.tsx:12\n  4. 不安全的 JWT 配置（无过期时间）\n     → src/auth/token.ts:15\n  5. 路径遍历风险\n     → src/api/files.ts:33\n\n💡 MEDIUM（2 个）：\n  6. 缺少 CORS 配置\n  7. 缺少 Rate Limiting',
-    '/security audit --deps': '📦 依赖安全审计\n\n扫描 342 个依赖包...\n\n❌ CRITICAL（1 个）：\n  lodash@4.17.20\n  → 原型污染漏洞 (CVE-2021-23337)\n  → 修复：升级到 4.17.21+\n\n⚠️ HIGH（2 个）：\n  node-fetch@2.6.1\n  → 信息泄露 (CVE-2022-0235)\n  → 修复：升级到 2.6.7+\n\n  jsonwebtoken@8.5.1\n  → 不安全的默认算法\n  → 修复：升级到 9.0.0+\n\n🔧 自动修复命令：\n  npm audit fix --force',
-    '/security secrets-check': '🔑 Secrets 检测器\n\n扫描代码库中的敏感信息...\n\n❌ 发现 3 个硬编码密钥：\n\n  1. AWS Access Key\n     → .env.example:3\n     → AKIA*****（已部分隐藏）\n\n  2. Stripe Secret Key\n     → src/config/payment.ts:5\n     → sk_live_*****\n\n  3. Database Password\n     → docker-compose.yml:12\n     → 明文密码\n\n🔧 建议：\n  1. 使用环境变量管理密钥\n  2. 添加 .gitignore 规则\n  3. 考虑使用 Vault 或 AWS Secrets Manager',
-    '/security review': '🔍 Security Reviewer 智能体激活！\n\n📋 综合安全评估报告：\n\n🏆 安全评分：62/100 🟡\n\n✅ 做得好的：\n  - 使用 bcrypt 哈希密码\n  - HTTPS 已启用\n  - 使用了 helmet 中间件\n\n❌ 需要改进的：\n  - 输入验证不完整\n  - 缺少 CSP 头\n  - 会话管理需要加强\n  - API 缺少速率限制\n\n📊 OWASP Top 10 覆盖率：6/10'
+    '/security-scan scan': '🔒 Security Scanner 启动！\n\n🔍 代码安全扫描报告：\n\n❌ CRITICAL（2 个）：\n  1. SQL 注入风险\n     → src/api/users.ts:28\n     → 使用字符串拼接构建查询\n  2. 硬编码 API 密钥\n     → src/config/payment.ts:5\n\n⚠️ HIGH（3 个）：\n  3. XSS 漏洞：未转义用户输入\n     → src/components/Comment.tsx:12\n  4. 不安全的 JWT 配置（无过期时间）\n     → src/auth/token.ts:15\n  5. 路径遍历风险\n     → src/api/files.ts:33\n\n💡 MEDIUM（2 个）：\n  6. 缺少 CORS 配置\n  7. 缺少 Rate Limiting',
+    '/security-scan audit --deps': '📦 依赖安全审计\n\n扫描 342 个依赖包...\n\n❌ CRITICAL（1 个）：\n  lodash@4.17.20\n  → 原型污染漏洞 (CVE-2021-23337)\n  → 修复：升级到 4.17.21+\n\n⚠️ HIGH（2 个）：\n  node-fetch@2.6.1\n  → 信息泄露 (CVE-2022-0235)\n  → 修复：升级到 2.6.7+\n\n  jsonwebtoken@8.5.1\n  → 不安全的默认算法\n  → 修复：升级到 9.0.0+\n\n🔧 自动修复命令：\n  npm audit fix --force',
+    '/security-scan secrets-check': '🔑 Secrets 检测器\n\n扫描代码库中的敏感信息...\n\n❌ 发现 3 个硬编码密钥：\n\n  1. AWS Access Key\n     → .env.example:3\n     → AKIA*****（已部分隐藏）\n\n  2. Stripe Secret Key\n     → src/config/payment.ts:5\n     → sk_live_*****\n\n  3. Database Password\n     → docker-compose.yml:12\n     → 明文密码\n\n🔧 建议：\n  1. 使用环境变量管理密钥\n  2. 添加 .gitignore 规则\n  3. 考虑使用 Vault 或 AWS Secrets Manager',
+    '/security-scan review': '🔍 Security Reviewer 智能体激活！\n\n📋 综合安全评估报告：\n\n🏆 安全评分：62/100 🟡\n\n✅ 做得好的：\n  - 使用 bcrypt 哈希密码\n  - HTTPS 已启用\n  - 使用了 helmet 中间件\n\n❌ 需要改进的：\n  - 输入验证不完整\n  - 缺少 CSP 头\n  - 会话管理需要加强\n  - API 缺少速率限制\n\n📊 OWASP Top 10 覆盖率：6/10'
   }}
 />
 

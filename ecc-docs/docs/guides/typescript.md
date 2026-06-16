@@ -14,14 +14,14 @@ description: 使用 ECC 进行 TypeScript 项目开发
 
 ```bash
 # 复制 TypeScript 规则到 CodeBuddy 配置目录
-cp -r rules/typescript/* ~/.codebuddy/rules/
+cp -r rules/typescript/* ~/.claude/rules/ecc/
 ```
 
 ### 2. 项目结构建议
 
 ```
 your-project/
-├── .codebuddy/
+├── .claude/
 │   └── rules/          # 项目特定规则
 ├── src/
 │   ├── components/     # React 组件
@@ -38,7 +38,17 @@ your-project/
 
 ## 推荐工作流
 
-### 新功能开发
+### 新功能开发（v2.0.0 推荐路径）
+
+```bash
+# 一键完成（推荐用于 MVP / 完整功能）
+/orch-build-mvp "user authentication with email + OAuth"
+
+# 或更细粒度：添加独立功能
+/orch-add-feature "user-auth"
+```
+
+### 手动分步（新功能）
 
 ```bash
 # 1. 规划
@@ -54,42 +64,90 @@ your-project/
 /e2e 测试登录流程
 ```
 
-### Bug 修复
+### Bug 修复（v2.0.0 推荐路径）
+
+```bash
+# 一键修复闭环
+/orch-fix-defect "登录后 session 立即失效"
+```
+
+### 手动分步（Bug 修复）
 
 ```bash
 # 1. 调试
-/debug TypeError: Cannot read property 'x' of undefined
+/silent-failure-hunter TypeError: Cannot read property 'x' of undefined
 
 # 2. TDD 修复（先写复现测试）
 /tdd --feature="fix-undefined-error"
 
 # 3. 验证
-/test --coverage
+/test-coverage
 ```
 
 ## 钩子配置
 
-### 推荐的 TypeScript 钩子
+### 推荐的 TypeScript 钩子（v2.0.0 调度器架构）
+
+ECC v2.0.0 用 `pre-bash-dispatcher.js` 和 `post-bash-dispatcher.js` 统一调度所有 Bash / Edit / Write 类 hook。TypeScript 项目的推荐 hook 配置：
 
 ```json
 {
   "hooks": {
-    "postToolUse": [
+    "PostToolUse": [
       {
-        "name": "prettier",
-        "trigger": "*.{ts,tsx,js,jsx}",
-        "command": "npx prettier --write"
-      },
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"...\" node scripts/hooks/run-with-flags.js post:edit:format scripts/hooks/post-edit-format.js standard,strict",
+            "id": "post:edit:format",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "node -e \"...\" node scripts/hooks/post-edit-typecheck.js standard,strict",
+            "id": "post:edit:typecheck",
+            "timeout": 10000
+          },
+          {
+            "type": "command",
+            "command": "node -e \"...\" node scripts/hooks/post-edit-console-warn.js standard,strict",
+            "id": "post:edit:console-warn",
+            "timeout": 3000
+          }
+        ]
+      }
+    ],
+    "Stop": [
       {
-        "name": "tsc-check",
-        "trigger": "*.{ts,tsx}",
-        "command": "npx tsc --noEmit"
-      },
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/check-console-log.js",
+            "id": "check-console-log"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+更简单的替代方案（项目级 `settings.json`）：
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
       {
-        "name": "console-warn",
-        "trigger": "*.{ts,tsx}",
-        "pattern": "console.log",
-        "action": "warn"
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx prettier --write $CLAUDE_TOOL_FILE_PATH && npx tsc --noEmit",
+            "timeout": 15000
+          }
+        ]
       }
     ]
   }
@@ -148,8 +206,8 @@ try {
 | 开始新功能 | `/plan 功能描述` |
 | TDD 开发 | `/tdd --feature="名称"` |
 | 代码审查 | `/code-review` |
-| 安全检查 | `/security` |
-| 性能优化 | `/perf` |
+| 安全检查 | `/security-scan` |
+| 性能优化 | `/orch-refine-code` |
 
 ---
 

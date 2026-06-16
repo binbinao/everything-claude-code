@@ -94,17 +94,28 @@ mcp_servers:
 
 - **Hermes** — 聊天、Cron、编排、工作区状态
 - **ECC** — 技能、规则、提示、跨框架约定
-- **GitHub + Context7 + Exa + Firecrawl + Playwright** — 基础 MCP 层
 
-### 📝 内容
+### 🔌 MCP 层（v2.0.0 重要变更）
+
+> **2026-06 审计后**：ECC 默认 MCP 连接器从 6 个（`github`、`context7`、`exa`、`memory`、`playwright`、`sequential-thinking`）**缩减为 1 个**（`chrome-devtools`）。其余功能由对应的 skills 包装 CLI/REST 提供：
+>
+> - `github` → `github-ops` skill
+> - `context7` → `documentation-lookup` skill
+> - `exa` → `exa-search` skill
+> - `memory` → harness 原生 extended thinking + web search
+> - `playwright` → e2e skills（`e2e-testing` 等）
+> - `sequential-thinking` → 已退役
+>
+> 需要旧连接器？在 `mcp-configs/mcp-servers.json` 显式 opt-in 启用。
+
+### 📝 内容（可选扩展）
 
 - **FFmpeg** — 本地编辑和组装
 - **Remotion** — 可编程剪辑
 - **fal.ai** — 图像/视频生成
 - **ElevenLabs** — 语音和音频
-- **CapCut / VectCutAPI** — 社交媒体润色
 
-### 🏢 业务运营
+### 🏢 业务运营（可选扩展）
 
 - **Google Drive** — 文档、表格、幻灯片、研究
 - **Stripe** — 收入和支付
@@ -179,32 +190,30 @@ plugins:
 
 ## 迁移到 Hermes
 
-如果从旧 ECC 配置迁移：
+ECC v2.0.0 提供了 [`hermes-imports`](https://github.com/affaan-m/ECC/tree/main/skills/hermes-imports) 技能来从 Hermes/OpenClaw 迁移：
 
 ```bash
-# 1. 审计现状
-ecc migrate audit --source ~/.hermes
+# 1. 审计 Hermes 现状
+> 使用 hermes-imports skill 审计 ~/.hermes 目录
 
 # 2. 制定迁移计划
-ecc migrate plan
+> 用 hermes-imports 把 ~/.hermes 映射到 ECC 技能
 
 # 3. 生成迁移脚手架
-ecc migrate scaffold
+> hermes-imports: 生成迁移工件到 migration-artifacts/
 
-# 4. 导入技能
-ecc migrate import-skills --output-dir migration-artifacts/skills
+# 4. 导入技能与配置
+> hermes-imports: 导入技能、工具、插件到 ECC
 
-# 5. 导入工具
-ecc migrate import-tools --output-dir migration-artifacts/tools
+# 5. 预览定时任务
+> hermes-imports: 预览 cron/jobs.json（不执行）
 
-# 6. 导入桥接插件
-ecc migrate import-plugins --output-dir migration-artifacts/plugins
+# 6. 导入工作区内存
+> hermes-imports: 转换 workspace 数据
 
-# 7. 预览定时任务
-ecc migrate import-schedules --dry-run
-
-# 8. 导入工作区内存
-ecc migrate import-memory
+# 详细迁移指南参见：
+# - docs/HERMES-SETUP.md
+# - docs/HERMES-OPENCLAW-MIGRATION.md
 ```
 
 ## 推荐的启动顺序
@@ -243,9 +252,12 @@ ecc migrate import-memory
 
 ## 资源链接
 
-- **Hermes Setup 完整指南**：[GitHub](https://github.com/affaan-m/ECC/blob/main/docs/HERMES-SETUP.md)
-- **跨框架架构**：[GitHub](https://github.com/affaan-m/ECC/blob/main/docs/architecture/cross-harness.md)
-- **ECC 2.0 Release Notes**：[GitHub](https://github.com/affaan-m/ECC/blob/main/docs/releases/2.0.0/release-notes.md)
+- **Hermes Setup 完整指南**：[`docs/HERMES-SETUP.md`](https://github.com/affaan-m/ECC/blob/main/docs/HERMES-SETUP.md)
+- **OpenClaw 迁移指南**：[`docs/HERMES-OPENCLAW-MIGRATION.md`](https://github.com/affaan-m/ECC/blob/main/docs/HERMES-OPENCLAW-MIGRATION.md)
+- **跨框架架构**：[`docs/architecture/cross-harness.md`](https://github.com/affaan-m/ECC/blob/main/docs/architecture/cross-harness.md)
+- **ECC 2.0 Release Notes**：[`docs/releases/2.0.0/release-notes.md`](https://github.com/affaan-m/ECC/blob/main/docs/releases/2.0.0/release-notes.md)
+- **ECC 2.0 GA 路线图**：[`docs/ECC-2.0-GA-ROADMAP.md`](https://github.com/affaan-m/ECC/blob/main/docs/ECC-2.0-GA-ROADMAP.md)
+- **hermes-imports 技能**：[`skills/hermes-imports/`](https://github.com/affaan-m/ECC/tree/main/skills/hermes-imports)
 - **Discord 社区**：[discord.gg/36yGMHGFbR](https://discord.gg/36yGMHGFbR)
 
 ---

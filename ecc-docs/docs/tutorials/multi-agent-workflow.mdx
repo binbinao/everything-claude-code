@@ -6,23 +6,53 @@ description: 掌握多智能体协作编排 - 交互式教程
 
 import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/components/interactive'
 
-# 🎭 多智能体工作流
+# 🎭 多智能体工作流（v2.0.0 orch-* 时代）
 
-欢迎来到进阶教程！在本课程中，你将学习如何组合多个 ECC 智能体形成强大的协作工作流 — 就像指挥一支专业的开发特种部队。
+欢迎来到进阶教程！在 ECC v2.0.0 中，多智能体编排有了**质的飞跃** — 引入了 `orch-*` 编排器家族，把"7 步手动串联"压缩为"1 个意图描述"。本课程从基础编排模式到 v2.0.0 的 orchestrator 实战。
 
 :::info 前置知识
 建议先完成 [Hello ECC](./hello-ecc) 和 [TDD 大师课](./tdd-masterclass) 两个入门教程。
 :::
+
+## 🚀 v2.0.0 新范式：orch-* 编排器
+
+**旧范式（手动串联 4-7 步）：**
+
+```bash
+/plan 实现购物车
+/tdd --feature=cart
+/code-review
+/e2e 测试购物流程
+```
+
+**v2.0.0 新范式（一句话完成）：**
+
+```bash
+/orch-build-mvp "购物车功能，支持优惠券和库存检查"
+```
+
+`orch-*` 编排器内部会自动调度：planner → architect → tdd-guide → code-reviewer → e2e-runner，并在每个关键决策点暂停等待你确认。
+
+### orch-* 家族速览
+
+| 命令 | 一句话能力 |
+|------|----------|
+| `/orch-build-mvp` | 0→1 快速构建 MVP |
+| `/orch-add-feature` | 添加独立新功能 |
+| `/orch-fix-defect` | 一键修复缺陷闭环 |
+| `/orch-refine-code` | 重构优化（性能 + 质量） |
+| `/orch-change-feature` | 修改现有功能行为 |
+| `/orch-pipeline` | 自定义编排流水线 |
 
 ## 🎮 体验多智能体协作
 
 在实际开发中，一个复杂功能往往需要多个专家协作。试试下面这些命令组合：
 
 <CommandSimulator 
-  availableCommands={['/plan 实现购物车', '/tdd --feature=cart', '/code-review', '/e2e 测试购物流程']}
+  availableCommands={['/orch-build-mvp 购物车', '/orch-add-feature cart', '/code-review', '/e2e 测试购物流程']}
   commandOutputs={{
-    '/plan 实现购物车': '🎯 Planner 智能体已激活！\n\n📋 购物车实施计划：\n\n阶段 1：数据模型设计\n  - CartItem 接口定义\n  - CartState 状态管理\n\n阶段 2：核心逻辑\n  - addToCart / removeFromCart\n  - calculateTotal (含折扣)\n\n阶段 3：UI 组件\n  - CartIcon / CartDrawer / CartItem\n\n⏱ 预估时间：2 小时\n⚠️ 风险：并发库存扣减',
-    '/tdd --feature=cart': '🧪 TDD Guide 智能体接手！\n\n📋 测试计划 (基于 Planner 输出)：\n\n🔴 RED 阶段：\n  ✍️ cart.test.ts - 12 个测试用例\n  - addToCart: 4 个用例\n  - removeFromCart: 3 个用例\n  - calculateTotal: 5 个用例\n\n开始编写第一个失败测试...',
+    '/orch-build-mvp 购物车': '🎯 orch-build-mvp 编排器启动！\n\n📋 自动编排计划：\n\n阶段 1：planner → 制定实施计划\n  - CartItem 接口定义\n  - CartState 状态管理\n\n阶段 2：architect → 技术选型\n  - 推荐：Zustand 状态管理 + Stripe 支付集成\n\n阶段 3：tdd-guide → 测试驱动开发\n  - 12 个测试用例（RED → GREEN → REFACTOR）\n\n阶段 4：code-reviewer → 质量审查\n  - ✅ 安全、✅ 质量、⚠️ calculateTotal 可提取为纯函数\n\n阶段 5：e2e-runner → 端到端验证\n  - 5/5 场景通过\n\n⏱ 总耗时：45 分钟（含等待确认）',
+    '/orch-add-feature cart': '🎯 orch-add-feature 编排器启动！\n\n输入：当前 codebase + "cart" 描述\n输出：自动识别边界、规划任务、调度 tdd-guide → code-reviewer → e2e-runner\n\n✅ 完成的 cart 功能已合并到当前分支',
     '/code-review': '🔍 Code Reviewer 智能体分析中...\n\n📊 审查报告：\n  ✅ 安全：无硬编码凭证\n  ✅ 质量：函数均 < 50 行\n  ⚠️ 建议：calculateTotal 可提取为纯函数\n  ⚠️ 建议：添加输入验证 (负数数量)\n\n结论：可以提交 ✅',
     '/e2e 测试购物流程': '🎭 E2E Runner 智能体启动！\n\n🎬 用户旅程测试：\n  1. 浏览商品列表\n  2. 添加商品到购物车\n  3. 修改商品数量\n  4. 应用优惠券\n  5. 完成结账\n\n✅ 5/5 场景通过\n⏱ 总耗时：3.2s'
   }}
@@ -36,28 +66,34 @@ import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/co
   title="掌握三大编排模式"
   steps={[
     {
-      title: '模式一：顺序编排',
-      description: '智能体按固定顺序依次执行，前一个的输出作为下一个的输入。就像工厂流水线 — 每个工位完成自己的工序后传递给下一个。',
-      code: '# 顺序流水线\n/plan 实现用户认证      # Step 1: Planner 制定计划\n/tdd --feature=auth     # Step 2: TDD Guide 开发\n/code-review            # Step 3: Reviewer 审查\n/e2e 测试认证流程        # Step 4: E2E Runner 验收',
-      tip: '适用于标准功能开发。每个智能体的输出自动成为下一个的上下文。'
+      title: '模式一：单命令编排（v2.0.0 推荐）',
+      description: '用一个 orch-* 命令替代整个手动流水线。编排器会自动调度多个智能体，并在关键决策点暂停等你确认。',
+      code: '# 一句话完成 MVP\n/orch-build-mvp "用户认证 with OAuth2 + JWT"\n\n# 编排器内部：\n#   planner → architect → tdd-guide → code-reviewer → e2e-runner\n#   每个阶段产物自动传给下一阶段\n#   在架构决策、TDD 关键 commit 前暂停等你确认',
+      tip: '推荐起点！适用于 80% 的功能开发场景。'
     },
     {
-      title: '模式二：并行编排',
+      title: '模式二：手动顺序编排（学习用）',
+      description: '智能体按固定顺序依次执行，前一个的输出作为下一个的输入。就像工厂流水线 — 每个工位完成自己的工序后传递给下一个。',
+      code: '# 顺序流水线\n/plan 实现用户认证      # Step 1: Planner 制定计划\n/tdd --feature=auth     # Step 2: TDD Guide 开发\n/code-review            # Step 3: Reviewer 审查\n/e2e 测试认证流程        # Step 4: E2E Runner 验收',
+      tip: '用于学习智能体协作机制，或需要精细控制每一步的场景。'
+    },
+    {
+      title: '模式三：并行编排',
       description: '多个独立的智能体同时工作，最后汇总结果。就像多个医生同时会诊 — 各自从自己的专业角度给出诊断。',
-      code: '# 并行审查 — 3 个智能体同时工作\n同时启动：\n  Agent 1: /code-review    → 代码质量\n  Agent 2: /security       → 安全审计\n  Agent 3: /perf           → 性能分析\n\n汇总 3 份报告 → 统一决策',
+      code: '# 并行审查 — 3 个智能体同时工作\n同时启动：\n  Agent 1: /code-review       → 代码质量\n  Agent 2: /security-scan     → 安全审计\n  Agent 3: /orch-refine-code  → 性能分析\n\n汇总 3 份报告 → 统一决策',
       tip: '适用于代码审查场景。3 个智能体并行只需 1 份时间！'
     },
     {
-      title: '模式三：条件编排',
-      description: '根据条件动态选择不同的智能体路径。就像分诊台 — 根据病情严重程度分配不同级别的医生。',
-      code: '# 条件路由\nIF 复杂度 > 高:\n  /plan → /architect → /tdd\nELSE:\n  /tdd  # 简单功能直接 TDD\n\nIF 测试通过:\n  /code-review\nELSE:\n  /tdd  # 回到 TDD 修复',
-      tip: '适用于需要灵活判断的场景。避免对简单任务过度流程化。'
+      title: '模式四：自定义编排（orch-pipeline）',
+      description: '用 /orch-pipeline 自定义 stage 序列、并行度、gate 条件。',
+      code: '# 自定义流水线\n/orch-pipeline --steps="plan,tdd,review,e2e" \\\n  --feature="payment-gateway" \\\n  --gate=strict',
+      tip: '当你需要复用某个固定编排模式时，用 orch-pipeline 而不是每次重新组合。'
     },
     {
-      title: '实战组合：完整功能开发',
-      description: '将三种模式组合使用，构建完整的功能开发流水线。',
-      code: '# 完整流水线示例\n\n# 1. 顺序：规划 → 设计\n/plan 实现支付系统\n/architect 设计支付架构\n\n# 2. 顺序：TDD 逐个模块开发\n/tdd --feature="payment-gateway"\n/tdd --feature="order-processing"\n/tdd --feature="receipt-generation"\n\n# 3. 并行：多维度审查\n/code-review + /security + /perf\n\n# 4. 条件：根据审查结果决定\nIF 有 CRITICAL → 修复后重新审查\nELSE → /e2e 端到端验收',
-      tip: '真实项目中，三种模式往往混合使用。关键是为每个阶段选择最合适的模式。'
+      title: '实战：旧 vs 新范式对比',
+      description: '真实场景：完整支付功能开发',
+      code: '# v1.x 旧模式（手动 7 步）\n/plan 实现支付系统\n/plan --architect 设计支付架构\n/tdd --feature="payment-gateway"\n/tdd --feature="order-processing"\n/tdd --feature="receipt-generation"\n/code-review + /security-scan + /orch-refine-code\nIF 有 CRITICAL → 修复后重新审查\nELSE → /e2e 端到端验收\n\n# v2.0.0 新模式（1 步）\n/orch-build-mvp "支付系统 with Stripe + Webhook + 对账"',
+      tip: 'v2.0.0 的核心价值：把"7 步手动串联"压缩为"1 个意图描述"，让 AI 负责编排细节。'
     }
   ]}
 />
@@ -70,7 +106,8 @@ import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/co
   title="多智能体 Pipeline 配置"
   language="yaml"
   initialCode={`# multi-agent-pipeline.yaml
-# Try editing this pipeline configuration!
+# v2.0.0 推荐用 /orch-pipeline 直接调用，
+# 这里展示底层 pipeline 配置供学习
 
 name: "Feature Development Pipeline"
 description: "Standard workflow for new feature development"
@@ -96,8 +133,8 @@ stages:
   - name: review
     mode: parallel
     agents:
-      - code-reviewer   # Code quality
-      - security-reviewer  # Security audit
+      - code-reviewer       # Code quality
+      - security-reviewer   # Security audit
     
   # Stage 4: Validation (Conditional)
   - name: validation
@@ -111,10 +148,27 @@ stages:
 config:
   max_retries: 3
   timeout_per_stage: "30m"
-  notify_on_failure: true`}
+  notify_on_failure: true
+
+# v2.0.0 替代方案：
+# /orch-pipeline --config=multi-agent-pipeline.yaml
+# 或直接：
+# /orch-build-mvp "feature description"`}
 />
 
 ## ❓ 知识检测
+
+<Quiz 
+  question="ECC v2.0.0 推荐的多智能体编排入口是什么？"
+  options={[
+    '手动串联 /plan、/tdd、/code-review 等命令',
+    '/orch-* 编排器家族（orch-build-mvp 等）',
+    '直接编辑 multi-agent.yaml 配置文件',
+    '用 /multi-execute 并发跑所有 agent'
+  ]}
+  correctAnswer={1}
+  explanation="v2.0.0 引入了 6 个 orch-* 编排器（orch-build-mvp、orch-add-feature、orch-fix-defect、orch-refine-code、orch-change-feature、orch-pipeline），把'7 步手动串联'压缩为'1 个意图描述'。"
+/>
 
 <Quiz 
   question="以下哪种编排模式最适合'多个专家同时审查同一份代码'的场景？"
@@ -156,6 +210,7 @@ config:
 
 你已完成多智能体工作流教程！你掌握了：
 
+- ✅ **v2.0.0 新范式**：orch-* 编排器家族
 - ✅ 顺序编排：流水线式开发流程
 - ✅ 并行编排：多维度同时审查
 - ✅ 条件编排：智能路由决策
@@ -165,3 +220,5 @@ config:
 
 - [自定义 Hooks 开发](./custom-hooks) - 学习创建自动化钩子
 - [E2E 测试策略](./e2e-testing) - 掌握端到端测试
+- [企业级模式](./enterprise-patterns) - 多服务、多 frontend 编排
+- [性能优化](./performance-optimization) - parallel-execution-optimizer 技能

@@ -19,12 +19,12 @@ import { CommandSimulator, StepByStep, CodePlayground, Quiz } from '@site/src/co
 ECC 提供了一套强大的性能分析工具链。试试这些命令：
 
 <CommandSimulator 
-  availableCommands={['/perf analyze', '/perf profile --cpu', '/perf bundle-size', '/perf lighthouse']}
+  availableCommands={['/orch-refine-code analyze', '/orch-refine-code profile --cpu', '/orch-refine-code bundle-size', '/orch-refine-code lighthouse']}
   commandOutputs={{
-    '/perf analyze': '⚡ Performance Analyzer 启动！\n\n📊 全局性能报告：\n\n🔍 检测到 5 个性能热点：\n  1. ❌ 未优化的数据库查询（N+1 问题）\n     → src/api/users.ts:42\n  2. ⚠️ 大型 Bundle 体积（1.2MB）\n     → 建议启用 Tree Shaking\n  3. ⚠️ 未使用 React.memo 的频繁渲染组件\n     → src/components/UserList.tsx\n  4. 💡 可缓存的 API 响应\n     → src/api/products.ts:18\n  5. 💡 图片未使用 next/image 优化\n     → src/pages/home.tsx:55\n\n📈 优化潜力：加载速度可提升 40%',
-    '/perf profile --cpu': '⚡ CPU Profiler 启动！\n\n🔥 CPU 火焰图分析：\n\n  Top 5 耗时函数：\n  ┌─────────────────────────────────┐\n  │ calculatePermissions   │ 34.2% │\n  │ parseJSON              │ 22.1% │\n  │ renderUserList         │ 15.3% │\n  │ validateSchema         │ 12.8% │\n  │ formatCurrency         │  8.4% │\n  └─────────────────────────────────┘\n\n💡 建议：calculatePermissions 可使用 memoization 优化\n💡 建议：parseJSON 考虑使用 streaming parser',
-    '/perf bundle-size': '📦 Bundle Size 分析器\n\n📊 当前 Bundle 组成：\n  Total: 1.2MB (gzipped: 380KB)\n\n  ┌──────────────────────────────────┐\n  │ lodash          │ 280KB │ 23.3% │\n  │ moment          │ 220KB │ 18.3% │\n  │ react-dom       │ 180KB │ 15.0% │\n  │ chart.js        │ 150KB │ 12.5% │\n  │ your code       │ 120KB │ 10.0% │\n  │ others          │ 250KB │ 20.9% │\n  └──────────────────────────────────┘\n\n🔧 优化建议：\n  1. lodash → lodash-es（Tree Shakeable）\n  2. moment → dayjs（2KB 替代品）\n  3. 预估节省：450KB（37.5%）',
-    '/perf lighthouse': '🏗️ Lighthouse 性能审计\n\n📊 评分：\n  Performance:    72 🟡\n  Accessibility:  95 🟢\n  Best Practices: 88 🟢\n  SEO:            92 🟢\n\n⏱ Core Web Vitals：\n  LCP: 3.2s ❌（目标 < 2.5s）\n  FID: 120ms 🟡（目标 < 100ms）\n  CLS: 0.05 🟢（目标 < 0.1）\n\n🔧 Top 3 改进建议：\n  1. 延迟加载首屏外图片\n  2. 预连接关键第三方域名\n  3. 减少未使用的 JavaScript'
+    '/orch-refine-code analyze': '⚡ Performance Analyzer 启动！\n\n📊 全局性能报告：\n\n🔍 检测到 5 个性能热点：\n  1. ❌ 未优化的数据库查询（N+1 问题）\n     → src/api/users.ts:42\n  2. ⚠️ 大型 Bundle 体积（1.2MB）\n     → 建议启用 Tree Shaking\n  3. ⚠️ 未使用 React.memo 的频繁渲染组件\n     → src/components/UserList.tsx\n  4. 💡 可缓存的 API 响应\n     → src/api/products.ts:18\n  5. 💡 图片未使用 next/image 优化\n     → src/pages/home.tsx:55\n\n📈 优化潜力：加载速度可提升 40%',
+    '/orch-refine-code profile --cpu': '⚡ CPU Profiler 启动！\n\n🔥 CPU 火焰图分析：\n\n  Top 5 耗时函数：\n  ┌─────────────────────────────────┐\n  │ calculatePermissions   │ 34.2% │\n  │ parseJSON              │ 22.1% │\n  │ renderUserList         │ 15.3% │\n  │ validateSchema         │ 12.8% │\n  │ formatCurrency         │  8.4% │\n  └─────────────────────────────────┘\n\n💡 建议：calculatePermissions 可使用 memoization 优化\n💡 建议：parseJSON 考虑使用 streaming parser',
+    '/orch-refine-code bundle-size': '📦 Bundle Size 分析器\n\n📊 当前 Bundle 组成：\n  Total: 1.2MB (gzipped: 380KB)\n\n  ┌──────────────────────────────────┐\n  │ lodash          │ 280KB │ 23.3% │\n  │ moment          │ 220KB │ 18.3% │\n  │ react-dom       │ 180KB │ 15.0% │\n  │ chart.js        │ 150KB │ 12.5% │\n  │ your code       │ 120KB │ 10.0% │\n  │ others          │ 250KB │ 20.9% │\n  └──────────────────────────────────┘\n\n🔧 优化建议：\n  1. lodash → lodash-es（Tree Shakeable）\n  2. moment → dayjs（2KB 替代品）\n  3. 预估节省：450KB（37.5%）',
+    '/orch-refine-code lighthouse': '🏗️ Lighthouse 性能审计\n\n📊 评分：\n  Performance:    72 🟡\n  Accessibility:  95 🟢\n  Best Practices: 88 🟢\n  SEO:            92 🟢\n\n⏱ Core Web Vitals：\n  LCP: 3.2s ❌（目标 < 2.5s）\n  FID: 120ms 🟡（目标 < 100ms）\n  CLS: 0.05 🟢（目标 < 0.1）\n\n🔧 Top 3 改进建议：\n  1. 延迟加载首屏外图片\n  2. 预连接关键第三方域名\n  3. 减少未使用的 JavaScript'
   }}
 />
 
@@ -36,7 +36,7 @@ ECC 提供了一套强大的性能分析工具链。试试这些命令：
     {
       title: '第一步：度量 — 知己知彼',
       description: '性能优化的第一条黄金法则：不要猜测，用数据说话。就像医生看病先做检查 — 你需要先"诊断"才能"开药"。',
-      code: '# Step 1: Measure current performance\n\n# Run full performance audit\n/perf analyze\n\n# Profile CPU usage\n/perf profile --cpu\n\n# Analyze bundle size\n/perf bundle-size\n\n# Run Lighthouse audit\n/perf lighthouse\n\n# Record baseline metrics\n/perf baseline --save',
+      code: '# Step 1: Measure current performance\n\n# Run full performance audit\n/orch-refine-code analyze\n\n# Profile CPU usage\n/orch-refine-code profile --cpu\n\n# Analyze bundle size\n/orch-refine-code bundle-size\n\n# Run Lighthouse audit\n/orch-refine-code lighthouse\n\n# Record baseline metrics\n/orch-refine-code baseline --save',
       tip: '永远先建立性能基准线（baseline），否则优化后无法量化改进效果！'
     },
     {
@@ -48,13 +48,13 @@ ECC 提供了一套强大的性能分析工具链。试试这些命令：
     {
       title: '第三步：优化 — 对症下药',
       description: '针对每个瓶颈实施具体的优化方案。ECC 的 TDD 流程确保优化不会引入新的 bug。',
-      code: '# Fix #1: N+1 Query → DataLoader\n/tdd --feature="dataloader-optimization"\n\n# Fix #2: Bundle Size → Tree Shaking\n# Replace lodash with lodash-es\nnpm uninstall lodash\nnpm install lodash-es\n# Replace moment with dayjs\nnpm uninstall moment\nnpm install dayjs\n\n# Fix #3: React Memoization\n/tdd --feature="memoize-user-list"\n\n# Verify each fix individually\n/perf analyze --compare=baseline',
+      code: '# Fix #1: N+1 Query → DataLoader\n/tdd --feature="dataloader-optimization"\n\n# Fix #2: Bundle Size → Tree Shaking\n# Replace lodash with lodash-es\nnpm uninstall lodash\nnpm install lodash-es\n# Replace moment with dayjs\nnpm uninstall moment\nnpm install dayjs\n\n# Fix #3: React Memoization\n/tdd --feature="memoize-user-list"\n\n# Verify each fix individually\n/orch-refine-code analyze --compare=baseline',
       tip: '每次只改一个东西！多项同时修改时无法确定哪个改动真正有效。'
     },
     {
       title: '第四步：验证 — 持续监控',
       description: '优化完成后，重新度量并与基准线对比。设置性能预算（Performance Budget）防止性能退化 — 就像给支出设上限一样。',
-      code: '# Compare with baseline\n/perf analyze --compare=baseline\n\n# Set performance budget in CI\n# performance-budget.json\n{\n  "bundles": [\n    {\n      "name": "main",\n      "maxSize": "200KB"\n    }\n  ],\n  "lighthouse": {\n    "performance": 90,\n    "lcp": "2.5s",\n    "fid": "100ms",\n    "cls": 0.1\n  }\n}\n\n# Add to preCommit hooks\n/hooks add perf-budget --preCommit',
+      code: '# Compare with baseline\n/orch-refine-code analyze --compare=baseline\n\n# Set performance budget in CI\n# performance-budget.json\n{\n  "bundles": [\n    {\n      "name": "main",\n      "maxSize": "200KB"\n    }\n  ],\n  "lighthouse": {\n    "performance": 90,\n    "lcp": "2.5s",\n    "fid": "100ms",\n    "cls": 0.1\n  }\n}\n\n# Add to preCommit hooks\n/hooks add perf-budget --preCommit',
       tip: '性能预算是防止退化的最好手段。就像 TDD 防止功能退化一样！'
     }
   ]}

@@ -14,7 +14,7 @@ description: 使用 ECC 进行 Python 项目开发
 
 ```bash
 # 复制 Python 规则到 CodeBuddy 配置目录
-cp -r rules/python/* ~/.codebuddy/rules/
+cp -r rules/python/* ~/.claude/rules/ecc/
 ```
 
 ### 2. 虚拟环境设置
@@ -33,7 +33,7 @@ source .venv/bin/activate
 
 ```
 your-project/
-├── .codebuddy/
+├── .claude/
 │   └── rules/          # 项目特定规则
 ├── src/
 │   └── your_package/
@@ -49,7 +49,39 @@ your-project/
 
 ## 推荐工作流
 
-### 新功能开发
+### 新功能开发（v2.0.0 推荐）
+
+```bash
+# 一键完成 MVP
+/orch-build-mvp "data processing pipeline with FastAPI + Pandas"
+
+/orch-build-mvp 内部会：
+#   1. planner 制定架构
+#   2. architect 选型（FastAPI、pandas、polars）
+#   3. tdd-guide 写测试
+#   4. python-reviewer 审查
+#   5. e2e-runner 跑端到端验证
+```
+
+### 数据科学项目（v2.0.0 推荐）
+
+```bash
+# 1. 探索性分析规划
+/plan 分析用户行为数据
+
+# 2. 架构设计
+/plan --architect 设计 ETL 管道
+
+# 3. 实现 + 迭代
+/orch-add-feature "etl-transform"
+/orch-add-feature "data-validation"
+/orch-add-feature "feature-store-integration"
+
+# 4. 性能优化（大数据集）
+/orch-refine-code --focus=throughput
+```
+
+### 手动分步（学习 / 简单功能）
 
 ```bash
 # 1. 规划
@@ -62,20 +94,7 @@ your-project/
 /code-review src/
 
 # 4. 测试覆盖率
-/test --coverage
-```
-
-### 数据科学项目
-
-```bash
-# 1. 探索性分析规划
-/plan 分析用户行为数据
-
-# 2. 架构设计
-/architect 设计 ETL 管道
-
-# 3. 实现
-/tdd --feature="etl-transform"
+/test-coverage
 ```
 
 ## 钩子配置
@@ -175,7 +194,7 @@ addopts = -v --cov=src --cov-report=html
 | TDD 开发 | `/tdd --feature="名称"` |
 | 代码审查 | `/code-review` |
 | 类型检查 | `/typecheck` |
-| 安全扫描 | `/security` |
+| 安全扫描 | `/security-scan` |
 
 ---
 

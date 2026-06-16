@@ -14,14 +14,14 @@ description: 使用 ECC 进行 Go 项目开发
 
 ```bash
 # 复制 Go 规则到 CodeBuddy 配置目录
-cp -r rules/golang/* ~/.codebuddy/rules/
+cp -r rules/golang/* ~/.claude/rules/ecc/
 ```
 
 ### 2. 项目结构建议
 
 ```
 your-project/
-├── .codebuddy/
+├── .claude/
 │   └── rules/          # 项目特定规则
 ├── cmd/
 │   └── app/
@@ -38,7 +38,19 @@ your-project/
 
 ## 推荐工作流
 
-### 新功能开发
+### 新功能开发（v2.0.0 推荐）
+
+```bash
+# 一键完成 MVP（Go 微服务 / REST API）
+/orch-build-mvp "user API with PostgreSQL + Redis cache"
+
+# 或添加独立端点
+/orch-add-feature "user-registration-endpoint"
+/orch-add-feature "user-profile-endpoint"
+/orch-add-feature "auth-middleware"
+```
+
+### 手动分步（学习 / 简单功能）
 
 ```bash
 # 1. 规划
@@ -51,20 +63,24 @@ your-project/
 /code-review internal/
 
 # 4. 构建检查
-/build-and-fix
+/build-fix
 ```
 
 ### 微服务开发
 
 ```bash
 # 1. 架构设计
-/architect 设计订单服务
+/plan --architect 设计订单服务
 
 # 2. 接口定义
 /plan 定义 gRPC 接口
 
-# 3. 实现
+# 3. 实现（用 orchestrator 自动协调）
+/orch-build-mvp "order-service with gRPC + PostgreSQL"
+
+# 或分步
 /tdd --feature="order-service"
+/tdd --feature="payment-integration"
 ```
 
 ## 钩子配置
@@ -200,8 +216,8 @@ func TestAdd(t *testing.T) {
 | 开始新功能 | `/plan 功能描述` |
 | TDD 开发 | `/tdd --feature="名称"` |
 | 代码审查 | `/code-review` |
-| 构建检查 | `/build-and-fix` |
-| 性能分析 | `/perf --profile` |
+| 构建检查 | `/build-fix` |
+| 性能分析 | `/orch-refine-code --profile` |
 
 ---
 

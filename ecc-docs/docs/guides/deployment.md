@@ -1,12 +1,19 @@
 ---
 sidebar_position: 4
 title: 部署指南
-description: 将 ECC 学习站点部署到 Vercel 的完整指南
+description: 将 ECC 学习站点部署到 Vercel 和 GitHub Pages 的完整指南
 ---
 
 # 部署指南
 
-本指南将帮助你将 ECC 学习站点部署到 Vercel，并配置 CI/CD 自动化流程。
+> **关于本文档**：`ecc-docs/` 是 ECC 的 Docusaurus 3.7 学习站点源码，部署双平台支持：
+>
+> | 平台 | URL | 触发 |
+> |------|-----|------|
+> | **Vercel（主）** | https://ecc-docs.vercel.app | push → `deploy.yml` |
+> | **GitHub Pages（备）** | https://binbinao.github.io/everything-claude-code/ | push → `deploy-github-pages.yml` |
+>
+> 详细流程参见 [advanced/deployment-guide](../advanced/deployment-guide)。本文档聚焦于通用 Vercel 部署步骤。
 
 ## 🚀 快速部署到 Vercel
 
@@ -14,7 +21,7 @@ description: 将 ECC 学习站点部署到 Vercel 的完整指南
 
 点击下方按钮，一键部署到 Vercel：
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/everything-claude-code/tree/main/ecc-docs)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/binbinao/everything-claude-code/tree/feat/ecc-docs-cn/ecc-docs)
 
 ### 方式二：手动部署
 

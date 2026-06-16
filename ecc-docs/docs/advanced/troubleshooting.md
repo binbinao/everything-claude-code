@@ -22,13 +22,13 @@ Warning: Rules directory not found
 **解决方案**：
 ```bash
 # 1. 检查目录是否存在
-ls -la ~/.codebuddy/rules/
+ls -la ~/.claude/rules/ecc/
 
 # 2. 如果不存在，创建目录
-mkdir -p ~/.codebuddy/rules/
+mkdir -p ~/.claude/rules/ecc/
 
 # 3. 复制规则文件
-cp -r rules/typescript/* ~/.codebuddy/rules/
+cp -r rules/typescript/* ~/.claude/rules/ecc/
 ```
 
 #### 问题：智能体无法识别
@@ -94,7 +94,7 @@ Error: Build failed with exit code 1
 **解决方案**：
 ```bash
 # 1. 使用构建修复智能体
-/build-and-fix
+/build-fix
 
 # 2. 或手动排查
 npm run build 2>&1 | head -50
@@ -183,7 +183,7 @@ npm ls --depth=0
 cat ~/.claude/settings.json
 
 # 项目规则
-ls -la .codebuddy/rules/
+ls -la .claude/rules/ecc/
 
 # 智能体配置
 ls -la ~/.claude/agents/
@@ -238,13 +238,43 @@ open https://github.com/anthropics/ecc/issues
 
 | 问题 | 快速修复 |
 |------|----------|
-| 规则不加载 | `mkdir -p ~/.codebuddy/rules/` |
-| 钩子不执行 | 检查 `settings.json` 格式 |
-| 构建失败 | `/build-and-fix` |
+| 规则不加载 | `mkdir -p ~/.claude/rules/ecc/` |
+| 钩子不执行 | `/hookify-list` 检查注册状态 |
+| 构建失败 | `/build-fix` |
 | 测试超时 | 增加 `timeout` 配置 |
 | E2E 失败 | 添加 `waitForSelector` |
-| 响应缓慢 | 开始新会话 |
+| 响应缓慢 | `/context-budget --check` 查看上下文用量 |
+| Orchestration 卡住 | `/orch-fix-defect "继续上次的任务"` |
+| Hook 误拦截 | `/hookify-configure disable <hook-id>` |
+
+## v2.0.0 新增调试工具
+
+```bash
+# 列出所有已注册 hook
+/hookify-list
+
+# 查看 hook 帮助
+/hookify-help
+
+# 干跑模式：看 hook 决策但不执行
+git commit --dry-run
+
+# 上下文压缩前手动保存
+/checkpoint
+
+# 查看会话历史
+/sessions
+
+# 重新调度卡住的编排
+/orch-fix-defect "继续上次的 MVP 构建"
+
+# 框架配置审计
+/harness-audit
+
+# 健康检查：plugin 缓存
+/plugin health
+```
 
 ---
 
-💡 **提示**：遇到问题时，先尝试 `/debug 问题描述`，让 ECC 帮你分析！
+💡 **提示**：遇到问题时，先尝试 `/silent-failure-hunter 问题描述`，让 ECC 帮你分析！如果是跨框架问题，参考 [Hermes Operator 章节](hermes-operator)。
