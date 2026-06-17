@@ -1,7 +1,8 @@
 name: Deploy to Vercel
 
-# Auto-deploy ecc-docs/ to Vercel production on every push to feat/ecc-docs-cn
-# (mirrors GitHub Pages deployment at .github/workflows/deploy-docs.yml)
+# Auto-deploy ecc-docs/ to Vercel:
+#   - push to feat/ecc-docs-cn → Production deployment
+#   - pull_request against feat/ecc-docs-cn → Preview deployment + PR comment
 #
 # Required GitHub Secrets (Settings → Secrets and variables → Actions):
 #   VERCEL_TOKEN       — Vercel personal access token
@@ -19,6 +20,12 @@ on:
     paths:
       - 'ecc-docs/**'
       - '.github/workflows/deploy-vercel.yml'
+  pull_request:
+    branches:
+      - feat/ecc-docs-cn
+    paths:
+      - 'ecc-docs/**'
+      - '.github/workflows/deploy-vercel.yml'
   workflow_dispatch:  # Manual trigger from Actions tab
 
 concurrency:
@@ -28,6 +35,7 @@ concurrency:
 permissions:
   contents: read
   deployments: write
+  pull-requests: write  # For posting preview URL comments
 
 jobs:
   deploy:
@@ -38,10 +46,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
           cache-dependency-path: ecc-docs/package-lock.json
 
@@ -55,33 +63,100 @@ jobs:
         working-directory: ecc-docs
         run: npm ci && npm run build
 
+      # Determine target based on trigger
+      - name: Determine deployment target
+        id: target
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "target=preview" >> $GITHUB_OUTPUT
+            echo "Target: Preview (PR #${{ github.event.pull_request.number }})"
+          else
+            echo "target=production" >> $GITHUB_OUTPUT
+            echo "Target: Production (push to ${{ github.ref_name }})"
+          fi
+
       - name: Deploy to Vercel (Production)
+        if: steps.target.outputs.target == 'production'
         # NOTE: do NOT set working-directory here — Vercel project's
         # Root Directory is already set to "ecc-docs", and adding
         # another working-directory causes path-doubling
         # (ecc-docs/ecc-docs). Run from repo root.
+        id: deploy_prod
         run: |
-          vercel deploy \
+          OUTPUT=$(vercel deploy \
             --prod \
             --yes \
             --token ${{ secrets.VERCEL_TOKEN }} \
-            --scope ${{ secrets.VERCEL_ORG_ID }}
+            --scope ${{ secrets.VERCEL_ORG_ID }})
+          echo "$OUTPUT"
+          # Extract production URL
+          URL=$(echo "$OUTPUT" | grep -oE 'https://[a-z0-9-]+\.vercel\.app' | head -1)
+          echo "url=$URL" >> $GITHUB_OUTPUT
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Summary
-        if: success()
+      - name: Deploy to Vercel (Preview)
+        if: steps.target.outputs.target == 'preview'
+        id: deploy_preview
         run: |
-          echo "### ✅ Vercel Deploy Success" >> $GITHUB_STEP_SUMMARY
+          OUTPUT=$(vercel deploy \
+            --yes \
+            --token ${{ secrets.VERCEL_TOKEN }} \
+            --scope ${{ secrets.VERCEL_ORG_ID }})
+          echo "$OUTPUT"
+          # Extract preview URL (looks like ecc-docs-{hash}-robinjis-projects.vercel.app)
+          URL=$(echo "$OUTPUT" | grep -oE 'https://[a-z0-9-]+\.vercel\.app' | head -1)
+          echo "url=$URL" >> $GITHUB_OUTPUT
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      # Post preview URL as PR comment (only for PR events)
+      - name: Comment PR with preview URL
+        if: steps.target.outputs.target == 'preview' && steps.deploy_preview.outputs.url != ''
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: vercel-preview
+          message: |
+            ## 🚀 Vercel Preview Ready
+
+            | | |
+            |---|---|
+            **Preview URL** | ${{ steps.deploy_preview.outputs.url }} |
+            **Branch** | `${{ github.head_ref }}` |
+            **Commit** | [`${{ github.event.pull_request.head.sha }}`](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}) |
+            **PR** | #${{ github.event.pull_request.number }} — ${{ github.event.pull_request.title }} |
+            **Deployed by** | `${{ github.actor }}` |
+
+            > Powered by [Vercel CLI](https://vercel.com/docs/cli) via GitHub Actions
+
+      - name: Production deploy summary
+        if: steps.target.outputs.target == 'production' && success()
+        run: |
+          echo "### ✅ Vercel Production Deploy Success" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Production URL**: https://ecc-docs.vercel.app" >> $GITHUB_STEP_SUMMARY
+          echo "**Latest deployment**: ${{ steps.deploy_prod.outputs.url }}" >> $GITHUB_STEP_SUMMARY
           echo "**Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "**Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Preview deploy summary
+        if: steps.target.outputs.target == 'preview' && success()
+        run: |
+          echo "### ✅ Vercel Preview Deploy Success" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Preview URL**: ${{ steps.deploy_preview.outputs.url }}" >> $GITHUB_STEP_SUMMARY
+          echo "**PR**: #${{ github.event.pull_request.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch**: ${{ github.head_ref }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Failure summary
         if: failure()
         run: |
           echo "### ❌ Vercel Deploy Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch**: ${{ github.ref_name }}${{ github.head_ref && format(' ({0})', github.head_ref) || '' }}" >> $GITHUB_STEP_SUMMARY
           echo "Check the workflow logs above for details." >> $GITHUB_STEP_SUMMARY
