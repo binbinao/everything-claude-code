@@ -27,6 +27,7 @@ description: ECC v2.0.0 的 271 个专业技能详解
 - `vue-patterns` `nuxt4-patterns` `nextjs-turbopack`
 - `angular-developer` `liquid-glass-design` `vite-patterns`
 - `ui-demo` `ui-to-vue` `make-interfaces-feel-better`
+- `accessibility` — 无障碍标准
 
 **后端语言**
 - `golang-patterns` `golang-testing`
@@ -44,11 +45,13 @@ description: ECC v2.0.0 的 271 个专业技能详解
 - `laravel-patterns` `laravel-plugin-discovery` `laravel-security` `laravel-tdd` `laravel-verification`
 - `quarkus-patterns` `quarkus-security` `quarkus-tdd` `quarkus-verification`
 - `perl-patterns` `perl-security` `perl-testing`
+- `generating-python-installer` — Python 打包（基于 Nuitka 商业化）
 
 **移动端**
 - `android-clean-architecture`
 - `compose-multiplatform-patterns`
 - `ios-icon-gen`
+- `flutter-dart-code-review` — Flutter/Dart 代码审查
 
 ### 🏗️ 架构与设计
 
@@ -58,6 +61,8 @@ description: ECC v2.0.0 的 271 个专业技能详解
 - `design-system` `codebase-onboarding` `code-tour`
 - `intent-driven-development` `ai-first-engineering`
 - `agentic-engineering` `agentic-os`
+- `backend-patterns` — 后端通用模式
+- `product-capability` `product-lens` — 产品能力与视角
 
 ### 🧪 测试与质量
 
@@ -68,6 +73,8 @@ description: ECC v2.0.0 的 271 个专业技能详解
 - `cpp-testing` `csharp-testing` `fsharp-testing` `kotlin-testing` `perl-testing` `python-testing` `react-testing` `rust-testing`
 - `production-audit` `workspace-surface-audit` `automation-audit-ops`
 - `plankton-code-quality`
+- `codehealth-mcp` — Code Health MCP 集成
+- `regex-vs-llm-structured-text` — 正则 vs LLM 文本抽取决策
 
 ### 🔒 安全与合规
 
@@ -92,10 +99,12 @@ description: ECC v2.0.0 的 271 个专业技能详解
 - `gan-style-harness` `ml-adoption-playbook` `mle-workflow` `recsys-pipeline-architect`
 - `foundation-models-on-device` `pytorch-patterns`
 - `executor-mode` `council`
+- `openclaw-persona-forge` — OpenClaw 角色生成
 
 ### 🚀 性能优化（v2.0.0 重磅新增）
 
 - `parallel-execution-optimizer` — 并行执行优化
+- `benchmark` `benchmark-methodology` — 标准化基准测试
 - `benchmark-optimization-loop` — 基准优化循环
 - `data-throughput-accelerator` — 数据吞吐加速
 - `latency-critical-systems` — 低延迟系统
@@ -110,6 +119,7 @@ description: ECC v2.0.0 的 271 个专业技能详解
 - `docker-patterns` `kubernetes-patterns` `deployment-patterns` `bun-runtime` `flox-environments`
 - `terminal-ops` `tinystruct-patterns` `uncloud`
 - `nodejs-keccak256`
+- `opensource-pipeline` — 开源发布流水线
 
 ### 📚 学习与连续性
 
@@ -140,6 +150,7 @@ description: ECC v2.0.0 的 271 个专业技能详解
 - `market-research` `lead-intelligence` `social-graph-ranker` `crosspost`
 - `seo`
 - `visa-doc-translate` `nutrient-document-processing`
+- `content-engine` — 内容引擎
 
 ### 🏢 业务与企业
 
@@ -149,6 +160,7 @@ description: ECC v2.0.0 的 271 个专业技能详解
 - `inventory-demand-planning` `production-scheduling` `logistics-exception-management` `returns-reverse-logistics`
 - `quality-nonconformance` `ito-basket-compare` `ito-data-atlas-agent` `ito-market-intelligence` `ito-trade-planner`
 - `carrier-relationship-management`
+- `google-workspace-ops` — Google Workspace 运维
 
 ### 🌐 网络与运维
 

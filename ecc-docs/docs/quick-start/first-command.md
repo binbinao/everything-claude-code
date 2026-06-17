@@ -73,13 +73,27 @@ planner 智能体会输出类似这样的计划：
 | 命令 | 说明 | 示例 |
 |------|------|------|
 | `/plan` | 制定计划 | `/plan 添加搜索功能` |
+| `/orch-build-mvp` | v2.0.0 一键构建 MVP | `/orch-build-mvp "完整功能描述"` |
+| `/orch-add-feature` | v2.0.0 添加新功能 | `/orch-add-feature "购物车"` |
+| `/orch-fix-defect` | v2.0.0 一键修复缺陷 | `/orch-fix-defect "问题描述"` |
 | `/tdd` | TDD 开发 | `/tdd --feature="login"` |
 | `/code-review` | 代码审查 | `/code-review` |
+| `/security-scan` | 安全扫描 | `/security-scan` |
 | `/e2e` | 端到端测试 | `/e2e 测试登录流程` |
 
 ## 命令组合示例
 
-一个完整的开发流程：
+### v2.0.0 推荐路径（一句话完成）
+
+```bash
+# 一句话构建完整功能
+/orch-build-mvp "评论功能 with CRUD + 审核 + 反垃圾"
+
+# 内部自动：planner → architect → tdd-guide → code-reviewer → e2e-runner
+# 每个关键决策点暂停等你确认
+```
+
+### 手动分步（学习或精细控制）
 
 ```bash
 # 1. 先规划
