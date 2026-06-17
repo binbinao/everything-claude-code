@@ -18,7 +18,7 @@ const baseUrl = isGitHubPages ? '/everything-claude-code/' : '/'
 const config: Config = {
   // Site metadata
   title: 'Everything Claude Code',
-  tagline: 'Interactive documentation and tutorials for mastering Claude Code',
+  tagline: 'ECC v2.0.0 — 67 agents, 92 commands, 271 skills, 21 rule packages',
   favicon: 'img/favicon.svg',
 
   // Enable Mermaid diagrams in Markdown

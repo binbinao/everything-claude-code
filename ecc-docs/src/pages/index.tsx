@@ -11,7 +11,7 @@ export default function Home(): JSX.Element {
   const wechatQrUrl = useBaseUrl('/img/wxpay.jpg');
 
   return (
-    <Layout title="ECC Learning Site" description="Everything Claude Code learning hub - v2026.02.25">
+    <Layout title="ECC Learning Site" description="Everything Claude Code learning hub - v2026.06 (ECC v2.0.0 aligned)">
       <header className="hero hero--primary">
         <div className="container">
           <div className={styles.heroRow}>
