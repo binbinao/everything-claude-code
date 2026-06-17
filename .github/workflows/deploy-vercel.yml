@@ -5,11 +5,12 @@ name: Deploy to Vercel
 #
 # Required GitHub Secrets (Settings → Secrets and variables → Actions):
 #   VERCEL_TOKEN       — Vercel personal access token
-#                        (https://vercel.com/account/tokens)
-#   VERCEL_ORG_ID      — Vercel team/org ID
-#                        team_20qpPsbWgX5Oa0lanpZsIBgW  (robinjis-projects)
-#   VERCEL_PROJECT_ID  — Vercel project ID
-#                        prj_tDRS0aKCU1xUc3c5zNsYMICtsuRu  (ecc-docs)
+#                        Create at https://vercel.com/account/tokens
+#   VERCEL_ORG_ID      — Vercel team/org ID (your scope)
+#   VERCEL_PROJECT_ID  — Vercel project ID (ecc-docs)
+#
+# Find your IDs with `vercel link` then cat .vercel/project.json
+# (the project.json is gitignored, so values stay local).
 
 on:
   push:
@@ -55,7 +56,10 @@ jobs:
         run: npm ci && npm run build
 
       - name: Deploy to Vercel (Production)
-        working-directory: ecc-docs
+        # NOTE: do NOT set working-directory here — Vercel project's
+        # Root Directory is already set to "ecc-docs", and adding
+        # another working-directory causes path-doubling
+        # (ecc-docs/ecc-docs). Run from repo root.
         run: |
           vercel deploy \
             --prod \
